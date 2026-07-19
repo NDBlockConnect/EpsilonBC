@@ -9,7 +9,7 @@
 <p align="center">
   <a href="https://github.com/NekoyaHouse/Epsilon/actions"><img alt="Build" src="https://img.shields.io/badge/build-gradle-4c1?style=flat-square"></a>
   <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-GPLv3-blue?style=flat-square"></a>
-  <img alt="Loaders" src="https://img.shields.io/badge/loaders-NeoForge%20%26%20Fabric-6a5acd?style=flat-square">
+  <img alt="Loaders" src="https://img.shields.io/badge/loaders-NeoForge%20%26%20Fabric%20%26%20Forge-6a5acd?style=flat-square">
   <a href="https://discord.gg/vYbaae3X7e"><img alt="Discord" src="https://img.shields.io/badge/Discord-Join%20Server-5865F2?style=flat-square&logo=discord&logoColor=white"></a>
 </p>
 
@@ -22,7 +22,7 @@
 </p>
 
 <p align="center">
-  <sub>Epsilon Official Groups (no longer actively maintained)</sub>
+  <sub>Epsilon Official Groups</sub>
 </p>
 
 <p align="center">
@@ -47,7 +47,7 @@
 > The code already published here remains available under the [GNU General Public License v3.0](LICENSE). This notice does not change the license or rights for existing releases.
 
 ## 📌 Overview
-A modern multi loader Minecraft utility client built on NeoForge & Fabric with advanced rendering system and modular architecture.
+A modern multi loader Minecraft utility client built on NeoForge/Forge & Fabric with advanced rendering system and modular architecture.
 
 ## 🚀 Addon System
 [Epsilon Addon Template](https://github.com/slmpc/Epsilon-Addon-Template)
@@ -77,7 +77,7 @@ The declarative UI layer built on Lumin is documented in the [Epsilon GUI Librar
 ./gradlew runClient
 ```
 
-🙏 Credits
+## 🙏 Credits
 Special thanks to the following projects. See NOTICE for third-party code attributions.
 
 Meteor Client
@@ -92,7 +92,7 @@ Original Repository
 
 Epsilon — the original project by NekoyaHouse, on which this fork is based.
 
-📝 License
+## 📝 License
 
 This project, including Lumin Graphics, is licensed under the GNU General Public License v3.0.
 
