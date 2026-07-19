@@ -1,4 +1,4 @@
-<h1 align="center">Epsilon</h1>
+<h1 align="center">EpsilonBC</h1>
 <h4 align="center">
     <p>
         <a href="./README.md">English</a> |
@@ -7,45 +7,65 @@
 </h4>
 
 <p align="center">
-  <a href="https://github.com/NekoyaHouse/Epsilon/actions"><img alt="构建" src="https://img.shields.io/badge/build-gradle-4c1?style=flat-square"></a>
-  <a href="LICENSE"><img alt="许可证" src="https://img.shields.io/badge/license-GPLv3-blue?style=flat-square"></a>
-  <img alt="加载器" src="https://img.shields.io/badge/loaders-NeoForge%20%26%20Fabric-6a5acd?style=flat-square">
-  <a href="https://discord.gg/vYbaae3X7e"><img alt="Discord" src="https://img.shields.io/badge/Discord-加入社区-5865F2?style=flat-square&logo=discord&logoColor=white"></a>
+  <a href="https://github.com/NekoyaHouse/Epsilon/actions"><img alt="构建状态" src="https://img.shields.io/badge/build-gradle-4c1?style=flat-square"></a>
+  <a href="LICENSE"><img alt="开源协议" src="https://img.shields.io/badge/license-GPLv3-blue?style=flat-square"></a>
+  <img alt="加载器支持" src="https://img.shields.io/badge/loaders-NeoForge%20%26%20Fabric%20%26%20Forge-6a5acd?style=flat-square">
+  <a href="https://discord.gg/vYbaae3X7e"><img alt="Discord社区" src="https://img.shields.io/badge/Discord-加入服务器-5865F2?style=flat-square&logo=discord&logoColor=white"></a>
 </p>
 
 <p align="center">
-  <a href="https://qm.qq.com/q/WPvwQZvYci"><img alt="QQ 一群" src="https://img.shields.io/badge/QQ%20%E4%B8%80%E7%BE%A4-join-12B7F5?style=flat-square&logo=tencentqq&logoColor=white"></a>
-  <a href="https://qm.qq.com/q/3hhg8ww9ag"><img alt="QQ 二群" src="https://img.shields.io/badge/QQ%20%E4%BA%8C%E7%BE%A4-join-12B7F5?style=flat-square&logo=tencentqq&logoColor=white"></a>
+  <b>BlockConnect Community Group</b>
+</p>
+
+<p align="center">
+  <a href="https://qm.qq.com/q/71qUqMO87e"><img alt="BlockConnect QQ群" src="https://img.shields.io/badge/BlockConnect%20QQ群-加入群聊-12B7F5?style=flat-square&logo=tencentqq&logoColor=white"></a>
+</p>
+
+<p align="center">
+  <sub>Epsilon 官方群</sub>
+</p>
+
+<p align="center">
+  <a href="https://qm.qq.com/q/WPvwQZvYci"><img alt="一号QQ群" src="https://img.shields.io/badge/一号QQ群-加入群聊-12B7F5?style=flat-square&logo=tencentqq&logoColor=white"></a>
+  <a href="https://qm.qq.com/q/3hhg8ww9ag"><img alt="二号QQ群" src="https://img.shields.io/badge/二号QQ群-加入群聊-12B7F5?style=flat-square&logo=tencentqq&logoColor=white"></a>
 </p>
 
 > [!IMPORTANT]
-> ## Public Archive 公告
-> 本仓库将进入 Public Archive 准备阶段，当前公开源码会继续保留，供查阅和参考。公开开发、Issue 维护与免费公开发布将逐步停止。
+> ## 🔀 BlockConnect 复刻分支公告
+> 本仓库是由 **BlockConnect** 社区维护的复刻分支，基于原版项目 [Epsilon](https://github.com/NekoyaHouse/Epsilon) 持续迭代开发。
 >
-> 客户端的持续开发需要长期投入时间和资源；大量二改版本被他人用于商业化获利，已经让原有的公益开发模式难以维持。为让开发可以继续，后续官方版本、支持服务与分发可能转为付费模式。
+> 原版 Epsilon 仓库已归档，官方公开开发工作停止。BlockConnect 团队复刻本项目，持续为社区进行维护、漏洞修复与新功能开发。
 >
-> 本仓库中已经发布的代码仍遵循 [GNU General Public License v3.0](LICENSE)。本公告不会改变现有版本的许可证或既有权利。
+> **加入我们的社区：** [BlockConnect Community Group](https://qm.qq.com/q/71qUqMO87e)
 
-## 📌 项目简介
-基于 NeoForge & Fabric 构建的多加载器现代化 Minecraft 辅助客户端，拥有先进的渲染系统和模块化架构。
+> [!NOTE]
+> ## 原版归档公告（来自 Epsilon）
+> 原仓库已准备归档，源码仍公开留存以供查阅参考。主动公开开发、问题工单处理以及免费公开发版工作均已终止。
+>
+> 维护一款功能完善的客户端需要长期投入大量时间与资源。第三方私自打包修改构建并牟利，导致原公开开发模式无法持续运营。
+>
+> 仓库已发布的全部代码仍遵循 [GNU General Public License v3.0](LICENSE) 协议开源。本公告不会修改现有版本的协议条款与使用权限。
 
-## 🚀 插件系统
-[Epsilon 插件模板](https://github.com/slmpc/Epsilon-Addon-Template)
+## 📌 项目概述
+一款同时适配 Forge/NeoForge 与 Fabric 多加载器的现代化 Minecraft 多功能客户端，搭载高性能渲染系统与模块化架构。
 
-[Addon 开发文档](docs/addon-development.md)
+## 🚀 拓展插件系统
+[Epsilon Addon Template](https://github.com/slmpc/Epsilon-Addon-Template)
 
-## 🎨 渲染系统
+[插件开发指南](docs/addon-development.md)
 
-Lumin 渲染系统提供自定义渲染管线，支持：
-- 矩形与圆角矩形
-- 阴影与模糊效果
+## 🎨 图形渲染系统
+
+Lumin 渲染引擎提供自定义渲染管线，支持以下功能：
+- 矩形、圆角矩形绘制
+- 阴影与模糊特效
 - TTF 字体渲染
-- 纹理渲染
+- 纹理贴图渲染
 - 自定义顶点格式
 
-详见 [渲染系统文档](common/src/main/java/com/github/epsilon/graphics/README_zh.md)
+详情查看 [Lumin Graphics README](common/src/main/java/com/github/epsilon/graphics/README.md)。
 
-基于 Lumin 的声明式 UI 层见 [Epsilon GUI Library 文档](docs/gui-library.md)。
+基于 Lumin 构建的声明式UI层相关文档见 [Epsilon GUI Library Guide](docs/gui-library.md)。
 
 ## ⚙️ 构建与运行
 
@@ -53,22 +73,26 @@ Lumin 渲染系统提供自定义渲染管线，支持：
 # 构建模组
 ./gradlew build
 
-# 运行客户端
+# 启动游戏客户端
 ./gradlew runClient
 ```
 
-## 🙏 鸣谢
+## 🙏 致谢特别感谢以下项目，第三方代码归属说明详见 NOTICE 文件。
 
-感谢以下项目。第三方代码归属信息详见 [NOTICE](NOTICE.md)。
-- [Meteor Client](https://github.com/MeteorDevelopment/meteor-client)
-- [Orbit](https://github.com/MeteorDevelopment/orbit)
-- [LeavesHack](https://github.com/MrBZBZ/LeavesHack)
-- [TrollHack](https://github.com/Luna5ama/TrollHack)
+Meteor Client
 
-## 📝 许可证
+Orbit
 
-本项目，包括 Lumin Graphics，统一遵循 [GNU General Public License v3.0](LICENSE) 许可证。
+LeavesHack
 
----
+TrollHack
 
-版权所有 © 2026 NekoyaHouse.
+原项目仓库Epsilon — 由 NekoyaHouse 开发的原版项目，本复刻分支基于此开发。
+
+## 📝 开源协议
+
+本项目（含 Lumin Graphics）采用 GNU General Public License v3.0 协议开源。
+
+版权所有 © 2026 NekoyaHouse。
+
+由 BlockConnect@StarsailsClover 复刻维护
