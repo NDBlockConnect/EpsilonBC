@@ -1,4 +1,4 @@
-<h1 align="center">Epsilon</h1>
+<h1 align="center">EpsilonBC</h1>
 <h4 align="center">
     <p>
         <b>English</b> |
@@ -14,15 +14,35 @@
 </p>
 
 <p align="center">
+  <b>BlockConnect Community Group</b>
+</p>
+
+<p align="center">
+  <a href="https://qm.qq.com/q/71qUqMO87e"><img alt="BlockConnect QQ Group" src="https://img.shields.io/badge/BlockConnect%20%E7%A4%BE%E5%8C%BA%E7%BE%A4-join-12B7F5?style=flat-square&logo=tencentqq&logoColor=white"></a>
+</p>
+
+<p align="center">
+  <sub>Epsilon Official Groups (no longer actively maintained)</sub>
+</p>
+
+<p align="center">
   <a href="https://qm.qq.com/q/WPvwQZvYci"><img alt="QQ Group 1" src="https://img.shields.io/badge/QQ%201%E7%BE%A4-join-12B7F5?style=flat-square&logo=tencentqq&logoColor=white"></a>
   <a href="https://qm.qq.com/q/3hhg8ww9ag"><img alt="QQ Group 2" src="https://img.shields.io/badge/QQ%202%E7%BE%A4-join-12B7F5?style=flat-square&logo=tencentqq&logoColor=white"></a>
 </p>
 
 > [!IMPORTANT]
-> ## Public archive notice
-> This repository is being prepared for archival and will remain available as a public reference for the current source release. Active public development, issue triage, and free public releases are winding down.
+> ## 🔀 BlockConnect Fork Notice
+> This repository is a **community-maintained fork** by **BlockConnect**, continued from the original [Epsilon](https://github.com/NekoyaHouse/Epsilon) project.
 >
-> Maintaining a feature-rich client takes sustained time and resources. Repackaged and modified builds being monetized by others have made the previous public-development model unsustainable. Future official releases, support, and distribution may move to a paid model so development can continue.
+> The original Epsilon repository has been archived and public development has ceased. We at BlockConnect have forked the project to continue maintenance, bug fixes, and feature development for the community.
+>
+> **Join our community:** [BlockConnect Community Group](https://qm.qq.com/q/71qUqMO87e)
+
+> [!NOTE]
+> ## Original Archive Notice (from Epsilon)
+> The original repository was being prepared for archival and remains available as a public reference for the source release. Active public development, issue triage, and free public releases were wound down.
+>
+> Maintaining a feature-rich client takes sustained time and resources. Repackaged and modified builds being monetized by others made the previous public-development model unsustainable.
 >
 > The code already published here remains available under the [GNU General Public License v3.0](LICENSE). This notice does not change the license or rights for existing releases.
 
@@ -57,18 +77,25 @@ The declarative UI layer built on Lumin is documented in the [Epsilon GUI Librar
 ./gradlew runClient
 ```
 
-## 🙏 Credits
+🙏 Credits
+Special thanks to the following projects. See NOTICE for third-party code attributions.
 
-Special thanks to the following projects. See [NOTICE](NOTICE.md) for third-party code attributions.
-- [Meteor Client](https://github.com/MeteorDevelopment/meteor-client)
-- [Orbit](https://github.com/MeteorDevelopment/orbit)
-- [LeavesHack](https://github.com/MrBZBZ/LeavesHack)
-- [TrollHack](https://github.com/Luna5ama/TrollHack)
+Meteor Client
 
-## 📝 License
+Orbit
 
-This project, including Lumin Graphics, is licensed under the [GNU General Public License v3.0](LICENSE).
+LeavesHack
 
----
+TrollHack
+
+Original Repository
+
+Epsilon — the original project by NekoyaHouse, on which this fork is based.
+
+📝 License
+
+This project, including Lumin Graphics, is licensed under the GNU General Public License v3.0.
 
 Copyright © 2026 NekoyaHouse.
+
+Forked by BlockConnect@StarsailsClover
