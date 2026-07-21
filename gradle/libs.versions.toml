@@ -7,6 +7,10 @@ project-fabric-api = "0.152.0+26.2"
 project-fabric-loader = "0.19.3"
 project-neoforge = "26.2.0.3-beta"
 project-neoforge-loader-range = "[4,)"
+project-forge = "65.0.4"
+project-parchment = "2026.07.13-26.2"
+forgegradle = "6.0.30"
+parchment-librarian = "1.+"
 fabric-loom = "1.15.5"
 neoforged-moddev = "2.0.141"
 buildconfig = "6.0.9"
@@ -37,5 +41,7 @@ junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher
 [plugins]
 fabric-loom = { id = "net.fabricmc.fabric-loom", version.ref = "fabric-loom" }
 neoforged-moddev = { id = "net.neoforged.moddev", version.ref = "neoforged-moddev" }
+forgegradle = { id = "net.minecraftforge.gradle", version.ref = "forgegradle" }
+parchment-librarian = { id = "org.parchmentmc.librarian.forgegradle", version.ref = "parchment-librarian" }
 buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig" }
 foojay-resolver-convention = { id = "org.gradle.toolchains.foojay-resolver-convention", version.ref = "foojay-resolver-convention" }
