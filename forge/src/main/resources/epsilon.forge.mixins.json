@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "com.github.epsilon.forge.mixins",
+  "plugin": "com.github.epsilon.forge.mixins.ForgeMixinPlugin",
+  "compatibilityLevel": "JAVA_25",
+  "client": [
+    "MixinCamera",
+    "MixinMinecraft"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -16,6 +16,14 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         mavenCentral()
+        maven {
+            name = "MinecraftForge"
+            url = uri("https://maven.minecraftforge.net")
+        }
+        maven {
+            name = "ParchmentMC"
+            url = uri("https://maven.parchmentmc.org")
+        }
         exclusiveContent {
             forRepository {
                 maven {
@@ -42,3 +50,4 @@ rootProject.name = "Epsilon"
 include("common")
 include("fabric")
 include("neoforge")
+include("forge")
