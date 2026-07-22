@@ -70,6 +70,10 @@ public class Xray extends Module {
 
     @Override
     public void onEnable() {
+        if (nullCheck()) {
+            toggle();
+            return;
+        }
         ores.clear();
         toCheck.clear();
         checked.clear();
