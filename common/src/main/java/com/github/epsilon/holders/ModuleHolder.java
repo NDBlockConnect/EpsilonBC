@@ -147,6 +147,7 @@ public class ModuleHolder {
         addModule(PopChams.INSTANCE);
         addModule(Shaders.INSTANCE);
         addModule(SneakTweak.INSTANCE);
+        addModule(Tracers.INSTANCE);
         addModule(Xray.INSTANCE);
 
     }
