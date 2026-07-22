@@ -712,9 +712,25 @@ public class ConfigHolder {
                 String json = Files.readString(rootSettingsFile, StandardCharsets.UTF_8);
                 JsonElement parsed = JsonParser.parseString(json);
                 if (parsed != null && parsed.isJsonObject()) {
-                    JsonElement value = parsed.getAsJsonObject().get("showWelcomeScreen");
-                    if (value != null && value.isJsonPrimitive()) {
-                        ClientSetting.INSTANCE.showWelcomeScreen.setValueSilently(value.getAsBoolean());
+                    JsonObject root = parsed.getAsJsonObject();
+
+                    // Load showWelcomeScreen setting
+                    JsonElement showWelcomeValue = root.get("showWelcomeScreen");
+                    if (showWelcomeValue != null && showWelcomeValue.isJsonPrimitive()) {
+                        ClientSetting.INSTANCE.showWelcomeScreen.setValueSilently(showWelcomeValue.getAsBoolean());
+                    }
+
+                    // Load language setting
+                    JsonElement languageValue = root.get("language");
+                    if (languageValue != null && languageValue.isJsonPrimitive()) {
+                        String langStr = languageValue.getAsString();
+                        try {
+                            com.github.epsilon.assets.i18n.EpsilonLanguage lang =
+                                com.github.epsilon.assets.i18n.EpsilonLanguage.valueOf(langStr);
+                            ClientSetting.INSTANCE.language.setValueSilently(lang);
+                        } catch (IllegalArgumentException e) {
+                            Constants.LOGGER.warn("无效的语言设置: {}", langStr);
+                        }
                     }
                 }
                 return;
@@ -735,6 +751,7 @@ public class ConfigHolder {
             ensureRootDirectories();
             JsonObject root = new JsonObject();
             root.addProperty("showWelcomeScreen", ClientSetting.INSTANCE.showWelcomeScreen.getValue());
+            root.addProperty("language", ClientSetting.INSTANCE.language.getValue().name());
             Files.writeString(rootSettingsFile, gson.toJson(root), StandardCharsets.UTF_8,
                     StandardOpenOption.CREATE,
                     StandardOpenOption.TRUNCATE_EXISTING,
