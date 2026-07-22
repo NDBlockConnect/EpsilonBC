@@ -18,16 +18,16 @@ import java.util.List;
 
 public class WelcomeScreen extends Screen {
 
-    // 欢迎来到 EpsilonBC - FishWish PvP HvH 专用客户端 / Welcome to EpsilonBC - FishWish PvP HvH Client
-    private static final String TITLE_B64 = "5qyi6L+O5p2l5YiwIEVwc2lsb25CQyAtIEZpc2hXaXNoIFB2UCBIdkgg5LiT55So5a6i5oi356uvIC8gV2VsY29tZSB0byBFcHNpbG9uQkM=";
-    // 本客户端完全免费，仅供 FishWish PvP 服务器 HvH 玩家使用。/ This client is completely free and exclusively for FishWish PvP HvH players.
-    private static final String NOTICE_B64 = "5pys5a6i5oi356uv5a6M5YWo5YWN6LS577yM5LuF5L6bIEZpc2hXaXNoIFB2UCDmnY3liqHlmahIdkjnjqnlrrbkvb/nlKjjgIIvIFRoaXMgY2xpZW50IGlzIGNvbXBsZXRlbHkgZnJlZSBhbmQgZXhjbHVzaXZlbHkgZm9yIEZpc2hXaXNoIFB2UCBIdkggcGxheWVycy4=";
+    // 欢迎来到 EpsilonBC / Welcome to EpsilonBC
+    private static final String TITLE_B64 = "5qyi6L+O5p2l5YiwIEVwc2lsb25CQyAvIFdlbGNvbWUgdG8gRXBzaWxvbkJD";
+    // 本客户端完全免费。/ This client is completely free.
+    private static final String NOTICE_B64 = "5pys5a6i5oi356uv5a6M5YWo5YWN6LS544CCLyBUaGlzIGNsaWVudCBpcyBjb21wbGV0ZWx5IGZyZWUu";
     private static final String GITHUB_PREFIX_ZH_B64 = "R2l0SHViIOS7k+W6kzog";
     private static final String GITHUB_PREFIX_EN_B64 = "R2l0SHViIHJlcG9zaXRvcnk6IA==";
-    // FishWish/EpsilonBC (示例 - 请替换为实际仓库)
-    private static final String REPO_LABEL_B64 = "RmlzaFdpc2gvRXBzaWxvbkJD";
-    // https://github.com/FishWish/EpsilonBC (示例 - 请替换为实际 URL)
-    private static final String REPOSITORY_URL_B64 = "aHR0cHM6Ly9naXRodWIuY29tL0Zpc2hXaXNoL0Vwc2lsb25CQw==";
+    // NDBlockConnect/EpsilonBC
+    private static final String REPO_LABEL_B64 = "TkRCbG9ja0Nvbm5lY3QvRXBzaWxvbkJD";
+    // https://github.com/NDBlockConnect/EpsilonBC
+    private static final String REPOSITORY_URL_B64 = "aHR0cHM6Ly9naXRodWIuY29tL05EQmxvY2tDb25uZWN0L0Vwc2lsb25CQw==";
     private static final String CONTINUE_B64 = "57un57utIC8gQ29udGludWU=";
     private static final String DONT_SHOW_AGAIN_B64 = "5LiL5qyh5LiN5YaN5pi+56S6IC8gRG8gbm90IHNob3cgYWdhaW4=";
     private static final String OPEN_GITHUB_B64 = "5omT5byAR2l0aHViIC8gT3BlbiBHaXRodWI=";
