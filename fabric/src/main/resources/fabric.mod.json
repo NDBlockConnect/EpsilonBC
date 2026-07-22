@@ -3,7 +3,7 @@
   "id": "${mod_id}",
   "version": "${version}",
   "name": "EpsilonBC",
-  "description": "FishWish PvP HvH 专用客户端",
+  "description": "EpsilonBC HvH 专用客户端",
   "authors": [
     "Chen_Meng",
     "06789"
