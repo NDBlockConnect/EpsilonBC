@@ -70,6 +70,7 @@ public class ModuleHolder {
 
         // Player
         addModule(AutoArmor.INSTANCE);
+        addModule(AutoEat.INSTANCE);
         addModule(AutoFirework.INSTANCE);
         addModule(AutoKouZi.INSTANCE);
         addModule(AutoTool.INSTANCE);
