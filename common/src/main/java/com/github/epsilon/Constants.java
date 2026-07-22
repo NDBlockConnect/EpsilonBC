@@ -8,7 +8,7 @@ public class Constants {
 
     public static final Minecraft mc = Minecraft.getInstance();
 
-    public static final String NAME = "Epsilon";
+    public static final String NAME = "EpsilonBC";
 
     public static final String MOD_ID = BuildConfig.MOD_ID;
 

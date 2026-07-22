@@ -1,6 +1,6 @@
 {
   "epsilon": {
-    "_value": "Epsilon",
+    "_value": "EpsilonBC",
     "categories": {
       "combat": "战斗",
       "player": "玩家",
@@ -298,13 +298,13 @@
           "_value": "自定义图标",
           "vanilla": "原版",
           "minecraft_1_8_9": "Minecraft 1.8.9",
-          "epsilon": "Epsilon"
+          "epsilon": "EpsilonBC"
         },
         "custom title": {
           "_value": "自定义标题",
           "vanilla": "原版",
           "minecraft_1_8_9": "Minecraft 1.8.9",
-          "epsilon": "Epsilon"
+          "epsilon": "EpsilonBC"
         },
         "use mainmenu": "自定义主菜单",
         "mainmenu background": {
