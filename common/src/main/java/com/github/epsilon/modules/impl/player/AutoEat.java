@@ -7,8 +7,8 @@ import com.github.epsilon.modules.Module;
 import com.github.epsilon.settings.impl.BoolSetting;
 import com.github.epsilon.settings.impl.DoubleSetting;
 import com.github.epsilon.settings.impl.IntSetting;
-import com.github.epsilon.utils.player.FindItemResult;
-import com.github.epsilon.utils.player.InvUtils;
+import com.github.epsilon.utils.player.ClickSlotUtils;
+import com.github.epsilon.utils.player.InvHelper;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
@@ -41,12 +41,13 @@ public class AutoEat extends Module {
     );
 
     private boolean eating;
-    private boolean usedInvSwap;
+    private int eatHotbarSlot = -1;
+    private int prevSelectedSlot = -1;
+    private int stashContainerSlot = -1;
 
     @Override
     protected void onEnable() {
-        eating = false;
-        usedInvSwap = false;
+        resetState();
     }
 
     @Override
@@ -70,6 +71,7 @@ public class AutoEat extends Module {
         boolean want = shouldEat();
 
         if (eating) {
+            // Keep chewing until we no longer need to eat or the held item is no longer food.
             if (!want || !isFood(mc.player.getMainHandItem())) {
                 stopEating();
                 return;
@@ -80,13 +82,10 @@ public class AutoEat extends Module {
 
         if (!want) return;
 
-        FindItemResult food = findFood();
-        if (!food.found()) return;
+        int foodSlot = findBestFoodSlot();
+        if (foodSlot == -1) return;
 
-        ItemStack stack = mc.player.getInventory().getItem(food.slot());
-        if (!canEatNow(stack)) return;
-
-        startEating(food);
+        startEating(foodSlot);
     }
 
     private boolean shouldEat() {
@@ -95,31 +94,89 @@ public class AutoEat extends Module {
         return hungry || lowHp;
     }
 
-    private FindItemResult findFood() {
+    /**
+     * Chooses the most appropriate food slot (0-35, hotbar + main inventory).
+     * Priorities: gapple when low HP -> food that best matches the hunger deficit.
+     */
+    private int findBestFoodSlot() {
         boolean lowHp = mc.player.getHealth() <= health.getValue().floatValue();
 
         if (lowHp && gappleAtLowHp.getValue()) {
-            FindItemResult gap = InvUtils.find(this::isGolden, 0, 35);
-            if (gap.found()) return gap;
+            int enchanted = firstSlotOf(Items.ENCHANTED_GOLDEN_APPLE);
+            if (enchanted != -1) return enchanted;
+            int golden = firstSlotOf(Items.GOLDEN_APPLE);
+            if (golden != -1) return golden;
         }
 
-        FindItemResult normal = InvUtils.find(
-                s -> isFood(s) && !isGolden(s) && (!avoidBadFood.getValue() || !isBadFood(s)), 0, 35);
-        if (normal.found()) return normal;
+        int deficit = 20 - mc.player.getFoodData().getFoodLevel();
+        if (deficit <= 0) deficit = 1;
 
-        return InvUtils.find(s -> isFood(s) && (!avoidBadFood.getValue() || !isBadFood(s)), 0, 35);
+        int coverSlot = -1;
+        int coverNutrition = Integer.MAX_VALUE;
+        float coverSaturation = -1.0f;
+
+        int largestSlot = -1;
+        int largestNutrition = -1;
+        float largestSaturation = -1.0f;
+
+        for (int i = 0; i <= 35; i++) {
+            ItemStack stack = mc.player.getInventory().getItem(i);
+            if (!isFood(stack)) continue;
+            if (avoidBadFood.getValue() && isBadFood(stack)) continue;
+
+            FoodProperties food = stack.get(DataComponents.FOOD);
+            if (food == null) continue;
+            if (!canEatNow(food)) continue;
+
+            int nutrition = food.nutrition();
+            float saturation = food.saturation();
+
+            // Best food that fully covers the deficit with the least overshoot.
+            if (nutrition >= deficit) {
+                if (nutrition < coverNutrition || (nutrition == coverNutrition && saturation > coverSaturation)) {
+                    coverNutrition = nutrition;
+                    coverSaturation = saturation;
+                    coverSlot = i;
+                }
+            }
+
+            // Fallback: the most filling food when nothing fully covers the deficit.
+            if (nutrition > largestNutrition || (nutrition == largestNutrition && saturation > largestSaturation)) {
+                largestNutrition = nutrition;
+                largestSaturation = saturation;
+                largestSlot = i;
+            }
+        }
+
+        return coverSlot != -1 ? coverSlot : largestSlot;
     }
 
-    private void startEating(FindItemResult food) {
-        int slot = food.slot();
-        if (slot >= 0 && slot < 9) {
-            InvUtils.swap(slot, true);
-            usedInvSwap = false;
-        } else if (slot >= 9 && slot <= 35) {
-            InvUtils.invSwap(slot);
-            usedInvSwap = true;
+    private int firstSlotOf(Item item) {
+        for (int i = 0; i <= 35; i++) {
+            if (mc.player.getInventory().getItem(i).getItem() == item) return i;
+        }
+        return -1;
+    }
+
+    private void startEating(int foodSlot) {
+        prevSelectedSlot = mc.player.getInventory().getSelectedSlot();
+
+        if (foodSlot >= 0 && foodSlot < 9) {
+            // Food already on the hotbar, just hold it.
+            eatHotbarSlot = foodSlot;
+            stashContainerSlot = -1;
+            mc.player.getInventory().setSelectedSlot(foodSlot);
         } else {
-            return;
+            // Pull food out of the main inventory: use an empty hotbar slot if we have
+            // one, otherwise swap it with whatever is currently held.
+            int empty = InvHelper.findEmptySlot();
+            int target = empty != -1 ? empty : prevSelectedSlot;
+            int containerSlot = foodSlot; // main inventory slots 9-35 map 1:1 in the player menu
+
+            ClickSlotUtils.swap(mc.player.inventoryMenu.containerId, containerSlot, target);
+            eatHotbarSlot = target;
+            stashContainerSlot = containerSlot;
+            mc.player.getInventory().setSelectedSlot(target);
         }
 
         eating = true;
@@ -127,35 +184,40 @@ public class AutoEat extends Module {
     }
 
     private void stopEating() {
-        if (!eating) return;
+        if (!eating) {
+            mc.options.keyUse.setDown(false);
+            return;
+        }
 
         mc.options.keyUse.setDown(false);
 
-        if (usedInvSwap) {
-            InvUtils.invSwapBack();
-        } else {
-            InvUtils.swapBack();
+        // Put the (possibly leftover) food stack back where it came from.
+        if (stashContainerSlot != -1 && eatHotbarSlot != -1) {
+            ClickSlotUtils.swap(mc.player.inventoryMenu.containerId, stashContainerSlot, eatHotbarSlot);
+        }
+        if (prevSelectedSlot != -1) {
+            mc.player.getInventory().setSelectedSlot(prevSelectedSlot);
         }
 
-        usedInvSwap = false;
+        resetState();
+    }
+
+    private void resetState() {
         eating = false;
+        eatHotbarSlot = -1;
+        prevSelectedSlot = -1;
+        stashContainerSlot = -1;
     }
 
     private boolean isFood(ItemStack stack) {
         return stack != null && !stack.isEmpty() && stack.get(DataComponents.FOOD) != null;
     }
 
-    private boolean isGolden(ItemStack stack) {
-        return isFood(stack) && (stack.getItem() == Items.GOLDEN_APPLE || stack.getItem() == Items.ENCHANTED_GOLDEN_APPLE);
-    }
-
     private boolean isBadFood(ItemStack stack) {
         return stack != null && BAD_FOOD.contains(stack.getItem());
     }
 
-    private boolean canEatNow(ItemStack stack) {
-        FoodProperties food = stack.get(DataComponents.FOOD);
-        if (food == null) return false;
+    private boolean canEatNow(FoodProperties food) {
         if (mc.player.getFoodData().getFoodLevel() < 20) return true;
         return food.canAlwaysEat();
     }
