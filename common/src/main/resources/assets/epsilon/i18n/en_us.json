@@ -1,6 +1,6 @@
 {
   "epsilon": {
-    "_value": "Epsilon",
+    "_value": "EpsilonBC",
     "categories": {
       "combat": "Combat",
       "player": "Player",
@@ -298,13 +298,13 @@
           "_value": "Custom Icon",
           "vanilla": "Vanilla",
           "minecraft_1_8_9": "Minecraft 1.8.9",
-          "epsilon": "Epsilon"
+          "epsilon": "EpsilonBC"
         },
         "custom title": {
           "_value": "Custom Title",
           "vanilla": "Vanilla",
           "minecraft_1_8_9": "Minecraft 1.8.9",
-          "epsilon": "Epsilon"
+          "epsilon": "EpsilonBC"
         },
         "use mainmenu": "Use Main Menu",
         "mainmenu background": {
