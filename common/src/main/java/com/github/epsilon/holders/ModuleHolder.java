@@ -49,6 +49,8 @@ public class ModuleHolder {
         addModule(AutoDtap.INSTANCE);
         addModule(AutoHitCrystal.INSTANCE);
         addModule(AutoMend.INSTANCE);
+        addModule(AutoOffhand.INSTANCE);
+        addModule(AutoPot.INSTANCE);
         addModule(AutoTotem.INSTANCE);
         addModule(AutoWeapon.INSTANCE);
         addModule(Criticals.INSTANCE);
@@ -70,8 +72,10 @@ public class ModuleHolder {
 
         // Player
         addModule(AutoArmor.INSTANCE);
+        addModule(AutoDisconnect.INSTANCE);
         addModule(AutoEat.INSTANCE);
         addModule(AutoFirework.INSTANCE);
+        addModule(AutoRespawn.INSTANCE);
         addModule(AutoKouZi.INSTANCE);
         addModule(AutoTool.INSTANCE);
         addModule(BreakCooldown.INSTANCE);
