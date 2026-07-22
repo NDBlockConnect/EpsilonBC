@@ -65,6 +65,7 @@ public class ModuleHolder {
         addModule(MaceAura.INSTANCE);
         addModule(PacketMine.INSTANCE);
         addModule(Reach.INSTANCE);
+        addModule(Regen.INSTANCE);
         addModule(SafeAnchor.INSTANCE);
         addModule(SafeCrystal.INSTANCE);
         addModule(SilentAim.INSTANCE);
