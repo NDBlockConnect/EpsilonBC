@@ -4,8 +4,10 @@ import com.github.epsilon.events.bus.EventBus;
 import com.github.epsilon.events.impl.AttackSlowDownEvent;
 import com.github.epsilon.events.impl.AttackYawEvent;
 import com.github.epsilon.events.impl.TravelEvent;
+import com.github.epsilon.modules.impl.combat.Reach;
 import com.github.epsilon.modules.impl.movement.KeepSprint;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -41,6 +43,22 @@ public class MixinPlayer {
         if (event.isCancelled()) {
             ci.cancel();
         }
+    }
+
+    @ModifyReturnValue(method = "entityInteractionRange", at = @At("RETURN"))
+    private double modifyEntityReach(double original) {
+        if ((Player) (Object) this != mc.player) return original;
+        Reach reach = Reach.INSTANCE;
+        if (!reach.isEnabled()) return original;
+        return Math.max(original, reach.getEntityReach());
+    }
+
+    @ModifyReturnValue(method = "blockInteractionRange", at = @At("RETURN"))
+    private double modifyBlockReach(double original) {
+        if ((Player) (Object) this != mc.player) return original;
+        Reach reach = Reach.INSTANCE;
+        if (!reach.isEnabled() || !reach.shouldOverrideBlock()) return original;
+        return Math.max(original, reach.getBlockReach());
     }
 
     @Inject(method = "attack", at = @At("RETURN"))
