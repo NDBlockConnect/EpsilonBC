@@ -149,6 +149,7 @@ public class ModuleHolder {
         addModule(SneakTweak.INSTANCE);
         addModule(Tracers.INSTANCE);
         addModule(Trajectories.INSTANCE);
+        addModule(TrueSight.INSTANCE);
         addModule(Xray.INSTANCE);
 
     }

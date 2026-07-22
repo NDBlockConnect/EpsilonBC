@@ -1,6 +1,7 @@
 package com.github.epsilon.mixins;
 
 import com.github.epsilon.interfaces.EntityRenderStateAccessor;
+import com.github.epsilon.modules.impl.render.TrueSight;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
@@ -16,6 +17,12 @@ public class MixinEntityRenderDispatcher {
         if (state instanceof EntityRenderStateAccessor entityRenderState) {
             entityRenderState.epsilon$setEntity(entity);
         }
+
+        // Force invisible entities to render solid so TrueSight can reveal them.
+        if (state.isInvisible && TrueSight.INSTANCE.isEnabled() && TrueSight.INSTANCE.shouldReveal(entity)) {
+            state.isInvisible = false;
+        }
+
         return state;
     }
 
