@@ -130,6 +130,7 @@ public class ModuleHolder {
         addModule(BlockHighlight.INSTANCE);
         addModule(CameraClip.INSTANCE);
         addModule(Chams.INSTANCE);
+        addModule(ChunkViewer.INSTANCE);
         addModule(CrystalChams.INSTANCE);
         addModule(ESP2D.INSTANCE);
         addModule(Filter.INSTANCE);
