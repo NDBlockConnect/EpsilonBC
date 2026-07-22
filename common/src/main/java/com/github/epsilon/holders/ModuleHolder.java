@@ -63,6 +63,7 @@ public class ModuleHolder {
         addModule(KillAura.INSTANCE);
         addModule(KeyPearl.INSTANCE);
         addModule(MaceAura.INSTANCE);
+        addModule(Nuker.INSTANCE);
         addModule(PacketMine.INSTANCE);
         addModule(Reach.INSTANCE);
         addModule(Regen.INSTANCE);
