@@ -12,6 +12,7 @@ import com.github.epsilon.modules.Module;
 import com.github.epsilon.settings.impl.BoolSetting;
 import com.github.epsilon.settings.impl.EnumSetting;
 import com.github.epsilon.settings.impl.IntSetting;
+import com.github.epsilon.settings.impl.RegistryListSetting;
 import com.github.epsilon.utils.timer.TimerUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.core.BlockPos;
@@ -25,6 +26,7 @@ import net.minecraft.world.phys.AABB;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Xray extends Module {
@@ -59,6 +61,25 @@ public class Xray extends Module {
     private final BoolSetting quartz = boolSetting("Quartz", false);
     private final BoolSetting water = boolSetting("Water", false);
     private final BoolSetting lava = boolSetting("Lava", false);
+    private final RegistryListSetting<Block> blockList = blockListSetting("Block List",
+            List.of(
+                    Blocks.DIAMOND_ORE,
+                    Blocks.DEEPSLATE_DIAMOND_ORE,
+                    Blocks.ANCIENT_DEBRIS,
+                    Blocks.EMERALD_ORE,
+                    Blocks.DEEPSLATE_EMERALD_ORE,
+                    Blocks.GOLD_ORE,
+                    Blocks.DEEPSLATE_GOLD_ORE,
+                    Blocks.SPAWNER,
+                    Blocks.TRIAL_SPAWNER,
+                    Blocks.VAULT,
+                    Blocks.CHEST,
+                    Blocks.TRAPPED_CHEST,
+                    Blocks.ENDER_CHEST,
+                    Blocks.BARREL,
+                    Blocks.SHULKER_BOX
+            )
+    );
 
     private final TimerUtils delayTimer = new TimerUtils();
     private final ArrayList<BlockPos> ores = new ArrayList<>();
@@ -170,6 +191,9 @@ public class Xray extends Module {
             if (block == Blocks.NETHER_QUARTZ_ORE && quartz.getValue()) {
                 draw(stack, pos, 170, 170, 170);
             }
+            if (!block.defaultBlockState().isAir() && blockList.getValue().contains(block) && !isHardcodedOre(block)) {
+                draw(stack, pos, 200, 120, 255);
+            }
         }
 
         if (displayBlock != null && (done != all)) {
@@ -219,7 +243,19 @@ public class Xray extends Module {
         Render3DScheduler.INSTANCE.addOutlineBox(box, new Color(r, g, b, 200));
     }
 
+    private boolean isHardcodedOre(Block block) {
+        return block == Blocks.DIAMOND_ORE || block == Blocks.DEEPSLATE_DIAMOND_ORE
+                || block == Blocks.GOLD_ORE || block == Blocks.DEEPSLATE_GOLD_ORE || block == Blocks.NETHER_GOLD_ORE
+                || block == Blocks.IRON_ORE || block == Blocks.DEEPSLATE_IRON_ORE
+                || block == Blocks.EMERALD_ORE || block == Blocks.DEEPSLATE_EMERALD_ORE
+                || block == Blocks.REDSTONE_ORE || block == Blocks.DEEPSLATE_REDSTONE_ORE
+                || block == Blocks.COAL_ORE || block == Blocks.DEEPSLATE_COAL_ORE
+                || block == Blocks.LAPIS_ORE || block == Blocks.DEEPSLATE_LAPIS_ORE
+                || block == Blocks.ANCIENT_DEBRIS || block == Blocks.NETHER_QUARTZ_ORE;
+    }
+
     public boolean isCheckableOre(Block block) {
+        if (blockList.getValue().contains(block)) return true;
         if (diamond.getValue() && (block == Blocks.DIAMOND_ORE || block == Blocks.DEEPSLATE_DIAMOND_ORE)) return true;
         if (gold.getValue() && (block == Blocks.GOLD_ORE || block == Blocks.DEEPSLATE_GOLD_ORE || block == Blocks.NETHER_GOLD_ORE))
             return true;
