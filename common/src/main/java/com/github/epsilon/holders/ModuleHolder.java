@@ -148,6 +148,7 @@ public class ModuleHolder {
         addModule(Shaders.INSTANCE);
         addModule(SneakTweak.INSTANCE);
         addModule(Tracers.INSTANCE);
+        addModule(Trajectories.INSTANCE);
         addModule(Xray.INSTANCE);
 
     }
