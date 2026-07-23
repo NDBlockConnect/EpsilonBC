@@ -10,6 +10,7 @@ import com.github.epsilon.holders.HudElementHolder;
 import com.github.epsilon.holders.ModuleHolder;
 import com.github.epsilon.managers.Managers;
 import com.github.epsilon.modules.impl.ClientSetting;
+import com.github.epsilon.update.UpdateChecker;
 
 import java.lang.invoke.MethodHandles;
 
@@ -29,6 +30,9 @@ public class EpsilonCommon {
 
         // 初始化 Managers
         Managers.initManagers();
+
+        // 异步检查 GitHub 是否有新版本
+        UpdateChecker.INSTANCE.init();
 
         // 初始化 Render3DScheduler 里的 RenderPipeline
         Render3DScheduler.init();
