@@ -1,12 +1,11 @@
 package com.github.epsilon.modules.impl.movement;
 
 import com.github.epsilon.events.bus.EventHandler;
-import com.github.epsilon.events.impl.ClientTickEvent;
+import com.github.epsilon.events.impl.SendPositionEvent;
 import com.github.epsilon.modules.Category;
 import com.github.epsilon.modules.Module;
 import com.github.epsilon.settings.impl.DoubleSetting;
 import com.github.epsilon.settings.impl.EnumSetting;
-import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
 
 public class NoFall extends Module {
 
@@ -25,22 +24,20 @@ public class NoFall extends Module {
     private final DoubleSetting fallDistance = doubleSetting("Fall Distance", 3, 3, 16, 1, () -> mode.is(Mode.GroundSpoof));
 
     @EventHandler
-    private void onClientTick(ClientTickEvent.Pre event) {
+    private void onSendPosition(SendPositionEvent event) {
         if (nullCheck() || !isFalling()) return;
 
         if (mode.is(Mode.Grim2B2T)) {
-            // Send a tiny upward-offset packet — server sees upward movement and resets
-            // its fall distance counter without any ground-state desync.
-            mc.getConnection().send(new ServerboundMovePlayerPacket.PosRot(
-                    mc.player.getX(), mc.player.getY() + 0.000000001, mc.player.getZ(),
-                    mc.player.getYRot(), mc.player.getXRot(), false, mc.player.horizontalCollision));
+            // Nudge Y upward by a tiny epsilon — server sees upward movement and
+            // resets its fall-distance counter without any ground-state desync.
+            event.setY(event.getY() + 0.000000001);
+            event.setOnGround(false);
         } else {
-            // GroundSpoof: tell server player is on the ground at current position.
-            // One packet per tick while falling; resetFallDistance() keeps client
-            // fallDistance at 0 so the server never sees a lethal landing.
-            mc.getConnection().send(new ServerboundMovePlayerPacket.PosRot(
-                    mc.player.getX(), mc.player.getY(), mc.player.getZ(),
-                    mc.player.getYRot(), mc.player.getXRot(), true, mc.player.horizontalCollision));
+            // GroundSpoof: set onGround=true in the natural position packet.
+            // Modifying it here (before PacketEvent.Send) means Blink will buffer
+            // the already-corrected packet; when released the server sees the player
+            // as always on the ground and never accumulates fall distance.
+            event.setOnGround(true);
         }
         mc.player.resetFallDistance();
     }
