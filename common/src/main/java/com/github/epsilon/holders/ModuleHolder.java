@@ -74,6 +74,7 @@ public class ModuleHolder {
         addModule(TriggerBot.INSTANCE);
 
         // Player
+        addModule(AltManager.INSTANCE);
         addModule(AutoArmor.INSTANCE);
         addModule(AntiAFK.INSTANCE);
         addModule(AutoDisconnect.INSTANCE);
