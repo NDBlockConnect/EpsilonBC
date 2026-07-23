@@ -133,6 +133,10 @@ public class SettingsContent {
         for (int index = 0; index < sections.size(); index++) {
             SettingSection section = sections.get(index);
             float sectionHeight = cachedSectionHeights.get(index);
+            if (section.hasHeader() && visibleWidgetCount(section) == 0) {
+                // Every child is hidden by an unmet dependency; skip the empty header entirely.
+                continue;
+            }
             if (section.hasHeader()) {
                 drawSection(scope, textMetrics, mouseX, mouseY, section, panelX, currentY, panelWidth);
             } else {
@@ -155,6 +159,9 @@ public class SettingsContent {
     public boolean mouseClicked(double mouseX, double mouseY, int button, float panelX, float contentY, float panelWidth) {
         float currentY = contentY + DropdownTheme.SETTING_GAP;
         for (SettingSection section : sections) {
+            if (section.hasHeader() && visibleWidgetCount(section) == 0) {
+                continue;
+            }
             if (section.hasHeader()) {
                 float headerX = panelX + DropdownTheme.SETTING_INDENT;
                 float headerW = panelWidth - DropdownTheme.SETTING_INDENT * 2.0f;
@@ -263,6 +270,14 @@ public class SettingsContent {
         return false;
     }
 
+    private int visibleWidgetCount(SettingSection section) {
+        int count = 0;
+        for (SettingWidget<?> widget : section.widgets()) {
+            if (widget.isVisible()) count++;
+        }
+        return count;
+    }
+
     private float getSectionHeight(SettingSection section) {
         if (!section.hasHeader()) {
             float h = 0.0f;
@@ -272,6 +287,11 @@ public class SettingsContent {
                 }
             }
             return h;
+        }
+
+        // A header group with no visible children collapses to zero height so it leaves no blank gap.
+        if (visibleWidgetCount(section) == 0) {
+            return 0.0f;
         }
 
         return DropdownTheme.GROUP_HEADER_HEIGHT + DropdownTheme.SETTING_GAP
@@ -315,7 +335,7 @@ public class SettingsContent {
         float labelY = sectionY + (headerH - textMetrics.textHeight(DropdownTheme.GROUP_HEADER_TEXT_SCALE)) * 0.5f;
         scope.text(label, headerX + DropdownTheme.SETTING_PADDING_X, labelY, DropdownTheme.GROUP_HEADER_TEXT_SCALE, DropdownTheme.groupText());
 
-        String countLabel = Integer.toString(section.widgets().size());
+        String countLabel = Integer.toString(visibleWidgetCount(section));
         float countWidth = textMetrics.textWidth(countLabel, DropdownTheme.GROUP_COUNT_TEXT_SCALE) + DropdownTheme.GROUP_COUNT_CHIP_PADDING * 2.0f;
         float countX = headerX + headerW - DropdownTheme.SETTING_PADDING_X - countWidth - 12.0f;
         float chipH = DropdownTheme.GROUP_COUNT_CHIP_HEIGHT;
