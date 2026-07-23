@@ -14,6 +14,12 @@ import net.minecraft.client.gui.screens.RecoverWorldDataScreen;
 import net.minecraft.client.player.RemotePlayer;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
+import net.minecraft.network.protocol.game.ServerboundChatPacket;
+import net.minecraft.network.protocol.game.ServerboundChatCommandPacket;
+import net.minecraft.network.protocol.game.ServerboundChatCommandSignedPacket;
+import net.minecraft.network.protocol.game.ServerboundChatAckPacket;
+import net.minecraft.network.protocol.game.ServerboundChatSessionUpdatePacket;
+import net.minecraft.network.protocol.game.ServerboundClientCommandPacket;
 import net.minecraft.network.protocol.handshake.ClientIntentionPacket;
 import net.minecraft.network.protocol.login.ServerboundHelloPacket;
 import net.minecraft.world.entity.Entity;
@@ -49,7 +55,17 @@ public class Blink extends Module {
     public void onHigherPacketSend(PacketEvent.Send e) {
         if (nullCheck()) return;
         Packet<?> packet = e.getPacket();
+        // Never buffer handshake/login packets — they must reach the server immediately.
         if (packet instanceof ServerboundHelloPacket || packet instanceof ClientIntentionPacket) return;
+        // Never buffer chat-related packets — buffering causes severe chat delay.
+        if (packet instanceof ServerboundChatPacket
+                || packet instanceof ServerboundChatCommandPacket
+                || packet instanceof ServerboundChatCommandSignedPacket
+                || packet instanceof ServerboundChatAckPacket
+                || packet instanceof ServerboundChatSessionUpdatePacket) return;
+        // Never buffer respawn/command packets — player is dead, no movement packets
+        // are sent, so the queue never drains and the respawn packet is stuck forever.
+        if (packet instanceof ServerboundClientCommandPacket) return;
         e.cancel();
         packets.add(packet);
     }

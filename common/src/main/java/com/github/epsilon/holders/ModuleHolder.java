@@ -148,6 +148,7 @@ public class ModuleHolder {
         addModule(CrystalChams.INSTANCE);
         addModule(ESP2D.INSTANCE);
         addModule(Filter.INSTANCE);
+        addModule(FootBlock.INSTANCE);
         addModule(FreeCamera.INSTANCE);
         addModule(Fullbright.INSTANCE);
         addModule(GameAnimation.INSTANCE);

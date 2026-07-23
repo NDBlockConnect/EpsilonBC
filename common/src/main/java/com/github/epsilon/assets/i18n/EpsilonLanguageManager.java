@@ -31,7 +31,10 @@ public class EpsilonLanguageManager {
     private static final String LANGUAGE_DIRECTORY = "i18n";
 
     private volatile Map<String, String> translations = Map.of();
-    private volatile EpsilonLanguage selectedLanguage = EpsilonLanguage.English;
+    // Default to Auto so the manager follows the game language on startup.
+    // ClientSetting.language also defaults to Auto, and the setting callback only fires
+    // on user change — not on config load — so this field initializer must match.
+    private volatile EpsilonLanguage selectedLanguage = EpsilonLanguage.Auto;
 
     private EpsilonLanguageManager() {
     }
@@ -114,6 +117,10 @@ public class EpsilonLanguageManager {
     }
 
     private String resolveSelectedLanguageCode() {
+        if (selectedLanguage.isAuto()) {
+            return resolveGameLanguageCode();
+        }
+
         if (!selectedLanguage.isCustom()) {
             return selectedLanguage.getCode();
         }
@@ -124,6 +131,18 @@ public class EpsilonLanguageManager {
                     .toLowerCase(Locale.ROOT);
         } catch (Throwable ignored) {
             return "";
+        }
+    }
+
+    private String resolveGameLanguageCode() {
+        try {
+            String gameCode = Constants.mc.options.languageCode;
+            if (gameCode == null || gameCode.isBlank()) {
+                return DEFAULT_LANGUAGE_CODE;
+            }
+            return gameCode.trim().toLowerCase(Locale.ROOT);
+        } catch (Throwable ignored) {
+            return DEFAULT_LANGUAGE_CODE;
         }
     }
 }

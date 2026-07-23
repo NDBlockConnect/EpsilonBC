@@ -1,6 +1,7 @@
 package com.github.epsilon.assets.i18n;
 
 public enum EpsilonLanguage {
+    Auto("", "Auto (Follow Game)"),
     English("en_us", "English"),
     ChineseSimplified("zh_cn", "Chinese Simplified"),
     Custom("", "Custom");
@@ -24,5 +25,9 @@ public enum EpsilonLanguage {
 
     public boolean isCustom() {
         return this == Custom;
+    }
+
+    public boolean isAuto() {
+        return this == Auto;
     }
 }

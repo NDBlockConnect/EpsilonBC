@@ -1444,6 +1444,24 @@
         },
         "base color": "Base Color"
       },
+      "foot block": {
+        "_value": "Foot Block",
+        "players": "Players",
+        "friends": "Friends",
+        "creatures": "Creatures",
+        "monsters": "Monsters",
+        "ambients": "Ambients",
+        "others": "Others",
+        "filled": "Filled",
+        "outline": "Outline",
+        "players color": "Players Color",
+        "friends color": "Friends Color",
+        "creatures color": "Creatures Color",
+        "monsters color": "Monsters Color",
+        "ambients color": "Ambients Color",
+        "others color": "Others Color",
+        "outline color": "Outline Color"
+      },
       "free camera": {
         "_value": "Free Camera",
         "speed": "Speed",
