@@ -31,7 +31,7 @@ public class FabricPlatformAddon extends EpsilonAddon {
 
     @Override
     public String getVersion() {
-        return Constants.VERSION;
+        return Constants.DISPLAY_VERSION;
     }
 
     @Override

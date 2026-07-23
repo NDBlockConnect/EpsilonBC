@@ -294,7 +294,7 @@ public class MainMenuScreen extends Screen {
         Color accentColor = applyAlpha(new Color(208, 188, 255), 0.95f * menuVisibility);
 
         String title = "EPSILON";
-        String subtitle = Constants.VERSION;
+        String subtitle = Constants.DISPLAY_VERSION;
 
         float titleHeight = scene.scheduler().textMetrics().getHeight(titleScale, StaticFontLoader.JURA_LIGHT);
         float subtitleY = titleY + titleHeight + titleSubtitleGap;

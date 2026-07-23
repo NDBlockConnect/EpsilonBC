@@ -144,7 +144,7 @@ public abstract class MixinMinecraft {
         return switch (ClientSetting.INSTANCE.customTitle.getValue()) {
             case Vanilla -> title;
             case Minecraft_1_8_9 -> "Minecraft 1.8.9";
-            case Epsilon -> Constants.NAME + " " + Constants.VERSION + " for " + title;
+            case Epsilon -> Constants.NAME + " " + Constants.DISPLAY_VERSION + " for " + title;
         };
     }
 

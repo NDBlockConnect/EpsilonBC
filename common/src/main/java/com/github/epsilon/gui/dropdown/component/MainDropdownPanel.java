@@ -58,7 +58,7 @@ public class MainDropdownPanel extends AbstractDropdownPanel {
         float versionMaxWidth = x + width - 17.0f - versionX;
         if (versionMaxWidth <= 2.0f) return;
 
-        String version = trimToWidth(Constants.VERSION, versionScale, versionMaxWidth, textMetrics);
+        String version = trimToWidth(Constants.DISPLAY_VERSION, versionScale, versionMaxWidth, textMetrics);
         if (!version.isEmpty()) {
             float nameY = y + (DropdownTheme.PANEL_HEADER_HEIGHT - textMetrics.textHeight(DropdownTheme.HEADER_TEXT_SCALE)) * 0.5f;
             float versionY = nameY + textMetrics.textHeight(DropdownTheme.HEADER_TEXT_SCALE) - textMetrics.textHeight(versionScale);

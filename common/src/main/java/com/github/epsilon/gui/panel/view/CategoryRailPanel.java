@@ -101,7 +101,7 @@ public class CategoryRailPanel {
                 scope.pushAbsolute(bounds, rail -> {
                     rail.text(Constants.NAME, 38.0f + titleOffset, titleY, titleScale, MD3Theme.withAlpha(MD3Theme.TEXT_PRIMARY, (int) (255 * titleProgress)));
                     if (subtitleProgress > 0.02f) {
-                        rail.text(Constants.VERSION, 38.0f + subtitleOffset, subtitleY, subtitleScale, MD3Theme.withAlpha(MD3Theme.TEXT_SECONDARY, (int) (210 * subtitleProgress)));
+                        rail.text(Constants.DISPLAY_VERSION, 38.0f + subtitleOffset, subtitleY, subtitleScale, MD3Theme.withAlpha(MD3Theme.TEXT_SECONDARY, (int) (210 * subtitleProgress)));
                     }
                     if (dividerProgress > 0.02f) {
                         float dividerY = subtitleY + textRenderer.getHeight(subtitleScale) + 4.0f;
