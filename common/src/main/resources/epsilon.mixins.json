@@ -50,6 +50,7 @@
     "MixinLocalPlayer",
     "MixinMain",
     "MixinMinecraft",
+    "MixinMinecraftAccessor",
     "MixinMobEffectFogEnvironment",
     "MixinModelFeatureRenderer",
     "MixinMouseHandler",
