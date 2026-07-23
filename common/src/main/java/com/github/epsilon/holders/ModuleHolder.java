@@ -77,6 +77,9 @@ public class ModuleHolder {
         addModule(AutoArmor.INSTANCE);
         addModule(AntiAFK.INSTANCE);
         addModule(AutoDisconnect.INSTANCE);
+        addModule(AutoReconnect.INSTANCE);
+        addModule(AutoEject.INSTANCE);
+        addModule(AutoReplace.INSTANCE);
         addModule(AutoEat.INSTANCE);
         addModule(AutoFish.INSTANCE);
         addModule(AutoFirework.INSTANCE);
@@ -93,9 +96,11 @@ public class ModuleHolder {
         addModule(InvManager.INSTANCE);
         addModule(JumpCooldown.INSTANCE);
         addModule(MultiTask.INSTANCE);
+        addModule(NameProtect.INSTANCE);
         addModule(NoRotate.INSTANCE);
         addModule(PacketEat.INSTANCE);
         addModule(PlayerAlarms.INSTANCE);
+        addModule(RangeNotifier.INSTANCE);
         addModule(SoundFX.INSTANCE);
         addModule(Stealer.INSTANCE);
         addModule(StructureFinder.INSTANCE);
