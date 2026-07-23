@@ -125,6 +125,10 @@ public class Phase extends Module {
     private void onCollide(BlockCollisionEvent event) {
         if (nullCheck()) return;
 
+        // BlockCollisionEvent fires for ALL entities, not just the local player.
+        // Guard: only suppress blocks that intersect the player's own bounding box.
+        if (!mc.player.getBoundingBox().inflate(1.0).intersects(new AABB(event.getPos()))) return;
+
         BlockPos playerPos = BlockPos.containing(mc.player.position());
 
         if (!mode.is(Mode.CCClip) && !mode.is(Mode.Pearl) && !mode.is(Mode.ForceMine) && canNoClip() || afterPearlTime > 0) {

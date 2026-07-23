@@ -2,8 +2,6 @@ package com.github.epsilon.modules.impl.movement;
 
 import com.github.epsilon.events.bus.EventHandler;
 import com.github.epsilon.events.impl.ClientTickEvent;
-import com.github.epsilon.events.impl.PacketEvent;
-import com.github.epsilon.events.impl.SendPositionEvent;
 import com.github.epsilon.modules.Category;
 import com.github.epsilon.modules.Module;
 import com.github.epsilon.settings.impl.DoubleSetting;
@@ -26,33 +24,25 @@ public class NoFall extends Module {
     private final EnumSetting<Mode> mode = enumSetting("Mode", Mode.GroundSpoof);
     private final DoubleSetting fallDistance = doubleSetting("Fall Distance", 3, 3, 16, 1, () -> mode.is(Mode.GroundSpoof));
 
-    private boolean shouldCancel = false;
-
-    @Override
-    protected void onEnable() {
-        shouldCancel = false;
-    }
-
     @EventHandler
     private void onClientTick(ClientTickEvent.Pre event) {
-        if (!nullCheck() && mode.is(Mode.Grim2B2T) && isFalling()) {
-            mc.getConnection().send(new ServerboundMovePlayerPacket.PosRot(mc.player.getX(), mc.player.getY() + 0.000000001, mc.player.getZ(), mc.player.getYRot(), mc.player.getXRot(), false, mc.player.horizontalCollision));
-            mc.player.resetFallDistance();
-        }
-    }
+        if (nullCheck() || !isFalling()) return;
 
-    @EventHandler
-    private void onSendPosition(SendPositionEvent event) {
-        if (isFalling() && mode.is(Mode.GroundSpoof)) {
-            shouldCancel = true;
+        if (mode.is(Mode.Grim2B2T)) {
+            // Send a tiny upward-offset packet — server sees upward movement and resets
+            // its fall distance counter without any ground-state desync.
+            mc.getConnection().send(new ServerboundMovePlayerPacket.PosRot(
+                    mc.player.getX(), mc.player.getY() + 0.000000001, mc.player.getZ(),
+                    mc.player.getYRot(), mc.player.getXRot(), false, mc.player.horizontalCollision));
+        } else {
+            // GroundSpoof: tell server player is on the ground at current position.
+            // One packet per tick while falling; resetFallDistance() keeps client
+            // fallDistance at 0 so the server never sees a lethal landing.
+            mc.getConnection().send(new ServerboundMovePlayerPacket.PosRot(
+                    mc.player.getX(), mc.player.getY(), mc.player.getZ(),
+                    mc.player.getYRot(), mc.player.getXRot(), true, mc.player.horizontalCollision));
         }
-    }
-
-    @EventHandler
-    private void onPacketSend(PacketEvent.Send event) {
-        if (event.getPacket() instanceof ServerboundMovePlayerPacket packet) {
-            if (shouldCancel) packet.onGround = false;
-        }
+        mc.player.resetFallDistance();
     }
 
     private boolean isFalling() {
