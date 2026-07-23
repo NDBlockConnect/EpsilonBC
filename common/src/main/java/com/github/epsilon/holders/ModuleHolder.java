@@ -75,16 +75,20 @@ public class ModuleHolder {
 
         // Player
         addModule(AutoArmor.INSTANCE);
+        addModule(AntiAFK.INSTANCE);
         addModule(AutoDisconnect.INSTANCE);
         addModule(AutoEat.INSTANCE);
+        addModule(AutoFish.INSTANCE);
         addModule(AutoFirework.INSTANCE);
         addModule(AutoRespawn.INSTANCE);
         addModule(AutoKouZi.INSTANCE);
         addModule(AutoTool.INSTANCE);
         addModule(BreakCooldown.INSTANCE);
+        addModule(BucketLand.INSTANCE);
         addModule(Disabler.INSTANCE);
         addModule(ElytraSwap.INSTANCE);
         addModule(FakePlayer.INSTANCE);
+        addModule(FastPlace.INSTANCE);
         addModule(GhostHand.INSTANCE);
         addModule(InvManager.INSTANCE);
         addModule(JumpCooldown.INSTANCE);
@@ -94,6 +98,7 @@ public class ModuleHolder {
         addModule(PlayerAlarms.INSTANCE);
         addModule(SoundFX.INSTANCE);
         addModule(Stealer.INSTANCE);
+        addModule(StructureFinder.INSTANCE);
         addModule(Timer.INSTANCE);
         addModule(UseCooldown.INSTANCE);
         addModule(AutoQueue.INSTANCE);
@@ -109,15 +114,18 @@ public class ModuleHolder {
         addModule(Flight.INSTANCE);
         addModule(GUIMove.INSTANCE);
         addModule(HoleSnap.INSTANCE);
+        addModule(Jesus.INSTANCE);
         addModule(JumpReset.INSTANCE);
         addModule(KeepSprint.INSTANCE);
         addModule(MovementFix.INSTANCE);
         addModule(NoFall.INSTANCE);
+        addModule(NoPush.INSTANCE);
         addModule(NoSlow.INSTANCE);
         addModule(Phase.INSTANCE);
         addModule(SafeWalk.INSTANCE);
         addModule(Scaffold.INSTANCE);
         addModule(Speed.INSTANCE);
+        addModule(Spider.INSTANCE);
         addModule(Step.INSTANCE);
         addModule(Strafe.INSTANCE);
         addModule(Stuck.INSTANCE);

@@ -8,6 +8,7 @@ import com.github.epsilon.gui.screen.MainMenuScreen;
 import com.github.epsilon.managers.Managers;
 import com.github.epsilon.managers.impl.sound.SoundKey;
 import com.github.epsilon.modules.impl.ClientSetting;
+import com.github.epsilon.modules.impl.player.FastPlace;
 import com.github.epsilon.modules.impl.player.MultiTask;
 import com.github.epsilon.modules.impl.player.UseCooldown;
 import com.github.epsilon.modules.impl.render.FreeCamera;
@@ -77,6 +78,9 @@ public abstract class MixinMinecraft {
     @Inject(method = "tick", at = @At("HEAD"))
     private void onPreTick(CallbackInfo info) {
         EventBus.INSTANCE.post(new ClientTickEvent.Pre());
+        if (FastPlace.INSTANCE.isEnabled()) {
+            rightClickDelay = 0;
+        }
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
