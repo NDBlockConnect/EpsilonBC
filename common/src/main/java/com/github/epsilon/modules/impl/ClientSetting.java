@@ -127,6 +127,8 @@ public class ClientSetting extends Module {
 
     public final BoolSetting replaceMinecraftFont = boolSetting("Replace Minecraft Font", true).group(sgGeneral);
 
+    public final BoolSetting checkForUpdates = boolSetting("Check For Updates", true).group(sgGeneral);
+
     public final BoolSetting closeOnOutside = boolSetting("Close Gui On Outside", false, () -> guiMode.is(GuiMode.Panel)).group(sgGeneral);
 
     public final BoolSetting dropdownHints = boolSetting("Dropdown Hints", true, () -> guiMode.is(GuiMode.Dropdown)).group(sgGeneral);
