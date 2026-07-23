@@ -6,7 +6,6 @@ import com.github.epsilon.modules.impl.ClientSetting;
 import com.github.epsilon.modules.impl.player.NameProtect;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.font.glyphs.BakedGlyph;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.FormattedCharSequence;
@@ -60,23 +59,14 @@ public class MixinFont {
         }
     }
 
-    // NameProtect: rewrite the text of the String and Component drawInBatch overloads
-    // before they are rendered. Purely client-side; nothing is sent to the server.
+    // NameProtect: rewrite the text before it is laid out for rendering. In MC 26.1.2
+    // the old drawInBatch overloads are gone; text now flows through prepareText(...).
+    // We hook the String overload (F3 / plain-text GUI labels). Purely client-side.
 
     @ModifyVariable(
-            method = "drawInBatch(Ljava/lang/String;FFIZLorg/joml/Matrix4f;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/client/gui/Font$DisplayMode;II)I",
+            method = "prepareText(Ljava/lang/String;FFIZI)Lnet/minecraft/client/gui/Font$PreparedText;",
             at = @At("HEAD"), argsOnly = true, index = 1)
     private String epsilon$protectString(String text) {
-        if (NameProtect.INSTANCE.shouldProcess()) {
-            return NameProtect.INSTANCE.process(text);
-        }
-        return text;
-    }
-
-    @ModifyVariable(
-            method = "drawInBatch(Lnet/minecraft/network/chat/Component;FFIZLorg/joml/Matrix4f;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/client/gui/Font$DisplayMode;II)I",
-            at = @At("HEAD"), argsOnly = true, index = 1)
-    private Component epsilon$protectComponent(Component text) {
         if (NameProtect.INSTANCE.shouldProcess()) {
             return NameProtect.INSTANCE.process(text);
         }
