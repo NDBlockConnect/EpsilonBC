@@ -189,15 +189,20 @@ public class Nuker extends Module {
 
     private int bestTool(BlockPos pos) {
         int index = -1;
-        float fastest = 1.0f;
+        float fastest = -1.0f;
         BlockState state = mc.level.getBlockState(pos);
         for (int i = 0; i < 9; i++) {
             ItemStack stack = mc.player.getInventory().getItem(i);
             if (stack.isEmpty()) continue;
-            float digSpeed = EnchantmentUtils.getEnchantmentLevel(stack, Enchantments.EFFICIENCY);
             float destroySpeed = stack.getDestroySpeed(state);
-            if (digSpeed + destroySpeed > fastest) {
-                fastest = digSpeed + destroySpeed;
+            // Only apply efficiency bonus for the correct tool type (destroySpeed > 1.0 means matching material).
+            // Vanilla formula: efficiency adds (level^2 + 1) to dig speed, so eff V = +26.
+            int effLevel = destroySpeed > 1.0f
+                    ? EnchantmentUtils.getEnchantmentLevel(stack, Enchantments.EFFICIENCY) : 0;
+            float effBonus = effLevel > 0 ? (effLevel * effLevel + 1) : 0;
+            float totalSpeed = destroySpeed + effBonus;
+            if (totalSpeed > fastest) {
+                fastest = totalSpeed;
                 index = i;
             }
         }

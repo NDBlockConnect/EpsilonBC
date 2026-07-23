@@ -1444,6 +1444,24 @@
         },
         "base color": "底色"
       },
+      "foot block": {
+        "_value": "脚下方块",
+        "players": "玩家",
+        "friends": "好友",
+        "creatures": "生物",
+        "monsters": "怪物",
+        "ambients": "环境生物",
+        "others": "其他",
+        "filled": "填充",
+        "outline": "描边",
+        "players color": "玩家颜色",
+        "friends color": "好友颜色",
+        "creatures color": "生物颜色",
+        "monsters color": "怪物颜色",
+        "ambients color": "环境生物颜色",
+        "others color": "其他颜色",
+        "outline color": "描边颜色"
+      },
       "free camera": {
         "_value": "自由视角",
         "speed": "移动速度",

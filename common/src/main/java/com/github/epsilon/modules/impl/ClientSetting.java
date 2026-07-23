@@ -100,7 +100,7 @@ public class ClientSetting extends Module {
 
     public final EnumSetting<ModuleSort> moduleSort = enumSetting("Module Sort", ModuleSort.Name).group(sgGeneral);
 
-    public final EnumSetting<EpsilonLanguage> language = enumSetting("Language", EpsilonLanguage.English, EpsilonLanguageManager.INSTANCE::selectLanguage).group(sgGeneral);
+    public final EnumSetting<EpsilonLanguage> language = enumSetting("Language", EpsilonLanguage.Auto, EpsilonLanguageManager.INSTANCE::selectLanguage).group(sgGeneral);
 
     public final StringSetting customLanguage = stringSetting("Custom Language", "", () -> language.is(EpsilonLanguage.Custom), _ -> EpsilonLanguageManager.INSTANCE.refreshCustomLanguage())
             .group(sgGeneral)

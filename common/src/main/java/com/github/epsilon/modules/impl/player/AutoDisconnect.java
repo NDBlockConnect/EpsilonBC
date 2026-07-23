@@ -34,6 +34,12 @@ public class AutoDisconnect extends Module {
     private void onTick(PlayerTickEvent.Pre event) {
         if (nullCheck() || mc.getConnection() == null) return;
 
+        // Don't disconnect if already dying (let death screen show normally)
+        if (mc.player.isDeadOrDying()) return;
+
+        // Don't disconnect in the void — player will die anyway, interrupting just blocks respawn
+        if (mc.level != null && mc.player.getY() < mc.level.getMinY() - 30) return;
+
         float currentHealth = mc.player.getHealth();
         float totalHealth = currentHealth + mc.player.getAbsorptionAmount();
 

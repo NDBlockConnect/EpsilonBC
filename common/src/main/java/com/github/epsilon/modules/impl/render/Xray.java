@@ -43,7 +43,11 @@ public class Xray extends Module {
     }
 
     private final EnumSetting<Plugin> plugin = enumSetting("Plugin", Plugin.New);
-    public final BoolSetting wallHack = boolSetting("WallHack", false, _ -> mc.levelRenderer.allChanged());
+    // WallHack is the reliable client-side transparency mixin — works on all servers,
+    // vanilla and anti-xray alike. Plugin.New alone only shows boxes when the server
+    // sends ClientboundBlockUpdatePacket (anti-xray reveal), which never happens on
+    // vanilla/no-anticheat servers. Default true so Xray works immediately on enable.
+    public final BoolSetting wallHack = boolSetting("WallHack", true, _ -> mc.levelRenderer.allChanged());
     private final BoolSetting brutForce = boolSetting("Ore Deobf", false);
     private final BoolSetting fast = boolSetting("Fast", false, brutForce::getValue);
     private final IntSetting delay = intSetting("Delay", 25, 1, 100, 1, brutForce::getValue);
