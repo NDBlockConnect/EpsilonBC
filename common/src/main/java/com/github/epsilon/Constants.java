@@ -14,6 +14,9 @@ public class Constants {
 
     public static final String VERSION = BuildConfig.VERSION;
 
+    // Human-facing version shown in the UI (e.g. "v26.0 Alpha 2"). VERSION stays valid SemVer for loaders.
+    public static final String DISPLAY_VERSION = BuildConfig.DISPLAY_VERSION;
+
     public static final Logger LOGGER = LogManager.getLogger(Constants.NAME);
 
 }
