@@ -43,8 +43,6 @@ public class CompanionDeathOverlay {
 
     /** 死亡动画开始时间戳，-1 表示未激活 */
     private long deathStartMs = -1L;
-    /** true 表示由彩蛋按钮强制触发，此时绕过 showCompanionOnDeath 开关 */
-    private boolean forceShow = false;
 
     private LuminRenderSystem.LuminRenderTarget renderTarget;
     private final UiScene scene = new UiScene(EpsilonUiTheme.INSTANCE);
@@ -54,15 +52,6 @@ public class CompanionDeathOverlay {
     /** 在 EpsilonCommon.init() 中调用，注册事件订阅 */
     public static void init() {
         EventBus.INSTANCE.subscribe(INSTANCE);
-    }
-
-    /**
-     * 彩蛋「立刻触发」专用：强制显示覆盖层，不播放死亡音效。
-     * 若已在显示中，则重置计时以延长显示。
-     */
-    public void showForEasterEgg() {
-        forceShow = true;
-        deathStartMs = Util.getMillis();
     }
 
     // ── 事件处理 ─────────────────────────────────────────────────────────────
@@ -92,8 +81,7 @@ public class CompanionDeathOverlay {
     private void onRender2D(Render2DEvent.HUD event) {
         if (deathStartMs < 0L) return;
 
-        // forceShow 为 true 时（彩蛋按钮触发）绕过 showCompanionOnDeath 开关
-        if (!forceShow && !ClientSetting.INSTANCE.showCompanionOnDeath.getValue()) {
+        if (!ClientSetting.INSTANCE.showCompanionOnDeath.getValue()) {
             WideHinataEasterEgg.INSTANCE.reset();
             deathStartMs = -1L;
             return;
@@ -105,7 +93,6 @@ public class CompanionDeathOverlay {
         if (elapsed >= TOTAL_DURATION_MS) {
             WideHinataEasterEgg.INSTANCE.reset();
             deathStartMs = -1L;
-            forceShow = false;
             return;
         }
 
@@ -166,7 +153,6 @@ public class CompanionDeathOverlay {
     @EventHandler
     private void onGameLeft(GameLeftEvent event) {
         deathStartMs = -1L;
-        forceShow = false;
         WideHinataEasterEgg.INSTANCE.reset();
     }
 

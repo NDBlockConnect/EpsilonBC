@@ -214,13 +214,11 @@ public class ClientSetting extends Module {
             wideHinataEasterEgg::getValue)
             .group(sgReisa);
 
-    public final DoubleSetting wideHinataDuration = doubleSetting("Wide Hinata Duration", 3.0, 0.5, 10.0, 0.5,
+    public final DoubleSetting wideHinataDuration = doubleSetting("Wide Hinata Duration", 3.0, 0.5, 23.0, 0.5,
             wideHinataEasterEgg::getValue)
             .group(sgReisa);
 
-    @SuppressWarnings("unused")
-    public final ButtonSetting wideHinataTriggerNow = buttonSetting("Trigger Wide Hinata Now",
-            () -> com.github.epsilon.gui.overlay.WideHinataEasterEgg.INSTANCE.triggerNow(),
+    public final DoubleSetting wideHinataMaxWidth = doubleSetting("Wide Hinata Max Width", 2.6, 1.5, 6.0, 0.1,
             wideHinataEasterEgg::getValue)
             .group(sgReisa);
 

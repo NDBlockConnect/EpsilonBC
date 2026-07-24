@@ -57,19 +57,6 @@ public final class WideHinataEasterEgg {
     }
 
     /**
-     * 立刻触发（ButtonSetting 回调用）。
-     * 同时强制显示 CompanionDeathOverlay，以保证 Hinata 可见。
-     */
-    public void triggerNow() {
-        if (!isHinataSelected()) return;
-        // 强制显示覆盖层（若已显示则重置计时，保证能看到宽体效果）
-        CompanionDeathOverlay.INSTANCE.showForEasterEgg();
-        // 重置旧状态以允许重新触发
-        wideStartMs = -1L;
-        doTrigger(ClientSetting.INSTANCE);
-    }
-
-    /**
      * 返回当前帧应使用的宽高比。
      *
      * @param baseRatio 角色的标准宽高比（来自 {@code CompanionCharacter.aspectRatio()}）
@@ -98,14 +85,12 @@ public final class WideHinataEasterEgg {
         durationMs = Math.max(500L, Math.round(cs.wideHinataDuration.getValue() * 1000.0));
         wideStartMs = Util.getMillis();
 
-        // pitch = 自然时长 / 用户时长，使音效与拉宽动画同步结束
-        float pitch = Mth.clamp(NATURAL_OGG_DURATION_S / (durationMs / 1000.0f), 0.5f, 2.0f);
-        float vol   = cs.reisaVolume.getValue().floatValue();
-
-        // 播放带淡入/淡出的彩蛋音效
+        float vol = cs.reisaVolume.getValue().floatValue();
+        // pitch 固定 1.0f，不做拉伸/慢放；音效以自然时长播放，淡入/淡出纯靠音量控制
+        long audioTotalMs = Math.round(NATURAL_OGG_DURATION_S * 1000f);
         mc.getSoundManager().play(
-                new FadeableSoundInstance(SoundKey.EASTER_EGG_001, pitch, vol,
-                        FADE_IN_MS, FADE_OUT_MS, durationMs));
+                new FadeableSoundInstance(SoundKey.EASTER_EGG_001, 1.0f, vol,
+                        FADE_IN_MS, FADE_OUT_MS, audioTotalMs));
     }
 
     private static boolean isHinataSelected() {
