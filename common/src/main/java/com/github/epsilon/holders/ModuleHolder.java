@@ -43,6 +43,7 @@ public class ModuleHolder {
 
         // Combat
         addModule(AimBot.INSTANCE);
+        addModule(AllyMarker.INSTANCE);
         addModule(AnchorBlast.INSTANCE);
         addModule(AntiBot.INSTANCE);
         addModule(AutoClicker.INSTANCE);
@@ -96,6 +97,7 @@ public class ModuleHolder {
         addModule(GhostHand.INSTANCE);
         addModule(InvManager.INSTANCE);
         addModule(JumpCooldown.INSTANCE);
+        addModule(MatchDetector.INSTANCE);
         addModule(MultiTask.INSTANCE);
         addModule(NameProtect.INSTANCE);
         addModule(NoRotate.INSTANCE);
@@ -146,6 +148,7 @@ public class ModuleHolder {
         addModule(Chams.INSTANCE);
         addModule(ChunkViewer.INSTANCE);
         addModule(CrystalChams.INSTANCE);
+        addModule(EnemyView.INSTANCE);
         addModule(ESP2D.INSTANCE);
         addModule(Filter.INSTANCE);
         addModule(FootBlock.INSTANCE);

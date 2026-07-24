@@ -1,6 +1,7 @@
 package com.github.epsilon.mixins;
 
 import com.github.epsilon.modules.impl.render.CrystalChams;
+import com.github.epsilon.modules.impl.render.EnemyView;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.world.entity.Entity;
@@ -16,6 +17,10 @@ public class MixinEntityRenderer<T extends Entity> {
     @Inject(method = "shouldRender", at = @At("HEAD"), cancellable = true)
     private void hookShouldRender(T entity, Frustum culler, double camX, double camY, double camZ, CallbackInfoReturnable<Boolean> cir) {
         if (CrystalChams.INSTANCE.isEnabled() && entity instanceof EndCrystal) {
+            cir.setReturnValue(false);
+            return;
+        }
+        if (EnemyView.INSTANCE.shouldHideModel(entity)) {
             cir.setReturnValue(false);
         }
     }

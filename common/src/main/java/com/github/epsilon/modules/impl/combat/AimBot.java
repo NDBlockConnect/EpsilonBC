@@ -257,6 +257,9 @@ public class AimBot extends Module {
         if (entity == mc.player || entity instanceof ArmorStand) return true;
         if (!entity.isAlive() || entity.isDeadOrDying()) return true;
         if (AntiBot.INSTANCE.isBot(entity)) return true;
+        // Allies (incl. middle-click-marked mobs, which have no name and so never enter
+        // FriendManager) are never aimed at.
+        if (Managers.ALLY.isAlly(entity)) return true;
         return !isTargetTypeAllowed(entity);
     }
 

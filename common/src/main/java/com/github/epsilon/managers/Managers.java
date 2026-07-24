@@ -1,6 +1,7 @@
 package com.github.epsilon.managers;
 
 import com.github.epsilon.events.bus.EventBus;
+import com.github.epsilon.managers.impl.AllyManager;
 import com.github.epsilon.managers.impl.FriendManager;
 import com.github.epsilon.managers.impl.HealthManager;
 import com.github.epsilon.managers.impl.NotificationManager;
@@ -22,6 +23,7 @@ public class Managers {
     public static ServerboundPacketManager C2SPACKET;
     public static ClientboundPacketManager S2CPACKET;
     public static FriendManager FRIEND;
+    public static AllyManager ALLY;
     public static SoundManager SOUND;
     public static NotificationManager NOTIFICATION;
     public static TimerManager TIMER;
@@ -33,6 +35,8 @@ public class Managers {
         C2SPACKET = new ServerboundPacketManager();
         S2CPACKET = new ClientboundPacketManager();
         FRIEND = new FriendManager();
+        ALLY = new AllyManager();
+        EventBus.INSTANCE.subscribe(ALLY);
         SOUND = new SoundManager();
         NOTIFICATION = new NotificationManager();
         TIMER = new TimerManager();
