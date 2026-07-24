@@ -4,7 +4,6 @@
   "plugin": "com.github.epsilon.neoforge.mixins.NeoForgeMixinPlugin",
   "compatibilityLevel": "JAVA_25",
   "client": [
-    "MixinCamera",
     "MixinMinecraft",
     "sodium.MixinSodiumAbstractBlockRenderContext"
   ],

@@ -63,6 +63,10 @@ public class FreeCamera extends Module {
 
     @Override
     protected void onEnable() {
+        if (nullCheck()) {
+            toggle();
+            return;
+        }
         fovScale = mc.options.fovEffectScale().get();
         bobView = mc.options.bobView().get();
         if (staticView.getValue()) {

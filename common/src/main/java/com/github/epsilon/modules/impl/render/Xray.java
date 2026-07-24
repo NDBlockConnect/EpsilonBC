@@ -27,6 +27,7 @@ import net.minecraft.world.phys.AABB;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Xray extends Module {
@@ -86,7 +87,10 @@ public class Xray extends Module {
     );
 
     private final TimerUtils delayTimer = new TimerUtils();
-    private final ArrayList<BlockPos> ores = new ArrayList<>();
+    // ores is written from the netty thread (onPacketReceive) and the main thread
+    // (onPlayerTick), and read from the render thread (onRender3D). Use a
+    // copy-on-write list so concurrent add/iterate never throws.
+    private final CopyOnWriteArrayList<BlockPos> ores = new CopyOnWriteArrayList<>();
     private final ArrayList<BlockPos> toCheck = new ArrayList<>();
     private final ArrayList<BlockMemory> checked = new ArrayList<>();
     private BlockPos displayBlock;
@@ -272,7 +276,6 @@ public class Xray extends Module {
         if (water.getValue() && block == Blocks.WATER) return true;
         if (lava.getValue() && block == Blocks.LAVA) return true;
         if (quartz.getValue() && block == Blocks.NETHER_QUARTZ_ORE) return true;
-        if (lapis.getValue() && (block == Blocks.LAPIS_ORE || block == Blocks.DEEPSLATE_LAPIS_ORE)) return true;
         return lapis.getValue() && (block == Blocks.LAPIS_ORE || block == Blocks.DEEPSLATE_LAPIS_ORE);
     }
 

@@ -25,6 +25,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerAlarms extends Module {
 
@@ -99,9 +100,12 @@ public class PlayerAlarms extends Module {
             List.of(SoundEvents.ARROW_HIT_PLAYER)).group(sgGamemode);
     private final BoolSetting gamemodeChatMessage = boolSetting("Gamemode Chat Message", true).group(sgGamemode);
 
-    private final Set<UUID> playersInRender = new HashSet<>();
-    private final Map<UUID, GameType> gamemodeCache = new HashMap<>();
-    private final Set<UUID> alarmedJoinPlayers = new HashSet<>();
+    // These are written from the netty thread (onReceivePacket) and read/written
+    // from the main thread (onTick). Use concurrent collections so a main-thread
+    // iteration never throws ConcurrentModificationException on a netty-thread remove.
+    private final Set<UUID> playersInRender = ConcurrentHashMap.newKeySet();
+    private final Map<UUID, GameType> gamemodeCache = new ConcurrentHashMap<>();
+    private final Set<UUID> alarmedJoinPlayers = ConcurrentHashMap.newKeySet();
     private Object lastConnection = null;
     private Object lastLevel = null;
 
@@ -214,7 +218,12 @@ public class PlayerAlarms extends Module {
             if (packet.actions().contains(Action.ADD_PLAYER)) {
                 for (Entry entry : packet.entries()) {
                     String playerName = entry.profile().name();
-                    gamemodeCache.put(entry.profileId(), entry.gameMode());
+                    // ADD_PLAYER without UPDATE_GAME_MODE leaves gameMode null.
+                    // ConcurrentHashMap forbids null values, so guard the put.
+                    GameType gameMode = entry.gameMode();
+                    if (gameMode != null) {
+                        gamemodeCache.put(entry.profileId(), gameMode);
+                    }
                     if (!alarmedJoinPlayers.contains(entry.profileId()) && shouldAlarm(playerName)) {
                         startRing(joinRing, joinRings.getValue(), joinRingDelay.getValue());
                         sendAlert(joinChatMessage.getValue(), EpsilonTranslations.PlayerAlarms.JOIN_ALERT_TEXT, playerName, entry.profileId(), ChatFormatting.RED);

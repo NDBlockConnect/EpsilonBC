@@ -62,6 +62,7 @@ import org.joml.Vector3f;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ZealotCrystalPlus extends Module {
 
@@ -165,10 +166,13 @@ public class ZealotCrystalPlus extends Module {
     private final TimerUtils snapshotTimer = new TimerUtils();
     private final TimerUtils explosionSampleTimer = new TimerUtils();
 
-    private final Map<Long, Long> placedPosMap = new HashMap<>();
-    private final Map<Integer, Long> crystalSpawnMap = new HashMap<>();
-    private final Map<Integer, Long> attackedCrystalMap = new HashMap<>();
-    private final Map<Long, Long> attackedPosMap = new HashMap<>();
+    // These maps are written from the netty thread (packet receive handlers) and
+    // read/written from the main thread (tick handlers). Use concurrent maps so
+    // concurrent put/removeIf never corrupts the structure or throws.
+    private final Map<Long, Long> placedPosMap = new ConcurrentHashMap<>();
+    private final Map<Integer, Long> crystalSpawnMap = new ConcurrentHashMap<>();
+    private final Map<Integer, Long> attackedCrystalMap = new ConcurrentHashMap<>();
+    private final Map<Long, Long> attackedPosMap = new ConcurrentHashMap<>();
     private long lastSwapTime;
     private long lastActiveTime;
     private LivingEntity target;
