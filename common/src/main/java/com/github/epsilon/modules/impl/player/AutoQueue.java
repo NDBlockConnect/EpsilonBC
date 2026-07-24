@@ -70,7 +70,12 @@ public class AutoQueue extends Module {
         if (!matcher.find()) return;
 
         String answer = matcher.group(1);
-        mc.player.connection.sendChat(answer);
+        // PacketEvent.Receive fires on the netty thread. sendChat touches the chat
+        // signature chain and connection state, which are main-thread structures, so
+        // defer the send to the main thread to avoid corrupting the signing chain.
+        mc.execute(() -> {
+            if (mc.player != null) mc.player.connection.sendChat(answer);
+        });
     }
 
 }

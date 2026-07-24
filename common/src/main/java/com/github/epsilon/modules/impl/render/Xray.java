@@ -229,7 +229,9 @@ public class Xray extends Module {
         }
 
         if (delayTimer.every(delay.getValue())) {
-            BlockPos pos = toCheck.remove(toCheck.size() - 1 <= 1 ? 0 : ThreadLocalRandom.current().nextInt(0, toCheck.size() - 1));
+            // nextInt(0, bound) is exclusive on the upper end, so pass size() (not
+            // size()-1) or the last index is never picked, skewing the random order.
+            BlockPos pos = toCheck.remove(toCheck.size() <= 1 ? 0 : ThreadLocalRandom.current().nextInt(0, toCheck.size()));
             mc.gameMode.startDestroyBlock(displayBlock = pos, mc.player.getDirection());
             mc.gameMode.stopDestroyBlock();
             mc.getConnection().send(new ServerboundSwingPacket(InteractionHand.MAIN_HAND));
