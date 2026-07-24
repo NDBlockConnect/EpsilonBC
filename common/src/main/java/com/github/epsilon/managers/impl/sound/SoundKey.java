@@ -16,6 +16,7 @@ public enum SoundKey {
     HINATA_WELCOME("hinata_welcome"),
     HINATA_BYE("hinata_bye"),
     HINATA_DEATH("hinata_death"),
+    EASTER_EGG_001("easter_egg_001"),
     UWU("uwu"),
     NYA("nya"),
     MOAN1("moan1"),

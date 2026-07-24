@@ -13,6 +13,7 @@ import com.github.epsilon.gui.lib.scene.UiScene;
 import com.github.epsilon.gui.panel.PanelScreen;
 import com.github.epsilon.gui.theme.EpsilonUiTheme;
 import com.github.epsilon.gui.theme.MD3Theme;
+import com.github.epsilon.gui.overlay.WideHinataEasterEgg;
 import com.github.epsilon.managers.Managers;
 import com.github.epsilon.modules.impl.ClientSetting;
 import com.github.epsilon.utils.render.animation.Easing;
@@ -37,7 +38,7 @@ public class MainMenuScreen extends Screen {
 
     public static final MainMenuScreen INSTANCE = new MainMenuScreen();
 
-    private static final float REISA_ASPECT_RATIO = 710.0f / 1280.0f;
+    // aspect ratio 现在由 CompanionCharacter.aspectRatio() 动态提供，不再写死
     private static final int REISA_PAGE_SLICES = 12;
     private static final long REISA_ENTRANCE_DURATION_MS = 900L;
     private static final long REISA_BUBBLE_DELAY_MS = 620L;
@@ -137,6 +138,7 @@ public class MainMenuScreen extends Screen {
                 ClientSetting.INSTANCE.companionCharacter.getValue().welcomeKey(),
                 ClientSetting.INSTANCE.reisaVolume.getValue().floatValue()
         ).orElse(null);
+        WideHinataEasterEgg.INSTANCE.tryTrigger();
     }
 
     public boolean requestShutdown() {
@@ -155,6 +157,7 @@ public class MainMenuScreen extends Screen {
                 ClientSetting.INSTANCE.companionCharacter.getValue().byeKey(),
                 ClientSetting.INSTANCE.reisaVolume.getValue().floatValue()
         ).orElse(null);
+        WideHinataEasterEgg.INSTANCE.tryTrigger();
         return true;
     }
 
@@ -382,7 +385,8 @@ public class MainMenuScreen extends Screen {
         float fadeProgress = Mth.clamp((moveProgress - 0.25f) / 0.75f, 0.0f, 1.0f);
         float fadeEase = Easing.EASE_OUT_CUBIC.getFunction().apply(fadeProgress);
         float imageHeight = Math.min(height * 0.96f, width * 0.72f);
-        float imageWidth = imageHeight * REISA_ASPECT_RATIO;
+        float imageWidth = imageHeight * WideHinataEasterEgg.INSTANCE.getCurrentAspectRatio(
+                ClientSetting.INSTANCE.companionCharacter.getValue().aspectRatio());
         float targetX = width - imageWidth - Math.max(4.0f, 10.0f * scale);
         float entranceX = Mth.lerp(slide, width + imageWidth * 0.08f, targetX);
         float exitDistance = Math.max(72.0f * scale, imageWidth * 0.34f);
@@ -448,7 +452,8 @@ public class MainMenuScreen extends Screen {
                 applyAlpha(new Color(8, 9, 16), dim * 0.62f)));
 
         float imageHeight = Math.min(height * 0.98f, width * 0.74f);
-        float imageWidth = imageHeight * REISA_ASPECT_RATIO;
+        float imageWidth = imageHeight * WideHinataEasterEgg.INSTANCE.getCurrentAspectRatio(
+                ClientSetting.INSTANCE.companionCharacter.getValue().aspectRatio());
         float targetX = width - imageWidth - Math.max(4.0f, 10.0f * scale);
         float imageX = Mth.lerp(entranceEase, width + imageWidth * 0.12f, targetX)
                 + exitEase * (imageWidth * 0.56f + 42.0f * scale);
@@ -788,6 +793,7 @@ public class MainMenuScreen extends Screen {
         reisaGreetingStartMs = -1L;
         reisaExitStartMs = -1L;
         reisaWelcomeSound = null;
+        WideHinataEasterEgg.INSTANCE.reset();
     }
 
     private void clearReisaShutdown() {
@@ -796,6 +802,7 @@ public class MainMenuScreen extends Screen {
         reisaShutdownSound = null;
         reisaShutdownCommitted = false;
         reisaShutdownTexturesPrewarmed = false;
+        WideHinataEasterEgg.INSTANCE.reset();
     }
 
     @Override

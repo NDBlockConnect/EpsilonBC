@@ -83,34 +83,38 @@ public class ClientSetting extends Module {
     }
 
     public enum CompanionCharacter {
-        Reisa("reisa", SoundKey.REISA_WELCOME, SoundKey.REISA_BYE, SoundKey.REISA_DEATH, "UZAWA REISA"),
-        Hinata("hinata", SoundKey.HINATA_WELCOME, SoundKey.HINATA_BYE, SoundKey.HINATA_DEATH, "HINATA HOSHINO");
+        Reisa("reisa",  SoundKey.REISA_WELCOME,  SoundKey.REISA_BYE,  SoundKey.REISA_DEATH,  "UZAWA REISA",   710.0f / 1280.0f),
+        Hinata("hinata", SoundKey.HINATA_WELCOME, SoundKey.HINATA_BYE, SoundKey.HINATA_DEATH, "HINATA HOSHINO", 391.0f / 1280.0f);
 
         private final String texturePrefix;
         private final SoundKey welcomeKey;
         private final SoundKey byeKey;
         private final SoundKey deathKey;
         private final String displayName;
+        /** 立绘纹理宽高比（width / height），按实际图片尺寸填写 */
+        private final float aspectRatio;
 
-        CompanionCharacter(String texturePrefix, SoundKey welcomeKey, SoundKey byeKey, SoundKey deathKey, String displayName) {
+        CompanionCharacter(String texturePrefix, SoundKey welcomeKey, SoundKey byeKey, SoundKey deathKey, String displayName, float aspectRatio) {
             this.texturePrefix = texturePrefix;
             this.welcomeKey = welcomeKey;
             this.byeKey = byeKey;
             this.deathKey = deathKey;
             this.displayName = displayName;
+            this.aspectRatio = aspectRatio;
         }
 
         public String texturePrefix() { return texturePrefix; }
-        public SoundKey welcomeKey() { return welcomeKey; }
-        public SoundKey byeKey() { return byeKey; }
-        public SoundKey deathKey() { return deathKey; }
-        public String displayName() { return displayName; }
+        public SoundKey welcomeKey()  { return welcomeKey; }
+        public SoundKey byeKey()      { return byeKey; }
+        public SoundKey deathKey()    { return deathKey; }
+        public String displayName()   { return displayName; }
+        public float aspectRatio()    { return aspectRatio; }
     }
 
     private final SettingGroup sgGeneral = settingGroup("General");
     private final SettingGroup sgAntiCheat = settingGroup("Anti Cheat");
     private final SettingGroup sgAppearance = settingGroup("Appearance");
-    private final SettingGroup sgReisa = settingGroup("Uzawa Reisa");
+    private final SettingGroup sgReisa = settingGroup("Companion");
     private final SettingGroup sgNotification = settingGroup("Notification");
 
     @SuppressWarnings("unused")
@@ -191,18 +195,34 @@ public class ClientSetting extends Module {
 
     public final BoolSetting showWelcomeScreen = boolSetting("Show Welcome Screen", true).rootSetting().group(sgAppearance);
 
-    // 宇泽玲纱 / 星野日向
+    // 宇泽玲纱 / 小鸟游星野
     public final EnumSetting<CompanionCharacter> companionCharacter = enumSetting("Companion Character", CompanionCharacter.Reisa).group(sgReisa);
 
-    public final BoolSetting showReisaInDropdown = boolSetting("Show Reisa In Dropdown", true).group(sgReisa);
+    public final BoolSetting showReisaInDropdown = boolSetting("Show Companion In Dropdown", true).group(sgReisa);
 
-    public final BoolSetting showReisaOnStartup = boolSetting("Show Reisa On Startup", true).group(sgReisa);
+    public final BoolSetting showReisaOnStartup = boolSetting("Show Companion On Startup", true).group(sgReisa);
 
-    public final BoolSetting showReisaOnShutdown = boolSetting("Show Reisa On Shutdown", true).group(sgReisa);
+    public final BoolSetting showReisaOnShutdown = boolSetting("Show Companion On Shutdown", true).group(sgReisa);
 
     public final BoolSetting showCompanionOnDeath = boolSetting("Show Companion On Death", true).group(sgReisa);
 
-    public final DoubleSetting reisaVolume = doubleSetting("Reisa Volume", 1.0, 0.0, 1.0, 0.05).group(sgReisa);
+    public final DoubleSetting reisaVolume = doubleSetting("Companion Volume", 1.0, 0.0, 1.0, 0.05).group(sgReisa);
+
+    public final BoolSetting wideHinataEasterEgg = boolSetting("Wide Hinata Easter Egg", false).group(sgReisa);
+
+    public final DoubleSetting wideHinataProb = doubleSetting("Wide Hinata Probability", 0.2, 0.01, 1.0, 0.01,
+            wideHinataEasterEgg::getValue)
+            .group(sgReisa);
+
+    public final DoubleSetting wideHinataDuration = doubleSetting("Wide Hinata Duration", 3.0, 0.5, 10.0, 0.5,
+            wideHinataEasterEgg::getValue)
+            .group(sgReisa);
+
+    @SuppressWarnings("unused")
+    public final ButtonSetting wideHinataTriggerNow = buttonSetting("Trigger Wide Hinata Now",
+            () -> com.github.epsilon.gui.overlay.WideHinataEasterEgg.INSTANCE.triggerNow(),
+            wideHinataEasterEgg::getValue)
+            .group(sgReisa);
 
     // Notification
     public final BoolSetting soundNotify = boolSetting("Sound Notify", true).group(sgNotification);

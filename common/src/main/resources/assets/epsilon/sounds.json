@@ -80,6 +80,14 @@
       }
     ]
   },
+  "easter_egg_001": {
+    "sounds": [
+      {
+        "name": "epsilon:easter_egg_001",
+        "stream": true
+      }
+    ]
+  },
   "uwu": {
     "sounds": [
       "epsilon:uwu"

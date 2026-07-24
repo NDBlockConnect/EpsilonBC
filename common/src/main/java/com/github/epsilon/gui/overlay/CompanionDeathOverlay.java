@@ -35,9 +35,6 @@ public class CompanionDeathOverlay {
 
     public static final CompanionDeathOverlay INSTANCE = new CompanionDeathOverlay();
 
-    /** 角色立绘宽高比（710 × 1280）*/
-    private static final float ASPECT_RATIO = 710.0f / 1280.0f;
-
     private static final long APPEAR_DURATION_MS = 400L;
     private static final long HOLD_DURATION_MS   = 4_000L;
     private static final long FADE_START_MS      = APPEAR_DURATION_MS + HOLD_DURATION_MS;
@@ -76,6 +73,7 @@ public class CompanionDeathOverlay {
                     companion.deathKey(),
                     ClientSetting.INSTANCE.reisaVolume.getValue().floatValue()
             );
+            WideHinataEasterEgg.INSTANCE.tryTrigger();
         });
     }
 
@@ -84,6 +82,7 @@ public class CompanionDeathOverlay {
         if (deathStartMs < 0L) return;
 
         if (!ClientSetting.INSTANCE.showCompanionOnDeath.getValue()) {
+            WideHinataEasterEgg.INSTANCE.reset();
             deathStartMs = -1L;
             return;
         }
@@ -92,6 +91,7 @@ public class CompanionDeathOverlay {
         long elapsed = now - deathStartMs;
 
         if (elapsed >= TOTAL_DURATION_MS) {
+            WideHinataEasterEgg.INSTANCE.reset();
             deathStartMs = -1L;
             return;
         }
@@ -117,7 +117,8 @@ public class CompanionDeathOverlay {
         int height = LuminRenderSystem.getScaledHeightInt();
 
         float imageH = height * 0.55f;
-        float imageW = imageH * ASPECT_RATIO;
+        float imageW = imageH * WideHinataEasterEgg.INSTANCE.getCurrentAspectRatio(
+                ClientSetting.INSTANCE.companionCharacter.getValue().aspectRatio());
         float targetX = width  - imageW - 4.0f;
         float startX  = width  + imageW * 0.1f;
         float drawX   = Mth.lerp(slideProgress, startX, targetX);
@@ -149,6 +150,7 @@ public class CompanionDeathOverlay {
     @EventHandler
     private void onGameLeft(GameLeftEvent event) {
         deathStartMs = -1L;
+        WideHinataEasterEgg.INSTANCE.reset();
     }
 
     // ── 内部工具 ─────────────────────────────────────────────────────────────
