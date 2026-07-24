@@ -77,6 +77,8 @@ public class FootBlock extends Module {
 
     private boolean shouldRender(LivingEntity entity) {
         if (!entity.isAlive() || entity.isSpectator()) return false;
+        // Allies (incl. middle-click-marked mobs) are exempt from all enemy visuals.
+        if (Managers.ALLY.isAlly(entity)) return false;
 
         if (entity instanceof Player player) {
             if (player == mc.player) return false;

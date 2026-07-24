@@ -83,6 +83,8 @@ public class Tracers extends Module {
     private boolean shouldRender(Entity entity) {
         if (mc.player == null) return false;
         if (entity == mc.player || !entity.isAlive() || entity.isSpectator()) return false;
+        // Allies (incl. middle-click-marked mobs) are exempt from all enemy visuals.
+        if (Managers.ALLY.isAlly(entity)) return false;
 
         if (entity instanceof Player player) {
             if (Managers.FRIEND.isFriend(player)) return friends.getValue();

@@ -73,6 +73,11 @@ public class Shaders extends Module {
             return false;
         }
 
+        // Allies (incl. middle-click-marked mobs) are exempt from all enemy visuals.
+        if (Managers.ALLY.isAlly(entity)) {
+            return false;
+        }
+
         if (entity instanceof Player player) {
             if (player == mc.player && !self.getValue()) {
                 return false;

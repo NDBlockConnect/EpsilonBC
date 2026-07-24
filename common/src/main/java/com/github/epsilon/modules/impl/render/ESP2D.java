@@ -98,6 +98,8 @@ public class ESP2D extends Module {
     private boolean shouldRender(Entity entity) {
         if (mc.player == null) return false;
         if (!entity.isAlive() || entity.isSpectator()) return false;
+        // Allies (incl. middle-click-marked mobs) are exempt from all enemy visuals.
+        if (Managers.ALLY.isAlly(entity)) return false;
 
         if (entity instanceof Player player) {
             if (entity == mc.player) return false;
