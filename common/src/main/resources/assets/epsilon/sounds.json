@@ -40,6 +40,46 @@
       }
     ]
   },
+  "reisa_death": {
+    "sounds": [
+      {
+        "name": "epsilon:reisa/death_1",
+        "stream": true
+      },
+      {
+        "name": "epsilon:reisa/death_2",
+        "stream": true
+      }
+    ]
+  },
+  "hinata_welcome": {
+    "sounds": [
+      {
+        "name": "epsilon:hinata/welcome_1",
+        "stream": true
+      },
+      {
+        "name": "epsilon:hinata/welcome_2",
+        "stream": true
+      }
+    ]
+  },
+  "hinata_bye": {
+    "sounds": [
+      {
+        "name": "epsilon:hinata/bye_1",
+        "stream": true
+      }
+    ]
+  },
+  "hinata_death": {
+    "sounds": [
+      {
+        "name": "epsilon:hinata/death_1",
+        "stream": true
+      }
+    ]
+  },
   "uwu": {
     "sounds": [
       "epsilon:uwu"

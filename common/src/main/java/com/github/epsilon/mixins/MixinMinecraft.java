@@ -65,11 +65,12 @@ public abstract class MixinMinecraft {
     private void onGameLoadFinished(CallbackInfo ci) {
         if (!ClientSetting.INSTANCE.showReisaOnStartup.getValue()) return;
 
+        ClientSetting.CompanionCharacter companion = ClientSetting.INSTANCE.companionCharacter.getValue();
         if (ClientSetting.INSTANCE.useMainMenu.getValue()) {
             MainMenuScreen.INSTANCE.queueReisaGreeting();
         } else {
             Managers.SOUND.playSound(
-                    SoundKey.REISA_WELCOME,
+                    companion.welcomeKey(),
                     ClientSetting.INSTANCE.reisaVolume.getValue().floatValue()
             );
         }
@@ -125,9 +126,10 @@ public abstract class MixinMinecraft {
         }
 
         if (epsilon$shutdownSound == null) {
+            ClientSetting.CompanionCharacter companion = ClientSetting.INSTANCE.companionCharacter.getValue();
             minecraft.getSoundManager().stop();
             epsilon$shutdownSound = Managers.SOUND.playTracked(
-                    SoundKey.REISA_BYE,
+                    companion.byeKey(),
                     ClientSetting.INSTANCE.reisaVolume.getValue().floatValue()
             ).orElse(null);
             if (epsilon$shutdownSound == null) {

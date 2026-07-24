@@ -12,6 +12,7 @@ import com.github.epsilon.holders.TextureCacheHolder;
 import com.github.epsilon.holders.TranslateHolder;
 import com.github.epsilon.managers.Managers;
 import com.github.epsilon.managers.impl.rotations.RotationManager;
+import com.github.epsilon.managers.impl.sound.SoundKey;
 import com.github.epsilon.modules.Module;
 import com.github.epsilon.settings.SettingGroup;
 import com.github.epsilon.settings.impl.*;
@@ -79,6 +80,31 @@ public class ClientSetting extends Module {
     public enum FontMode {
         Default,
         Custom
+    }
+
+    public enum CompanionCharacter {
+        Reisa("reisa", SoundKey.REISA_WELCOME, SoundKey.REISA_BYE, SoundKey.REISA_DEATH, "UZAWA REISA"),
+        Hinata("hinata", SoundKey.HINATA_WELCOME, SoundKey.HINATA_BYE, SoundKey.HINATA_DEATH, "HINATA HOSHINO");
+
+        private final String texturePrefix;
+        private final SoundKey welcomeKey;
+        private final SoundKey byeKey;
+        private final SoundKey deathKey;
+        private final String displayName;
+
+        CompanionCharacter(String texturePrefix, SoundKey welcomeKey, SoundKey byeKey, SoundKey deathKey, String displayName) {
+            this.texturePrefix = texturePrefix;
+            this.welcomeKey = welcomeKey;
+            this.byeKey = byeKey;
+            this.deathKey = deathKey;
+            this.displayName = displayName;
+        }
+
+        public String texturePrefix() { return texturePrefix; }
+        public SoundKey welcomeKey() { return welcomeKey; }
+        public SoundKey byeKey() { return byeKey; }
+        public SoundKey deathKey() { return deathKey; }
+        public String displayName() { return displayName; }
     }
 
     private final SettingGroup sgGeneral = settingGroup("General");
@@ -165,12 +191,16 @@ public class ClientSetting extends Module {
 
     public final BoolSetting showWelcomeScreen = boolSetting("Show Welcome Screen", true).rootSetting().group(sgAppearance);
 
-    // 宇泽玲纱
+    // 宇泽玲纱 / 星野日向
+    public final EnumSetting<CompanionCharacter> companionCharacter = enumSetting("Companion Character", CompanionCharacter.Reisa).group(sgReisa);
+
     public final BoolSetting showReisaInDropdown = boolSetting("Show Reisa In Dropdown", true).group(sgReisa);
 
     public final BoolSetting showReisaOnStartup = boolSetting("Show Reisa On Startup", true).group(sgReisa);
 
     public final BoolSetting showReisaOnShutdown = boolSetting("Show Reisa On Shutdown", true).group(sgReisa);
+
+    public final BoolSetting showCompanionOnDeath = boolSetting("Show Companion On Death", true).group(sgReisa);
 
     public final DoubleSetting reisaVolume = doubleSetting("Reisa Volume", 1.0, 0.0, 1.0, 0.05).group(sgReisa);
 

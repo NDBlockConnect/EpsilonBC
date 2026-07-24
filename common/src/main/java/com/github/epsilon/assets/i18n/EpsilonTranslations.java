@@ -29,6 +29,9 @@ public final class EpsilonTranslations {
             Gui.MAINMENU_OPTIONS,
             Gui.MAINMENU_QUIT,
             Gui.MAINMENU_REISA_GREETING,
+            Gui.MAINMENU_REISA_FAREWELL,
+            Gui.MAINMENU_HINATA_GREETING,
+            Gui.MAINMENU_HINATA_FAREWELL,
             Gui.TAB_GENERAL,
             Gui.TAB_FRIEND,
             Gui.TAB_CONFIG,
@@ -147,6 +150,8 @@ public final class EpsilonTranslations {
         public static final TranslateComponent MAINMENU_QUIT = create("gui", "mainmenu.quit");
         public static final TranslateComponent MAINMENU_REISA_GREETING = create("gui", "mainmenu.reisa_greeting");
         public static final TranslateComponent MAINMENU_REISA_FAREWELL = create("gui", "mainmenu.reisa_farewell");
+        public static final TranslateComponent MAINMENU_HINATA_GREETING = create("gui", "mainmenu.hinata_greeting");
+        public static final TranslateComponent MAINMENU_HINATA_FAREWELL = create("gui", "mainmenu.hinata_farewell");
 
         public static final TranslateComponent TAB_GENERAL = create("gui", "tab.general");
         public static final TranslateComponent TAB_FRIEND = create("gui", "tab.friend");

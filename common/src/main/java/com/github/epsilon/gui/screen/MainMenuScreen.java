@@ -14,7 +14,6 @@ import com.github.epsilon.gui.panel.PanelScreen;
 import com.github.epsilon.gui.theme.EpsilonUiTheme;
 import com.github.epsilon.gui.theme.MD3Theme;
 import com.github.epsilon.managers.Managers;
-import com.github.epsilon.managers.impl.sound.SoundKey;
 import com.github.epsilon.modules.impl.ClientSetting;
 import com.github.epsilon.utils.render.animation.Easing;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -61,10 +60,8 @@ public class MainMenuScreen extends Screen {
     private static final float REISA_SHUTDOWN_BUBBLE_SHADOW_ALPHA = 0.60f;
     private static final float REISA_GREETING_BUBBLE_SHADOW_ALPHA = 0.58f;
 
-    private static final Identifier REISA_WELCOME_TEXTURE = ResourceLocationUtils.getIdentifier("textures/gui/galgame/reisa_00.png");
-    private static final Identifier REISA_EXIT_TEXTURE = ResourceLocationUtils.getIdentifier("textures/gui/galgame/reisa_09.png");
-    private static final Identifier REISA_SHUTDOWN_ENTRANCE_TEXTURE = ResourceLocationUtils.getIdentifier("textures/gui/galgame/reisa_10.png");
-    private static final Identifier REISA_SHUTDOWN_FINAL_TEXTURE = ResourceLocationUtils.getIdentifier("textures/gui/galgame/reisa_18.png");
+    // Companion textures are resolved dynamically based on the selected CompanionCharacter.
+    // See companionTex(reisaSuffix, hinataSuffix) helper below.
 
     private final UiScene scene = new UiScene(EpsilonUiTheme.INSTANCE);
 
@@ -137,7 +134,7 @@ public class MainMenuScreen extends Screen {
         reisaGreetingStartMs = Util.getMillis();
         reisaExitStartMs = -1L;
         reisaWelcomeSound = Managers.SOUND.playTracked(
-                SoundKey.REISA_WELCOME,
+                ClientSetting.INSTANCE.companionCharacter.getValue().welcomeKey(),
                 ClientSetting.INSTANCE.reisaVolume.getValue().floatValue()
         ).orElse(null);
     }
@@ -155,7 +152,7 @@ public class MainMenuScreen extends Screen {
         reisaShutdownStartMs = Util.getMillis();
         reisaShutdownExitStartMs = -1L;
         reisaShutdownSound = Managers.SOUND.playTracked(
-                SoundKey.REISA_BYE,
+                ClientSetting.INSTANCE.companionCharacter.getValue().byeKey(),
                 ClientSetting.INSTANCE.reisaVolume.getValue().floatValue()
         ).orElse(null);
         return true;
@@ -418,12 +415,12 @@ public class MainMenuScreen extends Screen {
             drawReisaExitAfterimages(scope, drawX, drawY, drawWidth, drawHeight,
                     imageAlpha, poseEase, moveProgress, scale);
             if (poseEase < 0.999f) {
-                drawReisa(scope, REISA_WELCOME_TEXTURE, drawX, drawY, drawWidth, drawHeight, imageAlpha);
+                drawReisa(scope, companionTex("00", "43"), drawX, drawY, drawWidth, drawHeight, imageAlpha);
                 if (poseEase > 0.001f) {
                     drawReisaPoseOverlay(scope, drawX, drawY, drawWidth, drawHeight, imageAlpha * poseEase);
                 }
             } else {
-                drawReisa(scope, REISA_EXIT_TEXTURE, drawX, drawY, drawWidth, drawHeight, imageAlpha);
+                drawReisa(scope, companionTex("09", "46"), drawX, drawY, drawWidth, drawHeight, imageAlpha);
             }
         } else {
             if (elapsed <= REISA_ENTRANCE_DURATION_MS) {
@@ -500,8 +497,11 @@ public class MainMenuScreen extends Screen {
         float visibility = Math.min(bubbleIn, bubbleOut);
         if (visibility <= 0.001f) return;
 
-        String name = "UZAWA REISA";
-        String farewell = EpsilonTranslations.Gui.MAINMENU_REISA_FAREWELL.getTranslatedName();
+        ClientSetting.CompanionCharacter companion = ClientSetting.INSTANCE.companionCharacter.getValue();
+        String name = companion.displayName();
+        String farewell = (companion == ClientSetting.CompanionCharacter.Reisa
+                ? EpsilonTranslations.Gui.MAINMENU_REISA_FAREWELL
+                : EpsilonTranslations.Gui.MAINMENU_HINATA_FAREWELL).getTranslatedName();
         float contentInset = 13.0f * scale;
         float maxBubbleWidth = Math.clamp(225.0f * scale, 104.0f * scale, width * 0.44f);
         float availableTextWidth = Math.max(1.0f, maxBubbleWidth - contentInset * 2.0f);
@@ -556,19 +556,19 @@ public class MainMenuScreen extends Screen {
     }
 
     private Identifier reisaShutdownTexture(long elapsed, boolean exiting) {
-        if (exiting) return REISA_SHUTDOWN_FINAL_TEXTURE;
-        if (elapsed < REISA_SHUTDOWN_BUBBLE_DELAY_MS) return REISA_SHUTDOWN_ENTRANCE_TEXTURE;
+        if (exiting) return companionTex("18", "24");
+        if (elapsed < REISA_SHUTDOWN_BUBBLE_DELAY_MS) return companionTex("10", "19");
 
         long speechElapsed = elapsed - REISA_SHUTDOWN_BUBBLE_DELAY_MS;
-        return (speechElapsed / 145L & 1L) == 0L ? REISA_WELCOME_TEXTURE : REISA_EXIT_TEXTURE;
+        return (speechElapsed / 145L & 1L) == 0L ? companionTex("00", "43") : companionTex("09", "46");
     }
 
     private void prewarmReisaShutdownTextures(UiTree.Scope scope) {
         Color transparent = applyAlpha(Color.WHITE, 0.0f);
         scope.layer(-60, layer -> {
-            layer.texture(REISA_SHUTDOWN_ENTRANCE_TEXTURE, -1.0f, -1.0f, 1.0f, 1.0f,
+            layer.texture(companionTex("10", "19"), -1.0f, -1.0f, 1.0f, 1.0f,
                     0.0f, 0.0f, 1.0f, 1.0f, transparent, true);
-            layer.texture(REISA_SHUTDOWN_FINAL_TEXTURE, -1.0f, -1.0f, 1.0f, 1.0f,
+            layer.texture(companionTex("18", "24"), -1.0f, -1.0f, 1.0f, 1.0f,
                     0.0f, 0.0f, 1.0f, 1.0f, transparent, true);
         });
     }
@@ -605,21 +605,21 @@ public class MainMenuScreen extends Screen {
         Color farTrail = applyAlpha(new Color(216, 185, 255), trailAlpha * 0.08f);
         Color nearTrail = applyAlpha(new Color(228, 205, 255), trailAlpha * 0.14f);
         scope.layer(-22, layer -> {
-            layer.texture(REISA_EXIT_TEXTURE, imageX - 16.0f * scale, imageY + 1.5f * scale,
+            layer.texture(companionTex("09", "46"), imageX - 16.0f * scale, imageY + 1.5f * scale,
                     imageWidth, imageHeight, 0.0f, 0.0f, 1.0f, 1.0f, farTrail, true);
-            layer.texture(REISA_EXIT_TEXTURE, imageX - 8.0f * scale, imageY + 0.75f * scale,
+            layer.texture(companionTex("09", "46"), imageX - 8.0f * scale, imageY + 0.75f * scale,
                     imageWidth, imageHeight, 0.0f, 0.0f, 1.0f, 1.0f, nearTrail, true);
         });
     }
 
     private void drawReisaPoseOverlay(UiTree.Scope scope, float imageX, float imageY, float imageWidth, float imageHeight, float alpha) {
-        scope.layer(-20, layer -> layer.texture(REISA_EXIT_TEXTURE, imageX, imageY,
+        scope.layer(-20, layer -> layer.texture(companionTex("09", "46"), imageX, imageY,
                 imageWidth, imageHeight, 0.0f, 0.0f, 1.0f, 1.0f,
                 applyAlpha(Color.WHITE, alpha), true));
     }
 
     private void prewarmReisaExitTexture(UiTree.Scope scope) {
-        scope.layer(-30, layer -> layer.texture(REISA_EXIT_TEXTURE,
+        scope.layer(-30, layer -> layer.texture(companionTex("09", "46"),
                 -1.0f, -1.0f, 1.0f, 1.0f,
                 0.0f, 0.0f, 1.0f, 1.0f,
                 applyAlpha(Color.WHITE, 0.0f), true));
@@ -631,7 +631,7 @@ public class MainMenuScreen extends Screen {
 
     private void drawReisaFoldedPage(UiTree.Scope scope, float imageX, float imageY, float imageWidth, float imageHeight, float unfold, float alpha, float scale) {
         if (unfold >= 0.999f) {
-            drawReisa(scope, MainMenuScreen.REISA_WELCOME_TEXTURE, imageX, imageY, imageWidth, imageHeight, alpha);
+            drawReisa(scope, MainMenuScreen.companionTex("00", "43"), imageX, imageY, imageWidth, imageHeight, alpha);
             return;
         }
 
@@ -645,7 +645,7 @@ public class MainMenuScreen extends Screen {
             float curl = (float) Math.sin(center * Math.PI) * (1.0f - unfold) * 13.0f * scale;
             float shade = 1.0f - (1.0f - unfold) * (0.18f + 0.38f * (float) Math.sin(center * Math.PI));
             Color sliceColor = applyAlpha(Color.WHITE, alpha * shade);
-            scope.layer(-20, layer -> layer.texture(MainMenuScreen.REISA_WELCOME_TEXTURE, sliceX, imageY + curl,
+            scope.layer(-20, layer -> layer.texture(MainMenuScreen.companionTex("00", "43"), sliceX, imageY + curl,
                     Math.max(0.5f, sliceRight - sliceX + 0.35f), imageHeight - curl * 0.25f,
                     u0, 0.0f, u1, 1.0f, sliceColor, true));
         }
@@ -668,8 +668,11 @@ public class MainMenuScreen extends Screen {
         float visibility = Math.min(bubbleIn, bubbleOut);
         if (visibility <= 0.001f) return;
 
-        String name = "UZAWA REISA";
-        String greeting = EpsilonTranslations.Gui.MAINMENU_REISA_GREETING.getTranslatedName();
+        ClientSetting.CompanionCharacter companion = ClientSetting.INSTANCE.companionCharacter.getValue();
+        String name = companion.displayName();
+        String greeting = (companion == ClientSetting.CompanionCharacter.Reisa
+                ? EpsilonTranslations.Gui.MAINMENU_REISA_GREETING
+                : EpsilonTranslations.Gui.MAINMENU_HINATA_GREETING).getTranslatedName();
         float contentInset = 13.0f * scale;
         float maxBubbleWidth = Math.clamp(205.0f * scale, 96.0f * scale, width * 0.40f);
         float minBubbleWidth = Math.min(145.0f * scale, maxBubbleWidth);
@@ -710,7 +713,6 @@ public class MainMenuScreen extends Screen {
             layer.roundRect(bubbleX, bubbleY, bubbleWidth, bubbleHeight, radius, surface);
             layer.outline(bubbleX, bubbleY, bubbleWidth, bubbleHeight, radius, Math.max(1.0f, scale), outline);
             layer.roundRect(bubbleX + 6.5f * scale, nameY, 2.0f * scale, nameHeight, 1.0f * scale, accentColor);
-            layer.roundRect(bubbleX + bubbleWidth - 13.0f * scale, bubbleY + bubbleHeight - 2.0f * scale, 10.0f * scale, 9.0f * scale, 2.5f * scale, surface);
         });
         scope.layer(21, layer -> {
             layer.text(name, textX, nameY, nameScale, nameColor, StaticFontLoader.JURA_LIGHT);
@@ -736,6 +738,12 @@ public class MainMenuScreen extends Screen {
     private static Color applyAlpha(Color color, float alphaFactor) {
         float factor = Mth.clamp(alphaFactor, 0.0f, 1.0f);
         return new Color(color.getRed(), color.getGreen(), color.getBlue(), Math.round(color.getAlpha() * factor));
+    }
+
+    private static Identifier companionTex(String reisaSuffix, String hinataSuffix) {
+        ClientSetting.CompanionCharacter ch = ClientSetting.INSTANCE.companionCharacter.getValue();
+        String suffix = ch == ClientSetting.CompanionCharacter.Hinata ? hinataSuffix : reisaSuffix;
+        return ResourceLocationUtils.getIdentifier("textures/gui/galgame/" + ch.texturePrefix() + "_" + suffix + ".png");
     }
 
     @Override

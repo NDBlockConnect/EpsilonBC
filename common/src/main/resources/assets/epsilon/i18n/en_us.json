@@ -33,7 +33,9 @@
         "options": "Options",
         "quit": "Quit",
         "reisa_greeting": "Hi, Sensei! Reisa reporting in!",
-        "reisa_farewell": "Sensei, see you tomorrow! Reisa is signing off!"
+        "reisa_farewell": "Sensei, see you tomorrow! Reisa is signing off!",
+        "hinata_greeting": "Hey, Sensei! Where shall we start today?",
+        "hinata_farewell": "Sensei, Hoshino is signing off! See you tomorrow!"
       },
       "tab": {
         "general": "General",

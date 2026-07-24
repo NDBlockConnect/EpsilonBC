@@ -2,6 +2,7 @@ package com.github.epsilon.gui.dropdown;
 
 import com.github.epsilon.assets.resources.ResourceLocationUtils;
 import com.github.epsilon.gui.lib.UiTree;
+import com.github.epsilon.modules.impl.ClientSetting;
 import com.github.epsilon.utils.render.animation.Animation;
 import com.github.epsilon.utils.render.animation.Easing;
 import net.minecraft.resources.Identifier;
@@ -9,6 +10,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.Util;
 
 import java.awt.*;
+import java.util.EnumMap;
+import java.util.Map;
 
 public final class ReisaDropdownCompanion {
 
@@ -234,20 +237,24 @@ public final class ReisaDropdownCompanion {
         HEAD_HOVER("18", 0L, 0),
         BLINK("99", 0L, 0);
 
-        private final Identifier texture;
+        /** Suffix used for the default character (Reisa). */
+        private final String defaultSuffix;
         private final long durationMs;
         private final int priority;
 
-        Action(String textureSuffix, long durationMs, int priority) {
-            this.texture = ResourceLocationUtils.getIdentifier(
-                    "textures/gui/galgame/reisa_" + textureSuffix + ".png"
-            );
+        Action(String defaultSuffix, long durationMs, int priority) {
+            this.defaultSuffix = defaultSuffix;
             this.durationMs = durationMs;
             this.priority = priority;
         }
 
         public Identifier texture() {
-            return texture;
+            ClientSetting.CompanionCharacter ch = ClientSetting.INSTANCE.companionCharacter.getValue();
+            String prefix = ch.texturePrefix();
+            String suffix = "hinata".equals(prefix)
+                    ? HINATA_SUFFIX_REMAP.getOrDefault(this, defaultSuffix)
+                    : defaultSuffix;
+            return ResourceLocationUtils.getIdentifier("textures/gui/galgame/" + prefix + "_" + suffix + ".png");
         }
 
         public long durationMs() {
@@ -261,5 +268,36 @@ public final class ReisaDropdownCompanion {
         public boolean isTransient() {
             return durationMs > 0L;
         }
+    }
+
+    /**
+     * Maps Reisa's dropdown action → Hinata expression suffix that best matches semantically.
+     * Only entries that differ from Reisa's default suffix need to be listed.
+     */
+    private static final Map<Action, String> HINATA_SUFFIX_REMAP;
+
+    static {
+        Map<Action, String> m = new EnumMap<>(Action.class);
+        m.put(Action.PANEL_OPEN,       "43"); // 开心、阳光且充满活力
+        m.put(Action.COLOR_PICK,       "30"); // 平静温和、略带困惑的疑问
+        m.put(Action.SECONDARY_CLICK,  "09"); // 困惑、疑惑中略带天真
+        m.put(Action.PRIMARY_CLICK,    "13"); // 元气满满、自信且略带俏皮
+        m.put(Action.PANEL_CLOSE,      "01"); // 平静、冷静的表情
+        // MODULE_HIDDEN 05 → same in Hinata (中性偏严肃扑克脸)
+        m.put(Action.CANCEL,           "40"); // 不满、倔强且略带傲娇
+        m.put(Action.TOGGLE_ON,        "12"); // 开心、活泼且充满元气
+        m.put(Action.TOGGLE_OFF,       "35"); // 平静、冷静且略带困惑
+        m.put(Action.IDLE,             "01"); // 平静、冷静的表情 (replaces confused suffix 09)
+        m.put(Action.SLIDER_ADJUST,    "27"); // 轻度困惑、疑惑中带温和
+        m.put(Action.CONFIRM,          "14"); // 元气满满、开心活泼
+        m.put(Action.TYPING,           "39"); // 冷静、严肃、专注
+        m.put(Action.SCROLL_UP,        "08"); // 直视前方、眼神聚焦
+        m.put(Action.KEY_BIND,         "11"); // 严肃、不悦、冷静警惕
+        m.put(Action.BUTTON_ACTION,    "26"); // 开朗愉悦的友好表情
+        m.put(Action.DRAG,             "17"); // 困惑、愣住或不知所措
+        m.put(Action.SCROLL_DOWN,      "36"); // 平静的茫然、略带冷淡
+        m.put(Action.HEAD_HOVER,       "25"); // 冷静温和、略带自信的微笑
+        // BLINK 99 → same in Hinata (eyes closed relaxed)
+        HINATA_SUFFIX_REMAP = m;
     }
 }

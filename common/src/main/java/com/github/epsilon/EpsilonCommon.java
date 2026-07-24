@@ -8,6 +8,7 @@ import com.github.epsilon.holders.AddonHolder;
 import com.github.epsilon.holders.ConfigHolder;
 import com.github.epsilon.holders.HudElementHolder;
 import com.github.epsilon.holders.ModuleHolder;
+import com.github.epsilon.gui.overlay.CompanionDeathOverlay;
 import com.github.epsilon.managers.Managers;
 import com.github.epsilon.modules.impl.ClientSetting;
 import com.github.epsilon.update.UpdateChecker;
@@ -30,6 +31,9 @@ public class EpsilonCommon {
 
         // 初始化 Managers
         Managers.initManagers();
+
+        // 注册伴侣角色死亡覆盖层
+        CompanionDeathOverlay.init();
 
         // 异步检查 GitHub 是否有新版本
         UpdateChecker.INSTANCE.init();

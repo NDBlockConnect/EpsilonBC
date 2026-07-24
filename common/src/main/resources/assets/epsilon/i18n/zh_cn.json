@@ -33,7 +33,9 @@
         "options": "选项",
         "quit": "退出游戏",
         "reisa_greeting": "嗨，老师！玲纱前来报到！",
-        "reisa_farewell": "老师，明天也要再见！玲纱收队啦！"
+        "reisa_farewell": "老师，明天也要再见！玲纱收队啦！",
+        "hinata_greeting": "嗨，老师！今天从哪里开始呢？",
+        "hinata_farewell": "老师，星野收队啦～明天见！"
       },
       "tab": {
         "general": "常规",
