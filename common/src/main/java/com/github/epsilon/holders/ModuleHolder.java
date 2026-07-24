@@ -73,6 +73,12 @@ public class ModuleHolder {
         addModule(SilentAim.INSTANCE);
         addModule(SpearKill.INSTANCE);
         addModule(TriggerBot.INSTANCE);
+        addModule(Surround.INSTANCE);
+        addModule(HoleFiller.INSTANCE);
+        addModule(ShieldBreaker.INSTANCE);
+        addModule(SelfTrap.INSTANCE);
+        addModule(FacePlace.INSTANCE);
+        addModule(AutoCrystalSwitch.INSTANCE);
 
         // Player
         addModule(AltManager.INSTANCE);
@@ -138,6 +144,7 @@ public class ModuleHolder {
         addModule(Strafe.INSTANCE);
         addModule(Stuck.INSTANCE);
         addModule(Velocity.INSTANCE);
+        addModule(Burrow.INSTANCE);
 
         // Render
         addModule(AntiAlias.INSTANCE);
@@ -158,6 +165,7 @@ public class ModuleHolder {
         addModule(HandsView.INSTANCE);
         addModule(Hat.INSTANCE);
         addModule(HitParticles.INSTANCE);
+        addModule(Hitboxes.INSTANCE);
         addModule(HoleESP.INSTANCE);
         addModule(JumpCircle.INSTANCE);
         addModule(MasEffects.INSTANCE);
