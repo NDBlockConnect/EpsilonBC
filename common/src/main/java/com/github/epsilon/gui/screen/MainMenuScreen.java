@@ -384,7 +384,10 @@ public class MainMenuScreen extends Screen {
         float liftEase = Easing.EASE_IN_OUT_CUBIC.getFunction().apply(moveProgress);
         float fadeProgress = Mth.clamp((moveProgress - 0.25f) / 0.75f, 0.0f, 1.0f);
         float fadeEase = Easing.EASE_OUT_CUBIC.getFunction().apply(fadeProgress);
-        float imageHeight = Math.min(height * 0.96f, width * 0.72f);
+        // Hinata 立绘缩至 90% 使视觉尺寸与 Reisa 一致
+        boolean isHinataGreeting = ClientSetting.INSTANCE.companionCharacter.getValue()
+                == ClientSetting.CompanionCharacter.Hinata;
+        float imageHeight = Math.min(height * 0.96f, width * 0.72f) * (isHinataGreeting ? 0.9f : 1.0f);
         float imageWidth = imageHeight * WideHinataEasterEgg.INSTANCE.getCurrentAspectRatio(
                 ClientSetting.INSTANCE.companionCharacter.getValue().aspectRatio());
         float targetX = width - imageWidth - Math.max(4.0f, 10.0f * scale);
@@ -451,7 +454,10 @@ public class MainMenuScreen extends Screen {
         scope.layer(-40, layer -> layer.rect(0.0f, 0.0f, width, height,
                 applyAlpha(new Color(8, 9, 16), dim * 0.62f)));
 
-        float imageHeight = Math.min(height * 0.98f, width * 0.74f);
+        // Hinata 立绘缩至 90% 使视觉尺寸与 Reisa 一致
+        boolean isHinataShutdown = ClientSetting.INSTANCE.companionCharacter.getValue()
+                == ClientSetting.CompanionCharacter.Hinata;
+        float imageHeight = Math.min(height * 0.98f, width * 0.74f) * (isHinataShutdown ? 0.9f : 1.0f);
         float imageWidth = imageHeight * WideHinataEasterEgg.INSTANCE.getCurrentAspectRatio(
                 ClientSetting.INSTANCE.companionCharacter.getValue().aspectRatio());
         float targetX = width - imageWidth - Math.max(4.0f, 10.0f * scale);
@@ -565,7 +571,11 @@ public class MainMenuScreen extends Screen {
         if (elapsed < REISA_SHUTDOWN_BUBBLE_DELAY_MS) return companionTex("10", "19");
 
         long speechElapsed = elapsed - REISA_SHUTDOWN_BUBBLE_DELAY_MS;
-        return (speechElapsed / 145L & 1L) == 0L ? companionTex("00", "43") : companionTex("09", "46");
+        // Hinata 眨眼频率比 Reisa 慢（145ms → 380ms），避免眼皮抖动过快
+        boolean isHinata = ClientSetting.INSTANCE.companionCharacter.getValue()
+                == ClientSetting.CompanionCharacter.Hinata;
+        long blinkInterval = isHinata ? 380L : 145L;
+        return (speechElapsed / blinkInterval & 1L) == 0L ? companionTex("00", "43") : companionTex("09", "46");
     }
 
     private void prewarmReisaShutdownTextures(UiTree.Scope scope) {

@@ -1,6 +1,7 @@
 package com.github.epsilon.gui.overlay;
 
 import com.github.epsilon.managers.Managers;
+import com.github.epsilon.managers.impl.sound.FadeableSoundInstance;
 import com.github.epsilon.managers.impl.sound.SoundKey;
 import com.github.epsilon.modules.impl.ClientSetting;
 import net.minecraft.util.Mth;
@@ -10,32 +11,22 @@ import java.util.Random;
 
 /**
  * 宽体 Hinata 彩蛋管理器（单例）。
- *
- * <p>当角色为 Hinata、彩蛋开关开启时，按概率触发"宽体"效果：
- * 在 triggerDuration 秒内将立绘宽高比线性拉至 {@link #MAX_WIDE_MULTIPLIER} 倍，
- * 同时按比例调整音效 pitch 使播放时长与拉宽时长一致。
- *
- * <p>调用方（CompanionDeathOverlay / MainMenuScreen）在以下时机调用：
- * <ul>
- *   <li>{@link #tryTrigger()} — Hinata 首次出现时</li>
- *   <li>{@link #getCurrentAspectRatio(float)} — 每帧渲染时替换原始宽高比</li>
- *   <li>{@link #reset()} — Hinata 消失 / 场景切换时</li>
- * </ul>
+ * <p>当角色为 Hinata、彩蛋开关开启时，按概率触发「宽体」效果：
+ * 在 triggerDuration 秒内将立绘宽高比线性拉至用户设定倍数，
+ * 同时以 0.5s 淡入、2s 淡出播放彩蛋音效。
  */
 public final class WideHinataEasterEgg {
 
     public static final WideHinataEasterEgg INSTANCE = new WideHinataEasterEgg();
 
-    /** 最大拉宽倍数（相对于角色正常宽高比） */
-    private static final float MAX_WIDE_MULTIPLIER = 2.6f;
-
     /**
      * 彩蛋音效的自然播放时长（秒）。
      * 若实际 OGG 长度不同，调整此常量即可保持 pitch 与时长同步。
-     * 当前 OGG：EasterEgg001.ogg ≈ 7MB，预估约 7 秒（stream 模式）。
-     * 实测后可微调。
      */
     private static final float NATURAL_OGG_DURATION_S = 7.0f;
+
+    private static final long FADE_IN_MS  =   500L;
+    private static final long FADE_OUT_MS = 2_000L;
 
     private final Random random = new Random();
 
@@ -53,7 +44,11 @@ public final class WideHinataEasterEgg {
      * 若角色不是 Hinata、彩蛋未开启、已在播放，或概率未命中，则静默返回。
      */
     public void tryTrigger() {
-        if (wideStartMs >= 0L) return;
+        // 若上一次动画已自然结束（但 reset() 尚未被调用），允许重新触发
+        if (wideStartMs >= 0L) {
+            if (Util.getMillis() - wideStartMs < durationMs) return;
+            wideStartMs = -1L;
+        }
         if (!isHinataSelected()) return;
         ClientSetting cs = ClientSetting.INSTANCE;
         if (!cs.wideHinataEasterEgg.getValue()) return;
@@ -61,9 +56,16 @@ public final class WideHinataEasterEgg {
         doTrigger(cs);
     }
 
-    /** 立刻触发（ButtonSetting 回调用）。仅当当前角色为 Hinata 时生效。 */
+    /**
+     * 立刻触发（ButtonSetting 回调用）。
+     * 同时强制显示 CompanionDeathOverlay，以保证 Hinata 可见。
+     */
     public void triggerNow() {
         if (!isHinataSelected()) return;
+        // 强制显示覆盖层（若已显示则重置计时，保证能看到宽体效果）
+        CompanionDeathOverlay.INSTANCE.showForEasterEgg();
+        // 重置旧状态以允许重新触发
+        wideStartMs = -1L;
         doTrigger(ClientSetting.INSTANCE);
     }
 
@@ -71,13 +73,13 @@ public final class WideHinataEasterEgg {
      * 返回当前帧应使用的宽高比。
      *
      * @param baseRatio 角色的标准宽高比（来自 {@code CompanionCharacter.aspectRatio()}）
-     * @return 可能被拉宽后的宽高比
      */
     public float getCurrentAspectRatio(float baseRatio) {
         if (wideStartMs < 0L) return baseRatio;
         long elapsed = Util.getMillis() - wideStartMs;
         float t = Mth.clamp(elapsed / (float) durationMs, 0.0f, 1.0f);
-        float multiplier = Mth.lerp(t, 1.0f, MAX_WIDE_MULTIPLIER);
+        float maxMultiplier = ClientSetting.INSTANCE.wideHinataMaxWidth.getValue().floatValue();
+        float multiplier = Mth.lerp(t, 1.0f, maxMultiplier);
         return baseRatio * multiplier;
     }
 
@@ -93,16 +95,23 @@ public final class WideHinataEasterEgg {
     // ── 内部 ──────────────────────────────────────────────────────────────────
 
     private void doTrigger(ClientSetting cs) {
-        durationMs  = Math.max(500L, Math.round(cs.wideHinataDuration.getValue() * 1000.0));
+        durationMs = Math.max(500L, Math.round(cs.wideHinataDuration.getValue() * 1000.0));
         wideStartMs = Util.getMillis();
-        // pitch = 自然时长 / 用户时长，让音效与拉宽动画同步结束
+
+        // pitch = 自然时长 / 用户时长，使音效与拉宽动画同步结束
         float pitch = Mth.clamp(NATURAL_OGG_DURATION_S / (durationMs / 1000.0f), 0.5f, 2.0f);
-        Managers.SOUND.playSound(SoundKey.EASTER_EGG_001, pitch,
-                cs.reisaVolume.getValue().floatValue());
+        float vol   = cs.reisaVolume.getValue().floatValue();
+
+        // 播放带淡入/淡出的彩蛋音效
+        mc.getSoundManager().play(
+                new FadeableSoundInstance(SoundKey.EASTER_EGG_001, pitch, vol,
+                        FADE_IN_MS, FADE_OUT_MS, durationMs));
     }
 
     private static boolean isHinataSelected() {
         return ClientSetting.INSTANCE.companionCharacter.getValue()
                 == ClientSetting.CompanionCharacter.Hinata;
     }
+
+    private static final net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
 }
