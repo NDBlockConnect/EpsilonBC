@@ -34,7 +34,6 @@
 > ## 🔀 BlockConnect 分支说明
 > 本仓库是由 BlockConnect 进行社区维护的分支（Fork），延续自原 Epsilon 项目。
 > 原 Epsilon 仓库已归档，公开开发工作已停止。我们 BlockConnect 团队对该项目进行了分支，以便继续为社区提供维护、错误修复和功能开发。
-> 加入我们的社区： BlockConnect 社区群
 
 > [!NOTE]
 > ## 原项目归档公告（来自 Epsilon）
