@@ -1,0 +1,171 @@
+{
+  "epsilon": {
+    "_value": "EpsilonBC",
+    "categories": {
+      "combat": "전투",
+      "player": "플레이어",
+      "movement": "이동",
+      "render": "렌더"
+    },
+    "keybind": {
+      "none": "없음",
+      "toggle": "토글",
+      "hold": "홀드"
+    },
+    "module": {
+      "visible": "보임",
+      "hidden": "숨김",
+      "from": "출처:",
+      "state": {
+        "prefix": "",
+        "enabled": "활성화됨",
+        "disabled": "비활성화됨"
+      }
+    },
+    "gui": {
+      "search": "검색 ...",
+      "clientsettings": "클라이언트 설정",
+      "no_module": "모듈 없음",
+      "modules": "모듈",
+      "mainmenu": {
+        "singleplayer": "싱글플레이",
+        "multiplayer": "멀티플레이",
+        "options": "옵션",
+        "quit": "게임 종료",
+        "reisa_greeting": "선생님, 안녕하세요! 레이사 출격!",
+        "reisa_farewell": "선생님, 내일 또 봐요! 레이사 귀환!",
+        "hinata_greeting": "선생님, 안녕하세요! 오늘은 어디서 시작할까요?",
+        "hinata_farewell": "선생님, 호시노 귀환! 내일 또 봐요!"
+      },
+      "tab": {
+        "general": "일반",
+        "friend": "친구",
+        "config": "설정",
+        "addon": "애드온"
+      },
+      "friend": {
+        "empty": "친구가 없습니다",
+        "input": {
+          "placeholder": "친구 이름 입력"
+        }
+      },
+      "config": {
+        "input": {
+          "placeholder": "설정 이름 입력"
+        },
+        "current": "현재",
+        "switch_hint": "클릭하여 전환",
+        "empty": "설정을 찾을 수 없음",
+        "action": {
+          "saveas": "다른 이름으로 저장",
+          "reload": "다시 로드",
+          "export": "내보내기",
+          "import": "가져오기",
+          "new": "새로 만들기",
+          "open_folder": "폴더 열기"
+        },
+        "delete": {
+          "confirm": {
+            "title": "설정 삭제",
+            "message": "이 설정을 삭제하시겠습니까?",
+            "confirm": "삭제",
+            "cancel": "취소"
+          }
+        },
+        "error": {
+          "title": "오류",
+          "ok": "확인",
+          "save": "설정 저장 실패",
+          "reload": "설정 다시 로드 실패",
+          "export": "설정 내보내기 실패",
+          "import": "설정 가져오기 실패",
+          "open_folder": "설정 폴더 열기 실패",
+          "switch": "설정 전환 실패",
+          "delete": "설정 삭제 실패",
+          "delete_last": "마지막 설정은 삭제할 수 없습니다"
+        },
+        "export": {
+          "success": {
+            "title": "내보내기 성공",
+            "message": "설정이 성공적으로 내보내졌습니다"
+          }
+        }
+      },
+      "dropdown": {
+        "collapse_all": "모두 접기",
+        "status": {
+          "saved": "저장됨",
+          "reloaded": "다시 로드됨",
+          "exported": "내보내짐",
+          "imported": "가져와짐",
+          "deleted": "삭제됨",
+          "switched": "전환됨",
+          "created": "생성됨"
+        },
+        "hint": {
+          "search": "Ctrl + F 검색",
+          "panels": "카테고리 클릭으로 패널 열기",
+          "drag": "헤더를 드래그하여 패널 이동"
+        }
+      },
+      "addon": {
+        "empty": "애드온을 찾을 수 없음",
+        "no_settings": "사용 가능한 설정 없음",
+        "info": {
+          "id": "ID",
+          "version": "버전",
+          "authors": "제작자",
+          "modules": "모듈"
+        }
+      },
+      "inspector": {
+        "_value": "인스펙터",
+        "select": "요소를 선택하세요"
+      },
+      "list": {
+        "entries": " 항목",
+        "blocks": " 블록",
+        "items": " 아이템",
+        "entities": " 엔티티",
+        "sounds": " 소리",
+        "enchantments": " 인챈트",
+        "selected": " 선택됨",
+        "type_to_add": "Enter 키로 추가...",
+        "search": "검색...",
+        "all": "전체",
+        "available": "사용 가능",
+        "selected_header": "선택됨"
+      }
+    },
+    "modules": {
+      "client setting": {
+        "_value": "클라이언트 설정",
+        "general": "일반",
+        "anti cheat": "안티 치트",
+        "appearance": "외관",
+        "companion": "컴패니언",
+        "uzawa reisa": "우자와 레이사",
+        "notification": "알림",
+        "language": {
+          "_value": "언어",
+          "english": "English",
+          "chinese simplified": "简体中文",
+          "korean": "한국어",
+          "japanese": "日本語",
+          "russian": "Русский",
+          "custom": "사용자 지정"
+        },
+        "companion character": {
+          "_value": "컴패니언 캐릭터",
+          "reisa": "레이사",
+          "hinata": "히나타"
+        },
+        "show companion in dropdown": "드롭다운에 컴패니언 표시",
+        "show companion on startup": "시작 시 컴패니언 표시",
+        "show companion on shutdown": "종료 시 컴패니언 표시",
+        "show companion on death": "사망 시 컴패니언 표시",
+        "check for updates": "업데이트 확인"
+      }
+    }
+  }
+}

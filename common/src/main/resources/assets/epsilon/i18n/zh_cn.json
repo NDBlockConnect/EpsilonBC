@@ -233,6 +233,7 @@
         "anti cheat": "反作弊",
         "appearance": "外观",
         "uzawa reisa": "宇泽玲纱",
+        "companion": "伴侣系统",
         "notification": "通知",
         "open hud editor": "打开 HUD 编辑器",
         "gui keybind": "GUI 按键绑定",
@@ -251,6 +252,9 @@
           "_value": "语言",
           "english": "English",
           "chinese simplified": "简体中文",
+          "korean": "한국어",
+          "japanese": "日本語",
+          "russian": "Русский",
           "custom": "自定义"
         },
         "custom language": "自定义语言",
@@ -324,6 +328,21 @@
         "show reisa on startup": "启动游戏时显示玲纱",
         "show reisa on shutdown": "关闭游戏时显示玲纱",
         "reisa volume": "玲纱音量",
+        "companion character": {
+          "_value": "伴侣角色",
+          "reisa": "玲纱",
+          "hinata": "星野"
+        },
+        "show companion in dropdown": "在瀑布式界面显示伴侣",
+        "show companion on startup": "启动游戏时显示伴侣",
+        "show companion on shutdown": "关闭游戏时显示伴侣",
+        "show companion on death": "死亡时显示伴侣",
+        "companion volume": "伴侣音量",
+        "wide hinata easter egg": "宽星野彩蛋",
+        "wide hinata probability": "宽星野出现概率",
+        "wide hinata duration": "宽星野持续时间",
+        "wide hinata max width": "宽星野最大宽度",
+        "check for updates": "检查更新",
         "sound notify": "声音通知",
         "chat notify": "聊天通知",
         "animated chat prefix": "聊天前缀动画",
@@ -1829,6 +1848,311 @@
         "quartz": "石英",
         "water": "水",
         "lava": "岩浆"
+      },
+      "surround": {
+        "_value": "围攻",
+        "mode": {
+          "_value": "模式",
+          "normal": "普通",
+          "strict": "严格"
+        },
+        "only on ground": "仅在地面",
+        "height": "高度",
+        "rotate": "旋转"
+      },
+      "hole filler": {
+        "_value": "封坑",
+        "fill block": {
+          "_value": "填充方块",
+          "obsidian": "黑曜石",
+          "any": "任意"
+        },
+        "range": "范围",
+        "only players": "仅玩家附近"
+      },
+      "self trap": {
+        "_value": "自封顶",
+        "mode": {
+          "_value": "模式",
+          "normal": "普通",
+          "strict": "严格"
+        },
+        "height": "高度",
+        "only on ground": "仅在地面"
+      },
+      "face place": {
+        "_value": "强制爆头",
+        "health threshold": "血量阈值",
+        "armor threshold": "护甲阈值",
+        "armor threshold value": "护甲阈值数值"
+      },
+      "shield breaker": {
+        "_value": "破盾",
+        "axe priority": {
+          "_value": "斧子优先级",
+          "damage": "伤害",
+          "speed": "速度"
+        },
+        "range": "范围",
+        "switch back": "切换回来",
+        "only when enemy shields": "仅敌人举盾时"
+      },
+      "auto crystal switch": {
+        "_value": "自动水晶切换",
+        "strategy": {
+          "_value": "策略",
+          "crystalobsidian": "水晶转黑曜石",
+          "smart": "智能"
+        },
+        "switch back": "切换回来",
+        "delay": "延迟"
+      },
+      "hitboxes": {
+        "_value": "扩大碰撞箱",
+        "expand width": "扩展宽度",
+        "expand height": "扩展高度",
+        "render": "渲染"
+      },
+      "burrow": {
+        "_value": "钻地",
+        "smart": "智能模式",
+        "on ground only": "仅在地面"
+      },
+      "ally marker": {
+        "_value": "友军标记",
+        "scope": {
+          "_value": "标记范围",
+          "permanent": "永久",
+          "timed": "限时",
+          "match": "本局"
+        },
+        "timed seconds": "限时秒数",
+        "mark entities": "标记实体",
+        "only living": "仅存活实体",
+        "notify": "通知"
+      },
+      "match detector": {
+        "_value": "对局检测器",
+        "start keywords": "开始关键词",
+        "end keywords": "结束关键词",
+        "scan title": "扫描标题",
+        "scan subtitle": "扫描副标题",
+        "scan action bar": "扫描动作栏",
+        "scan chat": "扫描聊天",
+        "reset on start": "对局开始时重置",
+        "reset on end": "对局结束时重置",
+        "reset on leave": "离开时重置",
+        "notify": "通知"
+      },
+      "enemy view": {
+        "_value": "敌视渲染",
+        "style": {
+          "_value": "样式",
+          "box": "框架",
+          "solid": "纯色",
+          "glow": "发光"
+        },
+        "hide model": "隐藏模型",
+        "outline": "轮廓",
+        "line thickness": "线条粗细",
+        "fill alpha": "填充透明度",
+        "players": "玩家",
+        "creatures": "生物",
+        "monsters": "怪物",
+        "ambients": "环境生物",
+        "others": "其他",
+        "max range": "最大范围",
+        "players color": "玩家颜色",
+        "creatures color": "生物颜色",
+        "monsters color": "怪物颜色",
+        "ambients color": "环境生物颜色",
+        "others color": "其他颜色"
+      },
+      "auto pot": {
+        "_value": "自动扔药水",
+        "switch mode": {
+          "_value": "切换模式",
+          "normal": "普通",
+          "silent": "静默"
+        },
+        "health": "生命值",
+        "only on ground": "仅在地面",
+        "delay": "延迟",
+        "swing hand": "挥手"
+      },
+      "auto offhand": {
+        "_value": "自动副手",
+        "item": {
+          "_value": "物品",
+          "totem": "图腾",
+          "goldenapple": "金苹果",
+          "enchantedgoldenapple": "附魔金苹果"
+        },
+        "strict": "严格模式",
+        "only when empty": "仅副手为空时",
+        "health": "生命值"
+      },
+      "auto respawn": {
+        "_value": "自动复活",
+        "delay": "延迟"
+      },
+      "auto disconnect": {
+        "_value": "自动断线",
+        "health": "生命值",
+        "only hurt": "仅受伤时触发",
+        "notify": "通知"
+      },
+      "reach": {
+        "_value": "延伸距离",
+        "entity reach": "实体距离",
+        "override block": "覆盖方块距离",
+        "block reach": "方块距离"
+      },
+      "regen": {
+        "_value": "加速回血",
+        "health": "生命值",
+        "min hunger": "最低饱食度",
+        "delay": "延迟",
+        "only on ground": "仅在地面"
+      },
+      "autoreconnect": {
+        "_value": "自动重连",
+        "delay": "延迟"
+      },
+      "autoeject": {
+        "_value": "自动丢弃",
+        "list mode": {
+          "_value": "列表模式",
+          "whitelist": "白名单",
+          "blacklist": "黑名单"
+        },
+        "items": "物品列表",
+        "delay": "延迟",
+        "only in inventory": "仅背包内",
+        "ignore hotbar": "忽略热栏"
+      },
+      "autoreplace": {
+        "_value": "自动补货",
+        "threshold": "阈值",
+        "only blocks": "仅方块",
+        "refill tools": "补充工具",
+        "delay": "延迟"
+      },
+      "rangenotifier": {
+        "_value": "范围提醒",
+        "alert mode": {
+          "_value": "提醒模式",
+          "chat": "聊天",
+          "notification": "HUD通知",
+          "both": "聊天和HUD通知"
+        },
+        "range": "范围",
+        "notify leave": "离开时提醒",
+        "ignore friends": "忽略好友",
+        "play sound": "播放声音",
+        "volume": "音量",
+        "pitch": "音调",
+        "sound": "音效"
+      },
+      "nameprotect": {
+        "_value": "名字保护",
+        "replacement": "替换文本",
+        "protect own name": "保护自己名字",
+        "extra names": "额外名字列表"
+      },
+      "jesus": {
+        "_value": "水上行走",
+        "mode": {
+          "_value": "模式",
+          "water": "水",
+          "lava": "岩浆",
+          "both": "两者"
+        },
+        "sneak to sink": "潜行下沉"
+      },
+      "autofish": {
+        "_value": "自动钓鱼",
+        "dip threshold": "浮漂下沉阈值",
+        "re-throw delay": "重新抛竿延迟"
+      },
+      "antiafk": {
+        "_value": "防挂机",
+        "mode": {
+          "_value": "模式",
+          "rotate": "旋转",
+          "jump": "跳跃",
+          "sneak": "潜行"
+        },
+        "interval (ticks)": "间隔 (刻)"
+      },
+      "nuker": {
+        "_value": "区域爆破",
+        "mode": {
+          "_value": "模式",
+          "normal": "普通",
+          "packet": "数据包"
+        },
+        "shape": {
+          "_value": "形状",
+          "sphere": "球形",
+          "flat": "平面"
+        },
+        "range": "范围",
+        "max blocks": "最大方块数",
+        "delay": "延迟",
+        "only exposed": "仅暴露面",
+        "auto tool": "自动工具",
+        "swing": "挥手",
+        "render": "渲染",
+        "side color": "侧面颜色",
+        "line color": "线条颜色"
+      },
+      "structurefinder": {
+        "_value": "结构查找器",
+        "chunk radius": "区块半径",
+        "render": "渲染",
+        "color": "颜色",
+        "thickness": "线条粗细",
+        "scan interval": "扫描间隔"
+      },
+      "chunkviewer": {
+        "_value": "区块查看器",
+        "mode": {
+          "_value": "模式",
+          "loaded": "已加载",
+          "new": "新区块"
+        },
+        "full height": "全高度",
+        "height offset": "高度偏移",
+        "thickness": "线条粗细",
+        "fade time": "淡出时间",
+        "color": "颜色"
+      },
+      "auto eat": {
+        "_value": "自动进食",
+        "hunger": "饱食度",
+        "health": "生命值",
+        "avoid bad food": "避免劣质食物",
+        "gapple at low hp": "低血量优先金苹果"
+      },
+      "bucketland": {
+        "_value": "水桶落地",
+        "fall distance": "触发坠落距离",
+        "only on ground": "仅在地面"
+      },
+      "altmanager": {
+        "_value": "账号切换",
+        "mode": {
+          "_value": "模式",
+          "offline": "离线",
+          "token": "令牌"
+        },
+        "username": "用户名",
+        "uuid": "UUID",
+        "access token": "访问令牌",
+        "login": "登录",
+        "resolve name from uuid": "从UUID查询名字",
+        "restore original": "还原原账号"
       }
     },
     "elements": {

@@ -1,0 +1,171 @@
+{
+  "epsilon": {
+    "_value": "EpsilonBC",
+    "categories": {
+      "combat": "Бой",
+      "player": "Игрок",
+      "movement": "Движение",
+      "render": "Рендер"
+    },
+    "keybind": {
+      "none": "Нет",
+      "toggle": "Переключить",
+      "hold": "Удержать"
+    },
+    "module": {
+      "visible": "Видимый",
+      "hidden": "Скрытый",
+      "from": "Из:",
+      "state": {
+        "prefix": "",
+        "enabled": "включён",
+        "disabled": "выключен"
+      }
+    },
+    "gui": {
+      "search": "Поиск ...",
+      "clientsettings": "Настройки клиента",
+      "no_module": "Нет модуля",
+      "modules": "Модули",
+      "mainmenu": {
+        "singleplayer": "Одиночная игра",
+        "multiplayer": "Мультиплеер",
+        "options": "Настройки",
+        "quit": "Выйти из игры",
+        "reisa_greeting": "Привет, учитель! Рейса прибыла!",
+        "reisa_farewell": "Учитель, до завтра! Рейса уходит!",
+        "hinata_greeting": "Привет, учитель! С чего начнём сегодня?",
+        "hinata_farewell": "Учитель, Хосино уходит! До завтра!"
+      },
+      "tab": {
+        "general": "Общее",
+        "friend": "Друзья",
+        "config": "Конфиг",
+        "addon": "Аддоны"
+      },
+      "friend": {
+        "empty": "Друзья не добавлены",
+        "input": {
+          "placeholder": "Введите имя друга"
+        }
+      },
+      "config": {
+        "input": {
+          "placeholder": "Введите название конфига"
+        },
+        "current": "Текущий",
+        "switch_hint": "Нажмите для переключения",
+        "empty": "Конфиги не найдены",
+        "action": {
+          "saveas": "Сохранить как",
+          "reload": "Перезагрузить",
+          "export": "Экспорт",
+          "import": "Импорт",
+          "new": "Создать",
+          "open_folder": "Открыть папку"
+        },
+        "delete": {
+          "confirm": {
+            "title": "Удалить конфиг",
+            "message": "Вы уверены, что хотите удалить этот конфиг?",
+            "confirm": "Удалить",
+            "cancel": "Отмена"
+          }
+        },
+        "error": {
+          "title": "Ошибка",
+          "ok": "ОК",
+          "save": "Не удалось сохранить конфиг",
+          "reload": "Не удалось перезагрузить конфиг",
+          "export": "Не удалось экспортировать конфиг",
+          "import": "Не удалось импортировать конфиг",
+          "open_folder": "Не удалось открыть папку конфигов",
+          "switch": "Не удалось переключить конфиг",
+          "delete": "Не удалось удалить конфиг",
+          "delete_last": "Нельзя удалить последний конфиг"
+        },
+        "export": {
+          "success": {
+            "title": "Экспорт успешен",
+            "message": "Конфиг успешно экспортирован"
+          }
+        }
+      },
+      "dropdown": {
+        "collapse_all": "Свернуть всё",
+        "status": {
+          "saved": "Сохранено",
+          "reloaded": "Перезагружено",
+          "exported": "Экспортировано",
+          "imported": "Импортировано",
+          "deleted": "Удалено",
+          "switched": "Переключено",
+          "created": "Создано"
+        },
+        "hint": {
+          "search": "Ctrl + F для поиска",
+          "panels": "Нажмите на категорию для открытия",
+          "drag": "Перетащите заголовок для перемещения"
+        }
+      },
+      "addon": {
+        "empty": "Аддоны не найдены",
+        "no_settings": "Нет доступных настроек",
+        "info": {
+          "id": "ID",
+          "version": "Версия",
+          "authors": "Авторы",
+          "modules": "Модули"
+        }
+      },
+      "inspector": {
+        "_value": "Инспектор",
+        "select": "Выберите элемент"
+      },
+      "list": {
+        "entries": " записей",
+        "blocks": " блоков",
+        "items": " предметов",
+        "entities": " существ",
+        "sounds": " звуков",
+        "enchantments": " зачарований",
+        "selected": " выбрано",
+        "type_to_add": "нажмите Enter для добавления...",
+        "search": "Поиск...",
+        "all": "Все",
+        "available": "Доступно",
+        "selected_header": "Выбрано"
+      }
+    },
+    "modules": {
+      "client setting": {
+        "_value": "Настройки клиента",
+        "general": "Общее",
+        "anti cheat": "Анти-чит",
+        "appearance": "Внешний вид",
+        "companion": "Компаньон",
+        "uzawa reisa": "Удзава Рейса",
+        "notification": "Уведомления",
+        "language": {
+          "_value": "Язык",
+          "english": "English",
+          "chinese simplified": "简体中文",
+          "korean": "한국어",
+          "japanese": "日本語",
+          "russian": "Русский",
+          "custom": "Пользовательский"
+        },
+        "companion character": {
+          "_value": "Персонаж-компаньон",
+          "reisa": "Рейса",
+          "hinata": "Хината"
+        },
+        "show companion in dropdown": "Показывать компаньона в меню",
+        "show companion on startup": "Показывать компаньона при запуске",
+        "show companion on shutdown": "Показывать компаньона при выходе",
+        "show companion on death": "Показывать компаньона при смерти",
+        "check for updates": "Проверять обновления"
+      }
+    }
+  }
+}
