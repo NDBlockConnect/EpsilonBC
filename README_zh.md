@@ -30,17 +30,17 @@
   <a href="https://qm.qq.com/q/3hhg8ww9ag"><img alt="QQ 2群" src="https://img.shields.io/badge/QQ%202群-加入-12B7F5?style=flat-square&logo=tencentqq&logoColor=white"></a>
 </p>
 
-[!IMPORTANT]
-## 🔀 BlockConnect 分支说明
-本仓库是由 BlockConnect 进行社区维护的分支（Fork），延续自原 Epsilon 项目。
-原 Epsilon 仓库已归档，公开开发工作已停止。我们 BlockConnect 团队对该项目进行了分支，以便继续为社区提供维护、错误修复和功能开发。
-加入我们的社区： BlockConnect 社区群
+> [!IMPORTANT]
+> ## 🔀 BlockConnect 分支说明
+> 本仓库是由 BlockConnect 进行社区维护的分支（Fork），延续自原 Epsilon 项目。
+> 原 Epsilon 仓库已归档，公开开发工作已停止。我们 BlockConnect 团队对该项目进行了分支，以便继续为社区提供维护、错误修复和功能开发。
+> 加入我们的社区： BlockConnect 社区群
 
-[!NOTE]
-## 原项目归档公告（来自 Epsilon）
-原仓库此前已准备归档，目前仍作为源码发布的公开参考保留。活跃的公开开发、Issue 处理以及免费的公开发布均已逐步停止。
-维护一个功能丰富的客户端需要持续投入时间和资源。由于他人对重新打包和修改后的版本进行商业化牟利，导致原有的公开开发模式难以为继。
-此处已发布的代码仍根据 GNU 通用公共许可证 v3.0 提供。本公告不会改变现有发布版本的许可证或相关权利。
+> [!NOTE]
+> ## 原项目归档公告（来自 Epsilon）
+> 原仓库此前已准备归档，目前仍作为源码发布的公开参考保留。活跃的公开开发、Issue 处理以及免费的公开发布均已逐步停止。
+> 维护一个功能丰富的客户端需要持续投入时间和资源。由于他人对重新打包和修改后的版本进行商业化牟利，导致原有的公开开发模式难以为继。
+> 此处已发布的代码仍根据 GNU 通用公共许可证 v3.0 提供。本公告不会改变现有发布版本的许可证或相关权利。
 
 📌 概述
 一款基于 NeoForge/Forge 和 Fabric 构建的现代多加载器 Minecraft 实用工具客户端，拥有先进的渲染系统和模块化架构。
