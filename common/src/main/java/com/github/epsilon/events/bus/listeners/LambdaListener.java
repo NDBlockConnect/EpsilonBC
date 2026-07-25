@@ -26,6 +26,7 @@ public class LambdaListener implements IListener {
     private final Class<?> target;
     private final boolean isStatic;
     private final int priority;
+    private final String description;
     private Consumer<Object> executor;
 
     /**
@@ -40,6 +41,7 @@ public class LambdaListener implements IListener {
         this.target = method.getParameters()[0].getType();
         this.isStatic = Modifier.isStatic(method.getModifiers());
         this.priority = method.getAnnotation(EventHandler.class).priority();
+        this.description = klass.getSimpleName() + "#" + method.getName();
 
         try {
             String name = method.getName();
@@ -67,9 +69,35 @@ public class LambdaListener implements IListener {
         }
     }
 
+    // 异常节流：同一 handler 每 5 秒最多打一条完整栈，避免每 tick 抛异常刷爆日志
+    private long lastErrorLogMs;
+    private long suppressedErrorCount;
+
     @Override
     public void call(Object event) {
-        executor.accept(event);
+        try {
+            executor.accept(event);
+        } catch (Throwable throwable) {
+            // 异常隔离：单个 handler 抛异常绝不能中断 EventBus.post 循环，
+            // 否则同一事件里优先级更低的所有模块 handler 都会被跳过（大面积功能失效）。
+            handleException(throwable);
+        }
+    }
+
+    private void handleException(Throwable throwable) {
+        long now = System.currentTimeMillis();
+        if (now - lastErrorLogMs >= 5_000L) {
+            if (suppressedErrorCount > 0L) {
+                Constants.LOGGER.error("Event handler {} threw an exception (+{} more suppressed in the last 5s)",
+                        description, suppressedErrorCount, throwable);
+            } else {
+                Constants.LOGGER.error("Event handler {} threw an exception", description, throwable);
+            }
+            lastErrorLogMs = now;
+            suppressedErrorCount = 0L;
+        } else {
+            suppressedErrorCount++;
+        }
     }
 
     @Override

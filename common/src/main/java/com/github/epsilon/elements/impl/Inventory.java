@@ -18,6 +18,7 @@ public class Inventory extends HudModule {
 
     private Inventory() {
         super("Inventory HUD", 0f, 0f, 180f, 80f);
+        setDefaultEnabled(true);
     }
 
     private final DoubleSetting scale = doubleSetting("Scale", 1.0, 0.5, 2.0, 0.1);

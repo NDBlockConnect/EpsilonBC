@@ -43,7 +43,7 @@ public final class ReisaDropdownCompanion {
         entranceAnim.run(1.0f);
 
         long now = Util.getMillis();
-        nextBlinkMs = now + 2_800L + Math.floorMod(newSessionId * 347L, 1_300L);
+        nextBlinkMs = now + 4_500L + Math.floorMod(newSessionId * 347L, 2_000L);
         blinkEndsMs = 0L;
         react(Action.PANEL_OPEN);
     }
@@ -124,8 +124,8 @@ public final class ReisaDropdownCompanion {
         }
 
         if (now >= nextBlinkMs) {
-            blinkEndsMs = now + 145L;
-            nextBlinkMs = now + 3_200L + Math.floorMod(now, 1_500L);
+            blinkEndsMs = now + 175L;
+            nextBlinkMs = now + 5_000L + Math.floorMod(now, 2_500L);
         }
         return now < blinkEndsMs ? Action.BLINK : Action.IDLE;
     }

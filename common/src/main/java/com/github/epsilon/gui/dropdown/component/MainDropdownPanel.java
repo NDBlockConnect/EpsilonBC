@@ -100,7 +100,7 @@ public class MainDropdownPanel extends AbstractDropdownPanel {
             }
         }
         int rows = getIconRows();
-        currentY += rows * ICON_SIZE + Math.max(0, rows - 1) * ICON_GAP + 4.0f + CONTENT_PADDING;
+        currentY += rows * ICON_SIZE + Math.max(0, rows - 1) * ICON_GAP + 8.0f + CONTENT_PADDING;
         scope.rect(x + CONTENT_PADDING, currentY - 3.0f, width - CONTENT_PADDING * 2.0f, 0.7f, MD3Theme.withAlpha(MD3Theme.OUTLINE, 55));
         settingsContent.draw(scope, textMetrics, mouseX, mouseY, x, currentY, width, getRenderFrameId());
     }

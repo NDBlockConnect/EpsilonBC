@@ -79,6 +79,15 @@ public final class WideHinataEasterEgg {
         return wideStartMs >= 0L;
     }
 
+    /**
+     * 返回本次彩蛋触发的拉宽动画总时长（毫秒）。
+     * 供 {@link CompanionDeathOverlay} 计算覆盖层保持时长，
+     * 确保用户设定的彩蛋时长能完整播放，而不被覆盖层固定的 5s 窗口截断。
+     */
+    public long getDurationMs() {
+        return durationMs;
+    }
+
     // ── 内部 ──────────────────────────────────────────────────────────────────
 
     private void doTrigger(ClientSetting cs) {

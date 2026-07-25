@@ -37,6 +37,10 @@ public class StaticFontLoader {
     private static boolean destroyed;
     private static volatile Map<String, Path> systemFontLookup;
 
+    /** 覆盖 CJK/韩语字符的 fallback 字体（Malgun Gothic / Microsoft YaHei 等），懒加载一次。 */
+    private static TtfFontLoader cjkFallback;
+    private static boolean cjkFallbackBuilt = false;
+
     public static TtfFontLoader defaultFont() {
         if (destroyed) {
             return DEFAULT;
@@ -48,7 +52,9 @@ public class StaticFontLoader {
         if (isApplied(mode, fontPath)) {
             return DEFAULT;
         }
-        return applyDefaultFont(mode, fontPath);
+        TtfFontLoader result = applyDefaultFont(mode, fontPath);
+        applyCjkFallback(result);
+        return result;
     }
 
     private static synchronized TtfFontLoader applyDefaultFont(ClientSetting.FontMode mode, String fontPath) {
@@ -365,6 +371,61 @@ public class StaticFontLoader {
             return 1.0f;
         }
         return DEFAULT_VISUAL_HEIGHT / customHeight;
+    }
+
+    // ── CJK Fallback ─────────────────────────────────────────────────────────
+
+    /**
+     * 将 CJK/韩语回退字体绑定到给定的 TtfFontLoader，仅在尚未绑定时操作。
+     * 回退字体懒加载：首次调用时扫描系统字体目录。
+     */
+    private static void applyCjkFallback(TtfFontLoader loader) {
+        if (loader == null) return;
+        TtfFontLoader fb = getCjkFallback();
+        if (fb != null && loader.getFallback() == null) {
+            loader.setFallback(fb);
+        }
+    }
+
+    private static synchronized TtfFontLoader getCjkFallback() {
+        if (!cjkFallbackBuilt) {
+            cjkFallback = buildCjkFallback();
+            cjkFallbackBuilt = true;
+        }
+        return cjkFallback;
+    }
+
+    /**
+     * 尝试加载系统中支持 CJK/韩语的 TrueType 字体。
+     * 优先 Malgun Gothic（Windows 韩语系统字体），其次 Microsoft YaHei（中文/CJK覆盖），
+     * 以此类推。找不到任何候选时返回 null（不影响主字体正常工作）。
+     */
+    private static TtfFontLoader buildCjkFallback() {
+        String[] candidates = {
+                "Malgun Gothic",        // Windows 默认韩语字体，覆盖全部 Hangul
+                "MalgunGothic",
+                "malgun",
+                "Microsoft YaHei",      // Windows 中文字体，CJK + 部分韩语
+                "MicrosoftYaHei",
+                "msyh",
+                "NanumGothic",          // 常见韩语开源字体（需已安装）
+                "Noto Sans CJK SC",
+                "Arial Unicode MS",
+        };
+        for (String name : candidates) {
+            Path path = resolveSystemFont(name);
+            if (path != null && Files.isRegularFile(path)) {
+                try {
+                    TtfFontLoader loader = new TtfFontLoader(path);
+                    Constants.LOGGER.info("[EpsilonBC] CJK fallback font loaded: {}", path.getFileName());
+                    return loader;
+                } catch (RuntimeException e) {
+                    Constants.LOGGER.debug("[EpsilonBC] CJK fallback candidate failed: {}", path, e);
+                }
+            }
+        }
+        Constants.LOGGER.debug("[EpsilonBC] No CJK fallback font found; Korean/CJK glyphs may not render in custom UI.");
+        return null;
     }
 
     private static void destroyLoader(TtfFontLoader fontLoader) {

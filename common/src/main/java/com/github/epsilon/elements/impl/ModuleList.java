@@ -25,6 +25,7 @@ public class ModuleList extends HudModule {
 
     private ModuleList() {
         super("Module List", 0f, 2f, 96f, 20f);
+        setDefaultEnabled(true);
     }
 
     private enum Style {

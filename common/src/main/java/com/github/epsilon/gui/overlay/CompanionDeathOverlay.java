@@ -37,9 +37,7 @@ public class CompanionDeathOverlay {
 
     private static final long APPEAR_DURATION_MS = 400L;
     private static final long HOLD_DURATION_MS   = 4_000L;
-    private static final long FADE_START_MS      = APPEAR_DURATION_MS + HOLD_DURATION_MS;
     private static final long FADE_DURATION_MS   = 600L;
-    private static final long TOTAL_DURATION_MS  = FADE_START_MS + FADE_DURATION_MS;
 
     /** 死亡动画开始时间戳，-1 表示未激活 */
     private long deathStartMs = -1L;
@@ -90,7 +88,7 @@ public class CompanionDeathOverlay {
         long now     = Util.getMillis();
         long elapsed = now - deathStartMs;
 
-        if (elapsed >= TOTAL_DURATION_MS) {
+        if (elapsed >= effectiveTotalMs()) {
             WideHinataEasterEgg.INSTANCE.reset();
             deathStartMs = -1L;
             return;
@@ -158,15 +156,38 @@ public class CompanionDeathOverlay {
 
     // ── 内部工具 ─────────────────────────────────────────────────────────────
 
+    /**
+     * 保持（全不透明）阶段的时长。
+     * 彩蛋激活时，至少覆盖彩蛋拉宽动画的完整时长，使 {@code wideHinataDuration}
+     * 设置真正生效；否则用默认的 {@link #HOLD_DURATION_MS}。
+     */
+    private long effectiveHoldMs() {
+        if (WideHinataEasterEgg.INSTANCE.isActive()) {
+            return Math.max(HOLD_DURATION_MS, WideHinataEasterEgg.INSTANCE.getDurationMs());
+        }
+        return HOLD_DURATION_MS;
+    }
+
+    /** 淡出开始时刻（相对 deathStartMs 的毫秒偏移）。 */
+    private long effectiveFadeStartMs() {
+        return APPEAR_DURATION_MS + effectiveHoldMs();
+    }
+
+    /** 覆盖层完整存活时长。 */
+    private long effectiveTotalMs() {
+        return effectiveFadeStartMs() + FADE_DURATION_MS;
+    }
+
     private float computeAlpha(long elapsed) {
+        long fadeStart = effectiveFadeStartMs();
         if (elapsed < APPEAR_DURATION_MS) {
             return Easing.EASE_OUT_CUBIC.getFunction().apply(
                     Mth.clamp(elapsed / (float) APPEAR_DURATION_MS, 0.0f, 1.0f));
-        } else if (elapsed < FADE_START_MS) {
+        } else if (elapsed < fadeStart) {
             return 1.0f;
         } else {
             return 1.0f - Easing.EASE_IN_CUBIC.getFunction().apply(
-                    Mth.clamp((elapsed - FADE_START_MS) / (float) FADE_DURATION_MS, 0.0f, 1.0f));
+                    Mth.clamp((elapsed - fadeStart) / (float) FADE_DURATION_MS, 0.0f, 1.0f));
         }
     }
 

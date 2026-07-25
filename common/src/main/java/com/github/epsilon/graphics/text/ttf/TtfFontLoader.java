@@ -8,6 +8,7 @@ import org.lwjgl.stb.STBTruetype;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -26,6 +27,16 @@ public class TtfFontLoader implements IFontLoader {
 
     public final TtfFontFile fontFile;
     private float renderScale = 1.0f;
+
+    /**
+     * 主字体缺失的 codepoint 集合（已尝试生成但字形为 null）。
+     * 用于避免重复请求，并将渲染委托给 fallback 字体。
+     * ConcurrentHashMap.newKeySet() 因为 GLYPH_WORKER 线程也可能触发 appendGlyph。
+     */
+    private final Set<Integer> primaryMissing = ConcurrentHashMap.newKeySet();
+
+    /** 当主字体无法渲染某字形时，尝试该 fallback 字体（如用于 CJK/韩语支持）。 */
+    private TtfFontLoader fallback;
 
     // ASCII 是 GUI/HUD 文本的主路径，用数组避免 Character 装箱和 HashMap 查找。
     private final GlyphDescriptor[] asciiGlyphMap = new GlyphDescriptor[ASCII_LIMIT];
@@ -55,6 +66,14 @@ public class TtfFontLoader implements IFontLoader {
     public TtfFontLoader(Path ttfFile) {
         this.fontFile = new TtfFontFile(ttfFile, 48, 4);
         Arrays.fill(asciiAdvanceMap, ADVANCE_UNSET);
+    }
+
+    public void setFallback(TtfFontLoader fallback) {
+        this.fallback = fallback;
+    }
+
+    public TtfFontLoader getFallback() {
+        return fallback;
     }
 
     public float getRenderScale() {
@@ -102,6 +121,11 @@ public class TtfFontLoader implements IFontLoader {
             return glyph.advance();
         }
 
+        // 主字体缺失时，向 fallback 查询宽度
+        if (primaryMissing.contains(codepoint) && fallback != null) {
+            return fallback.getAdvance(codepoint);
+        }
+
         if (isAscii(codepoint)) {
             int advance = asciiAdvanceMap[codepoint];
             if (advance != ADVANCE_UNSET) {
@@ -135,7 +159,13 @@ public class TtfFontLoader implements IFontLoader {
             if (codepoint == ' ' || codepoint == '\n' || hasGlyph(codepoint) || hasPendingGlyph(codepoint)) {
                 continue;
             }
-
+            // 主字体已知没有该字形 → 直接转交 fallback，不重复请求
+            if (primaryMissing.contains(codepoint)) {
+                if (fallback != null) {
+                    fallback.requestChars(new String(Character.toChars(codepoint)));
+                }
+                continue;
+            }
             putPendingGlyph(codepoint, CompletableFuture.supplyAsync(() -> fontFile.generateGlyph(codepoint), GLYPH_WORKER));
         }
     }
@@ -210,7 +240,14 @@ public class TtfFontLoader implements IFontLoader {
     }
 
     private void appendGlyph(int codepoint, TtfGlyph glyph) {
-        if (glyph == null || glyph.glyphData() == null) return;
+        if (glyph == null || glyph.glyphData() == null) {
+            // 主字体没有该字形：标记避免重试，并同步加载 fallback
+            primaryMissing.add(codepoint);
+            if (fallback != null) {
+                fallback.loadCodepointImmediately(codepoint);
+            }
+            return;
+        }
 
         if (currentAtlas == null) {
             createNewAtlas();
@@ -291,10 +328,17 @@ public class TtfFontLoader implements IFontLoader {
     }
 
     public GlyphDescriptor getGlyph(int codepoint) {
+        GlyphDescriptor d;
         if (isAscii(codepoint)) {
-            return asciiGlyphMap[codepoint];
+            d = asciiGlyphMap[codepoint];
+        } else {
+            d = glyphMap.get(codepoint);
         }
-        return glyphMap.get(codepoint);
+        // 主字体无此字形时，从 fallback 获取（覆盖韩文等主字体缺失的字符集）
+        if (d == null && primaryMissing.contains(codepoint) && fallback != null) {
+            return fallback.getGlyph(codepoint);
+        }
+        return d;
     }
 
     private void putGlyph(int codepoint, GlyphDescriptor glyph) {
