@@ -304,6 +304,22 @@
         "show companion on shutdown": "Показывать компаньона при выходе",
         "show companion on death": "Показывать компаньона при смерти",
         "check for updates": "Проверять обновления"
+      },
+      "step": {
+        "_value": "Шаг",
+        "mode": {
+          "_value": "Режим",
+          "vanilla": "Ванила",
+          "oldncp": "OldNCP",
+          "ncp": "NCP"
+        },
+        "height": "Высота",
+        "timer": "Таймер",
+        "fast": "Быстрый",
+        "feettrap pause": "Пауза при FeetTrap",
+        "in web pause": "Пауза в паутине",
+        "inside block pause": "Пауза внутри блока",
+        "sneaking pause": "Пауза при крадении"
       }
     }
   }

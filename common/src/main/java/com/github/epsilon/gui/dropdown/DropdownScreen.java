@@ -125,6 +125,7 @@ public class DropdownScreen extends Screen {
         updatePanelHeightLimits();
         updateVisiblePanelIds();
         beginPanelFrames();
+        reflowRightColumn();
 
         beginDropdownLayer();
         Color scrim = DropdownTheme.scrim();
@@ -590,6 +591,21 @@ public class DropdownScreen extends Screen {
         int frameId = ++renderFrameId;
         for (DropdownPanel panel : panels) {
             panel.beginRenderFrame(frameId);
+        }
+    }
+
+    /**
+     * 瀑布式布局：每帧根据各面板的实际高度（含展开动画进度）重新计算右侧列的 Y 坐标。
+     * 这样当某个面板展开时，下方面板自动下移，折叠时自动上移，不产生遮挡。
+     * X 坐标保持用户拖拽后的值不变，只重置 Y。
+     */
+    private void reflowRightColumn() {
+        float y = DropdownTheme.PANEL_MARGIN_Y;
+        for (DropdownPanel panel : panels) {
+            if ("main".equals(panel.getId())) continue;
+            if (!panel.isVisible()) continue;
+            panel.setPosition(panel.getX(), y);
+            y += panel.getPanelHeight() + DropdownTheme.PANEL_GAP;
         }
     }
 

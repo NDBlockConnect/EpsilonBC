@@ -304,6 +304,22 @@
         "show companion on shutdown": "終了時にコンパニオンを表示",
         "show companion on death": "死亡時にコンパニオンを表示",
         "check for updates": "アップデートを確認"
+      },
+      "step": {
+        "_value": "ステップ",
+        "mode": {
+          "_value": "モード",
+          "vanilla": "バニラ",
+          "oldncp": "OldNCP",
+          "ncp": "NCP"
+        },
+        "height": "高さ",
+        "timer": "タイマー",
+        "fast": "高速",
+        "feettrap pause": "フィートトラップ停止",
+        "in web pause": "クモの巣内停止",
+        "inside block pause": "ブロック内停止",
+        "sneaking pause": "スニーク中停止"
       }
     }
   }

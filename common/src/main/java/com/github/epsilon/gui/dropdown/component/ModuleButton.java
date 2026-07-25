@@ -243,7 +243,9 @@ public class ModuleButton extends Component {
         float labelY = sectionY + (headerH - textMetrics.textHeight(DropdownTheme.GROUP_HEADER_TEXT_SCALE)) * 0.5f;
         scope.text(label, headerX + DropdownTheme.SETTING_PADDING_X, labelY, DropdownTheme.GROUP_HEADER_TEXT_SCALE, DropdownTheme.groupText());
 
-        String countLabel = Integer.toString(section.widgets().size());
+        int visibleCount = 0;
+        for (SettingWidget<?> w : section.widgets()) { if (w.isVisible()) visibleCount++; }
+        String countLabel = Integer.toString(visibleCount);
         float countWidth = textMetrics.textWidth(countLabel, DropdownTheme.GROUP_COUNT_TEXT_SCALE) + DropdownTheme.GROUP_COUNT_CHIP_PADDING * 2.0f;
         float countX = headerX + headerW - DropdownTheme.SETTING_PADDING_X - countWidth - 12.0f;
         float chipH = DropdownTheme.GROUP_COUNT_CHIP_HEIGHT;

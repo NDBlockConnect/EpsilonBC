@@ -304,6 +304,22 @@
         "show companion on shutdown": "종료 시 컴패니언 표시",
         "show companion on death": "사망 시 컴패니언 표시",
         "check for updates": "업데이트 확인"
+      },
+      "step": {
+        "_value": "스텝",
+        "mode": {
+          "_value": "모드",
+          "vanilla": "바닐라",
+          "oldncp": "OldNCP",
+          "ncp": "NCP"
+        },
+        "height": "높이",
+        "timer": "타이머",
+        "fast": "빠름",
+        "feettrap pause": "발 함정 일시정지",
+        "in web pause": "거미줄 내 일시정지",
+        "inside block pause": "블록 내 일시정지",
+        "sneaking pause": "웅크림 일시정지"
       }
     }
   }
