@@ -17,6 +17,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 
 public class SelfTrap extends Module {
 
@@ -58,7 +59,7 @@ public class SelfTrap extends Module {
 
             InvUtils.swap(result.slot(), true);
             BlockHitResult hitResult = new BlockHitResult(
-                    neighborBlock.getCenter().relative(faceDir, 0.5),
+                    Vec3.atCenterOf(neighborBlock).relative(faceDir, 0.5),
                     faceDir,
                     neighborBlock,
                     false

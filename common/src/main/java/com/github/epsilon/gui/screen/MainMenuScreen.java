@@ -85,16 +85,16 @@ public class MainMenuScreen extends Screen {
 
     private MainMenuScreen() {
         super(Component.literal("MainMenuScreen"));
-        entries.add(new MenuEntry("Singleplayer", () -> minecraft.setScreen(new SelectWorldScreen(this))));
+        entries.add(new MenuEntry("Singleplayer", () -> minecraft.gui.setScreen(new SelectWorldScreen(this))));
         entries.add(new MenuEntry("Multiplayer", () -> {
             Screen screen = this.minecraft.options.skipMultiplayerWarning ? new JoinMultiplayerScreen(this) : new SafetyScreen(this);
-            this.minecraft.setScreen(screen);
+            this.minecraft.gui.setScreen(screen);
         }));
-        entries.add(new MenuEntry("GUI", () -> minecraft.setScreen(switch (ClientSetting.INSTANCE.guiMode.getValue()) {
+        entries.add(new MenuEntry("GUI", () -> minecraft.gui.setScreen(switch (ClientSetting.INSTANCE.guiMode.getValue()) {
             case Panel -> PanelScreen.INSTANCE;
             case Dropdown -> DropdownScreen.INSTANCE;
         })));
-        entries.add(new MenuEntry("Options", () -> minecraft.setScreen(new OptionsScreen(this, minecraft.options, false))));
+        entries.add(new MenuEntry("Options", () -> minecraft.gui.setScreen(new OptionsScreen(this, minecraft.options, false))));
         entries.add(new MenuEntry("Quit", minecraft::stop));
     }
 
@@ -121,7 +121,7 @@ public class MainMenuScreen extends Screen {
             return;
         }
         reisaGreetingQueued = true;
-        if (initialized && minecraft.screen == this) {
+        if (initialized && minecraft.gui.screen() == this) {
             startReisaGreeting();
         }
     }
@@ -143,7 +143,7 @@ public class MainMenuScreen extends Screen {
 
     public boolean requestShutdown() {
         if (!ClientSetting.INSTANCE.showReisaOnShutdown.getValue()) return false;
-        if (!initialized || minecraft.screen != this || reisaShutdownCommitted) return false;
+        if (!initialized || minecraft.gui.screen() != this || reisaShutdownCommitted) return false;
         if (reisaShutdownStartMs >= 0L) return true;
 
         if (reisaWelcomeSound != null) {
@@ -215,9 +215,6 @@ public class MainMenuScreen extends Screen {
 
         final var background = switch (ClientSetting.INSTANCE.mainMenuBackground.getValue()) {
             case SEA_LEVEL -> GlslSandBox.SEA_LEVEL;
-            case CLOUDS -> GlslSandBox.CLOUDS;
-            case ALIEN_TERRAIN -> GlslSandBox.ALIEN_TERRAIN;
-            case INFERNO -> GlslSandBox.INFERNO;
             case PLANET -> GlslSandBox.PLANET;
             case BLACK_HOLE -> GlslSandBox.BLACK_HOLE;
             case MINECRAFT -> GlslSandBox.MINECRAFT;
@@ -858,9 +855,6 @@ public class MainMenuScreen extends Screen {
 
     public enum Background {
         SEA_LEVEL,
-        CLOUDS,
-        ALIEN_TERRAIN,
-        INFERNO,
         PLANET,
         BLACK_HOLE,
         MINECRAFT

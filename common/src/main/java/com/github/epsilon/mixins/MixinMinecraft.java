@@ -116,7 +116,7 @@ public abstract class MixinMinecraft {
         }
 
         Minecraft minecraft = (Minecraft) (Object) this;
-        if (minecraft.screen == MainMenuScreen.INSTANCE) {
+        if (minecraft.gui.screen() == MainMenuScreen.INSTANCE) {
             if (MainMenuScreen.INSTANCE.requestShutdown()) {
                 ci.cancel();
                 return;

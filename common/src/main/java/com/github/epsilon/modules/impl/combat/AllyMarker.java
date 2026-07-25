@@ -44,7 +44,7 @@ public class AllyMarker extends Module {
     private void onMouse(MousePressEvent event) {
         if (nullCheck()) return;
         if (event.getButton() != GLFW.GLFW_MOUSE_BUTTON_MIDDLE || event.getAction() != GLFW.GLFW_PRESS) return;
-        if (mc.screen != null) return;
+        if (mc.gui.screen() != null) return;
 
         if (!(mc.hitResult instanceof EntityHitResult ehr)) return;
         Entity target = ehr.getEntity();

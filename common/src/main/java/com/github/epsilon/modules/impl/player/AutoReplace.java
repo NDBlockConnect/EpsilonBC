@@ -34,7 +34,7 @@ public class AutoReplace extends Module {
         if (InvHelper.shouldDisableFeatures()) return;
 
         // Never fight an open non-player container.
-        if (mc.screen instanceof AbstractContainerScreen container
+        if (mc.gui.screen() instanceof AbstractContainerScreen container
                 && container.getMenu().containerId != mc.player.inventoryMenu.containerId) {
             return;
         }

@@ -56,7 +56,7 @@ public class Tracers extends Module {
         if (nullCheck()) return;
 
         float partialTick = mc.getDeltaTracker().getGameTimeDeltaPartialTick(true);
-        Vec3 cameraPos = mc.gameRenderer.getMainCamera().position();
+        Vec3 cameraPos = mc.gameRenderer.mainCamera().position();
 
         // Anchor the tracer origin just in front of the camera so it fans out from the crosshair
         // instead of clipping at the eye.

@@ -19,6 +19,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
@@ -107,7 +108,7 @@ public class HoleFiller extends Module {
                     BlockState support = mc.level.getBlockState(supportBlock);
                     // use the adjacent solid block as a placement surface
                     BlockHitResult hitResult = new BlockHitResult(
-                            adjacent.getCenter().relative(Direction.WEST.getOpposite(), 0.0),
+                            Vec3.atCenterOf(adjacent).relative(Direction.WEST.getOpposite(), 0.0),
                             dir.getOpposite(),
                             adjacent,
                             false

@@ -70,7 +70,7 @@ public class Surround extends Module {
 
                 InvUtils.swap(result.slot(), true);
                 BlockHitResult hitResult = new BlockHitResult(
-                        neighborBlock.getCenter().relative(faceDir, 0.5),
+                        Vec3.atCenterOf(neighborBlock).relative(faceDir, 0.5),
                         faceDir,
                         neighborBlock,
                         false

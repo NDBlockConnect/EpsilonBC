@@ -61,7 +61,7 @@ public class AutoReconnect extends Module {
     private void onTick(ClientTickEvent.Pre event) {
         if (reconnectTicks < 0) return;
         // Bail out the instant the user navigates away from the disconnect screen.
-        if (!(mc.screen instanceof DisconnectedScreen)) {
+        if (!(mc.gui.screen() instanceof DisconnectedScreen)) {
             reconnectTicks = -1;
             return;
         }

@@ -73,7 +73,7 @@ public class AutoEat extends Module {
 
     @EventHandler
     private void onTick(PlayerTickEvent.Pre event) {
-        if (nullCheck() || mc.gameMode == null || mc.player.isSpectator() || mc.screen != null) {
+        if (nullCheck() || mc.gameMode == null || mc.player.isSpectator() || mc.gui.screen() != null) {
             stopEating();
             return;
         }

@@ -45,10 +45,10 @@ public class AutoEject extends Module {
         if (InvHelper.shouldDisableFeatures()) return;
 
         // Only run while the player's own inventory is open when requested.
-        if (onlyInInventory.getValue() && !(mc.screen instanceof InventoryScreen)) return;
+        if (onlyInInventory.getValue() && !(mc.gui.screen() instanceof InventoryScreen)) return;
 
         // Never fight another open container (chest, shulker, etc.).
-        if (mc.screen instanceof AbstractContainerScreen container
+        if (mc.gui.screen() instanceof AbstractContainerScreen container
                 && container.getMenu().containerId != mc.player.inventoryMenu.containerId) {
             return;
         }
