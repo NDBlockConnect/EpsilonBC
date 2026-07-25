@@ -27,11 +27,14 @@ public class AirJump extends Module {
         super("AirJump", Category.MOVEMENT);
     }
 
-    private final IntSetting maxJumps = intSetting("Max Jumps", 1, 0, 10, 1);
+    // 0 = 无限次（配合 Hold Mode 就是升天）；默认给 5 次，一开箱就能连跳到位。
+    private final IntSetting maxJumps = intSetting("Max Jumps", 5, 0, 999, 1);
     private final DoubleSetting jumpPower = doubleSetting("Jump Power", 0.42, 0.1, 1.5, 0.01);
-    private final IntSetting cooldown = intSetting("Cooldown", 4, 0, 20, 1);
+    // 按住跳的最小间隔，别调太低会被反作弊挑出来
+    private final IntSetting cooldown = intSetting("Cooldown", 3, 0, 20, 1);
     private final BoolSetting resetFall = boolSetting("Reset Fall", true);
-    private final BoolSetting holdMode = boolSetting("Hold Mode", false); // 持续按跳=持续加速升天
+    // 默认打开：按住跳直接升天，别再要求玩家一直反复按空格
+    private final BoolSetting holdMode = boolSetting("Hold Mode", true);
 
     private boolean prevJumpDown;
     private int usedJumps;

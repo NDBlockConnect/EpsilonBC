@@ -38,7 +38,6 @@ import net.minecraft.world.phys.Vec3;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Scaffold extends Module {
@@ -459,46 +458,50 @@ public class Scaffold extends Module {
             return rotation;
         }
 
+        // 目标方块面的实际几何朝向。这才是"真正应该看的角度"，历史上被硬编码 8 方向 yaw 数组盖掉了，
+        // 导致玩家朝向和世界正方向不一致时，铺出去的方块方向和实际移动方向对不上。
         Rot2f calculated = RotationUtils.calculate(pos, direction);
-        Float[] yawArray = {
-                -135F,
-                -90F,
-                -45F,
-                0F,
-                45F,
-                90F,
-                135F,
-                180F,
-                calculated.getYaw()
-        };
-        Arrays.sort(yawArray, (a, b) ->
-                Float.compare(
-                        Math.abs(Mth.wrapDegrees(mc.player.getYRot() - 180 - a)),
-                        Math.abs(Mth.wrapDegrees(mc.player.getYRot() - 180 - b))
-                )
-        );
+        float baseYaw = calculated.getYaw();
 
-        float[] pitchArray = {75.0F, 82.0F, 87.0F};
+        // 先按几何 yaw + 常规 pitch 短路。绝大多数场景这一步就返回。
+        float[] pitchArray = {calculated.getPitch(), 82.0F, 87.0F, 75.0F};
+        for (float pitch : pitchArray) {
+            Rot2f candidate = new Rot2f(baseYaw + MathUtils.getRandom(-0.3F, 0.3F), pitch + MathUtils.getRandom(-0.3F, 0.3F));
+            if (raytraceHits(candidate, pos, direction)) {
+                return candidate;
+            }
+        }
 
-        for (float yaw : yawArray) {
+        // Raytrace 没过：以几何 yaw 为中心做小角度扫描，配合玩家当前朝向的相对偏移。
+        // 用**相对于玩家 yaw 的偏移**而不是绝对世界方位，这样铺路方向永远跟着移动走。
+        float playerYaw = mc.player.getYRot();
+        float[] relativeOffsets = {0F, -15F, 15F, -30F, 30F, -45F, 45F, -60F, 60F};
+
+        for (float offset : relativeOffsets) {
+            float yaw = Mth.wrapDegrees(playerYaw + 180F + offset);
             for (float pitch : pitchArray) {
                 Rot2f candidate = new Rot2f(yaw + MathUtils.getRandom(-0.3F, 0.3F), pitch + MathUtils.getRandom(-0.3F, 0.3F));
-                boolean matches = raytrace.is(RaytraceMode.Normal) ? RaytraceUtils.overBlock(candidate, pos) : RaytraceUtils.overBlock(candidate, pos, direction);
-                if (matches) {
-                    return candidate;
-                }
-            }
-
-            for (int pitch = -90; pitch < 90; pitch++) {
-                Rot2f candidate = new Rot2f(yaw, pitch);
-                boolean matches = raytrace.is(RaytraceMode.Normal) ? RaytraceUtils.overBlock(candidate, pos) : RaytraceUtils.overBlock(candidate, pos, direction);
-                if (matches) {
+                if (raytraceHits(candidate, pos, direction)) {
                     return candidate;
                 }
             }
         }
 
+        // 最后兜底：以几何 yaw 扫全 pitch。别再迭代那个绝对方位数组了。
+        for (int pitch = 40; pitch < 90; pitch++) {
+            Rot2f candidate = new Rot2f(baseYaw, pitch);
+            if (raytraceHits(candidate, pos, direction)) {
+                return candidate;
+            }
+        }
+
         return calculated;
+    }
+
+    private boolean raytraceHits(Rot2f candidate, BlockPos pos, Direction direction) {
+        return raytrace.is(RaytraceMode.Normal)
+                ? RaytraceUtils.overBlock(candidate, pos)
+                : RaytraceUtils.overBlock(candidate, pos, direction);
     }
 
     private boolean onAir() {

@@ -2,14 +2,20 @@ package com.github.epsilon.modules.impl.player;
 
 import com.github.epsilon.events.bus.EventHandler;
 import com.github.epsilon.events.impl.PlayerTickEvent;
+import com.github.epsilon.managers.Managers;
 import com.github.epsilon.modules.Category;
 import com.github.epsilon.modules.Module;
+import com.github.epsilon.modules.impl.combat.AntiBot;
 import com.github.epsilon.settings.impl.BoolSetting;
 import com.github.epsilon.settings.impl.DoubleSetting;
 import com.github.epsilon.settings.impl.IntSetting;
 import com.github.epsilon.utils.player.ClickSlotUtils;
 import com.github.epsilon.utils.player.InvHelper;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -29,6 +35,10 @@ public class AutoEat extends Module {
     private final DoubleSetting health = doubleSetting("Health", 8.0, 0.0, 20.0, 0.5);
     private final BoolSetting avoidBadFood = boolSetting("Avoid Bad Food", true);
     private final BoolSetting gappleAtLowHp = boolSetting("Gapple At Low HP", true);
+    // HvH 铁律：吃饭进食会限制走位、卡刀，敌对实体在身边时坚决不吃。半径可调，默认 15 格。
+    private final BoolSetting pauseNearEnemies = boolSetting("Pause Near Enemies", true);
+    private final DoubleSetting enemyRange = doubleSetting("Enemy Range", 15.0, 3.0, 32.0, 0.5, pauseNearEnemies::getValue);
+    private final BoolSetting pauseGappleException = boolSetting("Gapple Override", true, () -> pauseNearEnemies.getValue() && gappleAtLowHp.getValue());
 
     private static final Set<Item> BAD_FOOD = Set.of(
             Items.ROTTEN_FLESH,
@@ -91,7 +101,51 @@ public class AutoEat extends Module {
     private boolean shouldEat() {
         boolean hungry = mc.player.getFoodData().getFoodLevel() <= hunger.getValue();
         boolean lowHp = mc.player.getHealth() <= health.getValue().floatValue();
-        return hungry || lowHp;
+        if (!hungry && !lowHp) return false;
+
+        if (pauseNearEnemies.getValue() && isEnemyNearby()) {
+            // 低血 + 允许金苹果例外：这时候不吃就是死，宁可被打断也要吃
+            if (pauseGappleException.getValue() && lowHp && gappleAtLowHp.getValue() && hasGapple()) {
+                return true;
+            }
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * 半径内有敌对实体（怪物 + 非友军玩家）就锁住。用 TargetManager 同款过滤逻辑，
+     * 不新造管理器，AllyManager/FriendManager/AntiBot 全都尊重。
+     */
+    private boolean isEnemyNearby() {
+        double range = enemyRange.getValue();
+        double rangeSq = range * range;
+        for (Entity entity : mc.level.entitiesForRendering()) {
+            if (!(entity instanceof LivingEntity living)) continue;
+            if (living == mc.player) continue;
+            if (!living.isAlive() || living.isDeadOrDying() || living.isSpectator()) continue;
+            if (AntiBot.INSTANCE.isBot(living)) continue;
+            if (Managers.ALLY.isAlly(living)) continue;
+
+            boolean hostile;
+            if (living instanceof Player player) {
+                if (Managers.FRIEND.isFriend(player)) continue;
+                hostile = true;
+            } else if (living instanceof Monster) {
+                hostile = true;
+            } else {
+                hostile = false;
+            }
+            if (!hostile) continue;
+
+            if (mc.player.distanceToSqr(living) <= rangeSq) return true;
+        }
+        return false;
+    }
+
+    private boolean hasGapple() {
+        return firstSlotOf(Items.ENCHANTED_GOLDEN_APPLE) != -1 || firstSlotOf(Items.GOLDEN_APPLE) != -1;
     }
 
     /**
