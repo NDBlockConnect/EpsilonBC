@@ -309,8 +309,11 @@ public class DropdownScreen extends Screen {
             DropdownPanel panel = panels.get(i);
             if (!panel.isVisible()) continue;
             long reactionRevision = reisaCompanion.getReactionRevision();
+            // 记录点击前是不是命中标题栏——只有拖标题栏才应该把面板拉到最顶，
+            // 点面板内部的设置或下拉选项不能触发 z-shuffle，否则整块面板会突然弹到最上层看着像闪烁。
+            boolean headerClick = panel.isHeaderHovered(mx, my);
             if (panel.mouseClicked(mx, my, button)) {
-                if (i < panels.size() - 1) {
+                if (headerClick && i < panels.size() - 1) {
                     panels.remove(i);
                     panels.add(panel);
                 }

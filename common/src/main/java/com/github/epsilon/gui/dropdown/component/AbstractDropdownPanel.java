@@ -351,7 +351,8 @@ public abstract class AbstractDropdownPanel implements DropdownPanel {
         cachedMetricsFrameId = renderFrameId;
     }
 
-    protected boolean isHeaderHovered(double mouseX, double mouseY) {
+    @Override
+    public boolean isHeaderHovered(double mouseX, double mouseY) {
         return mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + DropdownTheme.PANEL_HEADER_HEIGHT;
     }
 

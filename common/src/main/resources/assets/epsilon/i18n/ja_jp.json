@@ -138,6 +138,145 @@
       }
     },
     "modules": {
+      "autoreconnect": {
+        "_value": "自動再接続",
+        "delay": "遅延"
+      },
+      "autoeject": {
+        "_value": "自動ドロップ",
+        "list mode": {
+          "_value": "リストモード",
+          "whitelist": "ホワイトリスト",
+          "blacklist": "ブラックリスト"
+        },
+        "items": "アイテム",
+        "delay": "遅延",
+        "only in inventory": "インベントリのみ",
+        "ignore hotbar": "ホットバー無視"
+      },
+      "autoreplace": {
+        "_value": "自動補充",
+        "threshold": "しきい値",
+        "only blocks": "ブロックのみ",
+        "refill tools": "ツール補充",
+        "delay": "遅延"
+      },
+      "rangenotifier": {
+        "_value": "範囲通知",
+        "alert mode": {
+          "_value": "通知モード",
+          "chat": "チャット",
+          "notification": "HUD通知",
+          "both": "両方"
+        },
+        "range": "範囲",
+        "notify leave": "退出時通知",
+        "ignore friends": "フレンド無視",
+        "play sound": "サウンド再生",
+        "volume": "音量",
+        "pitch": "ピッチ",
+        "sound": "サウンド"
+      },
+      "nameprotect": {
+        "_value": "名前保護",
+        "replacement": "置換テキスト",
+        "protect own name": "自分の名前を保護",
+        "extra names": "追加名前リスト"
+      },
+      "jesus": {
+        "_value": "水上歩行",
+        "mode": {
+          "_value": "モード",
+          "water": "水",
+          "lava": "溶岩",
+          "both": "両方"
+        },
+        "sneak to sink": "スニークで沈む"
+      },
+      "autofish": {
+        "_value": "自動釣り",
+        "dip threshold": "浮き沈みしきい値",
+        "re-throw delay": "再投入遅延"
+      },
+      "antiafk": {
+        "_value": "AFK対策",
+        "mode": {
+          "_value": "モード",
+          "rotate": "回転",
+          "jump": "ジャンプ",
+          "sneak": "スニーク"
+        },
+        "interval (ticks)": "間隔 (Tick)"
+      },
+      "nuker": {
+        "_value": "範囲破壊",
+        "mode": {
+          "_value": "モード",
+          "normal": "通常",
+          "packet": "パケット"
+        },
+        "shape": {
+          "_value": "形状",
+          "sphere": "球形",
+          "flat": "平面"
+        },
+        "range": "範囲",
+        "max blocks": "最大ブロック数",
+        "delay": "遅延",
+        "only exposed": "露出面のみ",
+        "auto tool": "自動ツール",
+        "swing": "振り",
+        "render": "描画",
+        "side color": "面カラー",
+        "line color": "線カラー"
+      },
+      "structurefinder": {
+        "_value": "構造物ファインダー",
+        "chunk radius": "チャンク半径",
+        "render": "描画",
+        "color": "カラー",
+        "thickness": "線の太さ",
+        "scan interval": "スキャン間隔"
+      },
+      "chunkviewer": {
+        "_value": "チャンクビューア",
+        "mode": {
+          "_value": "モード",
+          "loaded": "ロード済み",
+          "new": "新規チャンク"
+        },
+        "full height": "全高さ",
+        "height offset": "高さオフセット",
+        "thickness": "線の太さ",
+        "fade time": "フェード時間",
+        "color": "カラー"
+      },
+      "auto eat": {
+        "_value": "自動進食",
+        "hunger": "満腹度",
+        "health": "体力",
+        "avoid bad food": "悪食避け",
+        "gapple at low hp": "低HP時に金リンゴ優先",
+        "pause near enemies": "敵接近時に停止",
+        "enemy range": "敵検出範囲",
+        "gapple override": "金リンゴ例外"
+      },
+      "bucketland": {
+        "_value": "水バケツ着地",
+        "fall distance": "落下距離",
+        "only on ground": "地面のみ"
+      },
+      "airjump": {
+        "_value": "エアジャンプ",
+        "max jumps": "最大跳躍回数",
+        "jump power": "跳躍力",
+        "cooldown": "クールダウン",
+        "reset fall": "落下距離リセット",
+        "hold mode": "長押しモード"
+      },
+      "spider": "スパイダー",
+      "nopush": "押し出し防止",
+      "fastplace": "高速設置",
       "client setting": {
         "_value": "クライアント設定",
         "general": "一般",

@@ -2133,13 +2133,27 @@
         "hunger": "Hunger",
         "health": "Health",
         "avoid bad food": "Avoid Bad Food",
-        "gapple at low hp": "Gapple At Low HP"
+        "gapple at low hp": "Gapple At Low HP",
+        "pause near enemies": "Pause Near Enemies",
+        "enemy range": "Enemy Range",
+        "gapple override": "Gapple Override"
       },
       "bucketland": {
         "_value": "BucketLand",
         "fall distance": "Fall Distance",
         "only on ground": "Only On Ground"
       },
+      "airjump": {
+        "_value": "AirJump",
+        "max jumps": "Max Jumps",
+        "jump power": "Jump Power",
+        "cooldown": "Cooldown",
+        "reset fall": "Reset Fall",
+        "hold mode": "Hold Mode"
+      },
+      "spider": "Spider",
+      "nopush": "NoPush",
+      "fastplace": "FastPlace",
       "altmanager": {
         "_value": "AltManager",
         "mode": {

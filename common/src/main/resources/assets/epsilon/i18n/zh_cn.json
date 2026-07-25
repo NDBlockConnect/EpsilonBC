@@ -2133,13 +2133,27 @@
         "hunger": "饱食度",
         "health": "生命值",
         "avoid bad food": "避免劣质食物",
-        "gapple at low hp": "低血量优先金苹果"
+        "gapple at low hp": "低血量优先金苹果",
+        "pause near enemies": "敌人在附近时暂停",
+        "enemy range": "敌人检测范围",
+        "gapple override": "金苹果例外"
       },
       "bucketland": {
         "_value": "水桶落地",
         "fall distance": "触发坠落距离",
         "only on ground": "仅在地面"
       },
+      "airjump": {
+        "_value": "空中跳跃",
+        "max jumps": "最大跳跃次数",
+        "jump power": "跳跃力度",
+        "cooldown": "冷却",
+        "reset fall": "重置下落",
+        "hold mode": "长按模式"
+      },
+      "spider": "蜘蛛爬墙",
+      "nopush": "防推挤",
+      "fastplace": "快速放置",
       "altmanager": {
         "_value": "账号切换",
         "mode": {
