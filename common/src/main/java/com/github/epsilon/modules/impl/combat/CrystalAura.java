@@ -205,6 +205,8 @@ public class CrystalAura extends Module {
 
     private boolean canPlaceCrystalAssumeObsidian(BlockPos supportPos) {
         BlockPos crystalPos = supportPos.above();
+        // 水晶实体高度 2 格，crystalPos 与其上方都要在建筑高度内，否则服务器会踢 "建筑高度上限：319"
+        if (mc.level.isOutsideBuildHeight(crystalPos) || mc.level.isOutsideBuildHeight(crystalPos.above())) return false;
         if (!mc.level.getBlockState(crystalPos).isAir()) return false;
         if (strictAirCheck.getValue() && !mc.level.getBlockState(crystalPos.above()).isAir()) return false;
         AABB box = new AABB(

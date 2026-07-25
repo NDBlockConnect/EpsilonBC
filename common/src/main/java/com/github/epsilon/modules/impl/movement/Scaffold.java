@@ -117,6 +117,8 @@ public class Scaffold extends Module {
     private final IntSetting rotateSpeed = intSetting("Rotation Speed", 180, 10, 180, 10, () -> rotationMode.is(RotationMode.Rise));
     private final IntSetting rotateBackSpeed = intSetting("Rotation Back Speed", 180, 10, 180, 10, () -> mode.is(Mode.TellyBridge));
     private final IntSetting tellyTicks = intSetting("Telly Ticks", 1, 0, 6, 1, () -> mode.is(Mode.TellyBridge));
+    private final BoolSetting autoJump = boolSetting("Auto Jump", true, () -> mode.is(Mode.TellyBridge));
+    private final BoolSetting motionAim = boolSetting("Motion Aim", true);
 
     private final BoolSetting swingHand = boolSetting("Swing Hand", true);
     private final BoolSetting render = boolSetting("Render", true);
@@ -274,7 +276,7 @@ public class Scaffold extends Module {
 
     @EventHandler
     private void onMoveInput(KeyboardInputEvent event) {
-        if (mc.player.onGround() && !mc.options.keyJump.isDown() && mc.player.isMoving() && mode.is(Mode.TellyBridge)) {
+        if (autoJump.getValue() && mc.player.onGround() && !mc.options.keyJump.isDown() && mc.player.isMoving() && mode.is(Mode.TellyBridge)) {
             event.setJump(true);
         }
     }
@@ -374,7 +376,14 @@ public class Scaffold extends Module {
         blockPos = null;
         direction = null;
 
-        Vec3 baseVec = mc.player.getEyePosition();
+        // 用"下一 tick 的预估脚下位置"当搜索基点。玩家在斜跳/急停时，如果只按当前位置定位，
+        // 常常会把方块放到已经离开的格子导致走空。这里把水平位移带进去，方向就跟着真实运动走。
+        Vec3 eye = mc.player.getEyePosition();
+        Vec3 baseVec = eye;
+        if (motionAim.getValue()) {
+            Vec3 delta = mc.player.getDeltaMovement();
+            baseVec = eye.add(delta.x, 0.0, delta.z);
+        }
         BlockPos base = BlockPos.containing(baseVec.x, getYLevel(), baseVec.z);
         int baseX = base.getX();
         int baseZ = base.getZ();

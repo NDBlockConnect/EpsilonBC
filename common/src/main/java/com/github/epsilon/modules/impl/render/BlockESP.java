@@ -12,7 +12,6 @@ import com.github.epsilon.settings.impl.DoubleSetting;
 import com.github.epsilon.settings.impl.RegistryListSetting;
 import com.github.epsilon.utils.player.ChatUtils;
 import com.github.epsilon.utils.timer.TimerUtils;
-import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.util.Util;
@@ -112,10 +111,17 @@ public class BlockESP extends Module {
             return;
         }
 
-        for (AABB aabb : Lists.newArrayList(boxes)) {
-            if (blur.getValue()) Render3DScheduler.INSTANCE.addBlurredBox(aabb, blurStrength.getValue());
-            Render3DScheduler.INSTANCE.addFilledBox(aabb, sideColor.getValue());
-            Render3DScheduler.INSTANCE.addOutlineBox(aabb, lineColor.getValue());
+        // boxes 是 volatile-style 引用替换（scan 线程赋新 List 给 static 字段），本线程只读遍历，
+        // 之前 Lists.newArrayList(boxes) 每帧多复制一份 O(n) 是白白浪费。抓一次本地引用防 mid-frame 替换即可。
+        List<AABB> snapshot = boxes;
+        boolean drawBlur = blur.getValue();
+        Color side = sideColor.getValue();
+        Color line = lineColor.getValue();
+        double blurQuality = blurStrength.getValue();
+        for (AABB aabb : snapshot) {
+            if (drawBlur) Render3DScheduler.INSTANCE.addBlurredBox(aabb, blurQuality);
+            Render3DScheduler.INSTANCE.addFilledBox(aabb, side);
+            Render3DScheduler.INSTANCE.addOutlineBox(aabb, line);
         }
     }
 

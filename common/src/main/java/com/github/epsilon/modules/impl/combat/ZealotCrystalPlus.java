@@ -1331,9 +1331,13 @@ public class ZealotCrystalPlus extends Module {
         int feetY = Mth.floor(feetPos.y);
         int feetZ = Mth.floor(feetPos.z);
 
+        int maxY = mc.level.getMaxY();
+        int minY = mc.level.getMinY();
         for (int x = feetX - floor; x <= feetX + ceil; x++) {
             for (int z = feetZ - floor; z <= feetZ + ceil; z++) {
                 for (int y = feetY - floor; y <= feetY + ceil; y++) {
+                    // 水晶实体高 2 格，放在 support(y).above() 上；y+2 越界服务器就会红字 "建筑高度上限"。
+                    if (y < minY || y + 2 > maxY) continue;
                     BlockPos pos = new BlockPos(x, y, z);
                     if (!mc.level.getWorldBorder().isWithinBounds(pos)) continue;
 

@@ -535,10 +535,11 @@ public class DropdownScreen extends Screen {
 
         for (DropdownPanel panel : panels) {
             if (panel.getId().equals(panelId)) {
-                panel.setVisible(!panel.isVisible());
-                panel.setOpened(false);
+                boolean nowVisible = !panel.isVisible();
+                panel.setVisible(nowVisible);
+                panel.setOpened(nowVisible);
                 DropdownLayoutState.save(panels);
-                react(panel.isVisible()
+                react(nowVisible
                         ? ReisaDropdownCompanion.Action.PANEL_OPEN
                         : ReisaDropdownCompanion.Action.PANEL_CLOSE);
                 return;

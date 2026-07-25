@@ -125,7 +125,11 @@ public class NameTags extends Module {
             Color healthColor = totalHealth < 10.0f ? new Color(255, 214, 64, 240) : new Color(120, 255, 120, 240);
             final var isFriend = Managers.FRIEND.isFriend(nameText);
 
-            drawList.add(new TagDrawData(equipmentItems, nameText, isFriend, healthText, healthColor, x, y, boxWidth, boxHeight, renderScale, padding, lineGap, itemScale, itemSize, itemGap, itemRowGap));
+            // 提前算好 3 项文本宽度，2D 阶段不再重复 measure（原本每帧每玩家多测 3 次）
+            float nameWidth = textRenderer.getWidth(nameText, renderScale);
+            float spaceWidth = textRenderer.getWidth(" ", renderScale);
+            float healthWidth = textRenderer.getWidth(healthText, renderScale);
+            drawList.add(new TagDrawData(equipmentItems, nameText, isFriend, healthText, healthColor, x, y, boxWidth, boxHeight, renderScale, padding, lineGap, itemScale, itemSize, itemGap, itemRowGap, nameWidth, spaceWidth, healthWidth));
         }
 
     }
@@ -140,15 +144,11 @@ public class NameTags extends Module {
             rectRenderer.addRect(data.x, data.y, data.width, data.height, backgroundColor.getValue());
 
             float headerY = data.y + data.padding;
-
-            float nameWidth = textRenderer.getWidth(data.nameText, data.scale);
-            float spaceWidth = textRenderer.getWidth(" ", data.scale);
-            float healthWidth = textRenderer.getWidth(data.healthText, data.scale);
-            float headerWidth = nameWidth + spaceWidth + healthWidth;
+            float headerWidth = data.nameWidth + data.spaceWidth + data.healthWidth;
             float headerX = data.x + (data.width - headerWidth) * 0.5f;
 
             textRenderer.addText(data.nameText, headerX, headerY, data.scale, data.isFriend ? FRIEND_COLOR : NAME_COLOR);
-            textRenderer.addText(data.healthText, headerX + nameWidth + spaceWidth, headerY, data.scale, data.healthColor);
+            textRenderer.addText(data.healthText, headerX + data.nameWidth + data.spaceWidth, headerY, data.scale, data.healthColor);
 
             if (!data.equipmentItems.isEmpty()) {
                 float itemRowWidth = data.equipmentItems.size() * data.itemSize + Math.max(0, data.equipmentItems.size() - 1) * data.itemGap;
@@ -198,7 +198,9 @@ public class NameTags extends Module {
 
     private void appendItem(List<ItemStack> items, ItemStack stack) {
         if (!stack.isEmpty()) {
-            items.add(stack.copy());
+            // 只在同一帧 3D->2D 之间传递引用即可，2D 阶段只读渲染。
+            // 之前每帧对每个玩家 6 件装备做 stack.copy() 是无谓的 CoW（涉及 DataComponentMap 复制）。
+            items.add(stack);
         }
     }
 
@@ -227,7 +229,10 @@ public class NameTags extends Module {
             float itemScale,
             float itemSize,
             float itemGap,
-            float itemRowGap
+            float itemRowGap,
+            float nameWidth,
+            float spaceWidth,
+            float healthWidth
     ) {
     }
 

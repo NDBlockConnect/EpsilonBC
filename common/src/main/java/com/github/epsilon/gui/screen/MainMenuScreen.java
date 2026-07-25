@@ -571,11 +571,15 @@ public class MainMenuScreen extends Screen {
         if (elapsed < REISA_SHUTDOWN_BUBBLE_DELAY_MS) return companionTex("10", "19");
 
         long speechElapsed = elapsed - REISA_SHUTDOWN_BUBBLE_DELAY_MS;
-        // Hinata 眨眼频率比 Reisa 慢（145ms → 380ms），避免眼皮抖动过快
+        // 自然眨眼节奏：大部分时间睁眼，每个周期内只在末尾一小段窗口闭眼。
+        // Hinata 比 Reisa 眨得更慢（周期 5s vs 2.4s，闭眼窗口 175ms vs 120ms）。
         boolean isHinata = ClientSetting.INSTANCE.companionCharacter.getValue()
                 == ClientSetting.CompanionCharacter.Hinata;
-        long blinkInterval = isHinata ? 380L : 145L;
-        return (speechElapsed / blinkInterval & 1L) == 0L ? companionTex("00", "43") : companionTex("09", "46");
+        long blinkCycleMs = isHinata ? 5000L : 2400L;
+        long blinkClosedMs = isHinata ? 175L : 120L;
+        long phase = speechElapsed % blinkCycleMs;
+        boolean closed = phase >= (blinkCycleMs - blinkClosedMs);
+        return closed ? companionTex("09", "46") : companionTex("00", "43");
     }
 
     private void prewarmReisaShutdownTextures(UiTree.Scope scope) {

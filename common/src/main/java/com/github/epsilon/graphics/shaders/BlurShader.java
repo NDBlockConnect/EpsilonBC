@@ -54,6 +54,20 @@ public class BlurShader {
     private RenderPipeline boxPipeline;
     private RenderTarget input;
 
+    // 每帧只做一次全屏 copyTextureToTexture。TargetHUD/Potions/Inventory/ModuleList/ScaffoldBlock/BPS
+    // 每帧会各自 render() 多次(甚至 Potions 是循环内)，之前每次都拷一份全屏纹理导致 GPU 拷贝带宽被打满。
+    // MixinGuiRenderer 在每帧 draw() 开头调 beginFrame()，把 currentFrameId 递增，
+    // 这里只在 lastSnapshotFrameId != currentFrameId 时才真拷，其余命中缓存。
+    // 若中间 render3DBox 也刷新了 input，就直接把它当作本帧快照。
+    private static long currentFrameId;
+    private long lastSnapshotFrameId = -1L;
+    private int lastSnapshotWidth = -1;
+    private int lastSnapshotHeight = -1;
+
+    public static void beginFrame() {
+        currentFrameId++;
+    }
+
     private void ensureProgram() {
         if (this.pipeline == null) {
             this.pipeline = RenderPipeline.builder(RenderPipelines.POST_PROCESSING_SNIPPET)
@@ -134,12 +148,19 @@ public class BlurShader {
         float quality = Math.max(0.0f, blurStrength);
 
         CommandEncoder encoder = RenderSystem.getDevice().createCommandEncoder();
-        encoder.copyTextureToTexture(
-                targetTexture,
-                input.getColorTexture(),
-                0, 0, 0, 0, 0,
-                targetWidth, targetHeight
-        );
+        if (lastSnapshotFrameId != currentFrameId
+                || lastSnapshotWidth != targetWidth
+                || lastSnapshotHeight != targetHeight) {
+            encoder.copyTextureToTexture(
+                    targetTexture,
+                    input.getColorTexture(),
+                    0, 0, 0, 0, 0,
+                    targetWidth, targetHeight
+            );
+            lastSnapshotFrameId = currentFrameId;
+            lastSnapshotWidth = targetWidth;
+            lastSnapshotHeight = targetHeight;
+        }
 
         GpuBufferSlice blurUniforms = LuminRenderSystem.writeDynamicUniform(
                 "blur_uniforms",
@@ -192,12 +213,17 @@ public class BlurShader {
         }
 
         CommandEncoder encoder = RenderSystem.getDevice().createCommandEncoder();
+        // 3D box blur 用当前主 framebuffer 快照（可能不是 HUD 阶段），刷新缓存戳，
+        // 让同帧后续的 HUD blur() 直接命中缓存。
         encoder.copyTextureToTexture(
                 fb.getColorTexture(),
                 input.getColorTexture(),
                 0, 0, 0, 0, 0,
                 fb.width, fb.height
         );
+        lastSnapshotFrameId = currentFrameId;
+        lastSnapshotWidth = fb.width;
+        lastSnapshotHeight = fb.height;
 
         float quality = Math.max(0.0f, (float) blurStrength);
         GpuBufferSlice boxBlurUniforms = LuminRenderSystem.writeDynamicUniform(

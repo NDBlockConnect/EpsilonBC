@@ -54,6 +54,10 @@ public class MixinGuiRenderer {
             return;
         }
 
+        // 帧起点：清除 BlurShader 的"本帧已快照"标记，
+        // 让本帧第一次 blur() 才做全屏 copyTextureToTexture，之后所有 HUD blur 共享同一份快照。
+        com.github.epsilon.graphics.shaders.BlurShader.beginFrame();
+
         if (epsilon$levelRenderState == null || epsilon$levelGuiRenderer == null) {
             this.epsilon$levelRenderState = new GuiRenderState();
             this.epsilon$levelGuiRenderer = new EpsilonGuiRenderer(

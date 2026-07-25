@@ -6,6 +6,9 @@ import com.github.epsilon.modules.Category;
 import com.github.epsilon.modules.Module;
 import com.github.epsilon.settings.impl.BoolSetting;
 import com.github.epsilon.settings.impl.EnumSetting;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.Vec3;
 
 public class Jesus extends Module {
@@ -40,18 +43,23 @@ public class Jesus extends Module {
         };
 
         if (!active) return;
-        // Allow swimming deeper when fully submerged.
-        if (mc.player.isUnderWater()) return;
 
-        // Pin the player flat at the surface: zero the vertical delta so vanilla
-        // buoyancy can't push us up and gravity can't drag us down. This removes
-        // the bobbing that the old +0.05 delta nudge caused, so it feels like
-        // walking on solid blocks. Horizontal movement is preserved.
-        event.setY(0.0);
-        event.cancel();
+        // 判断当前接触到哪种流体，取"沉入深度"最大的那一种做决策
+        TagKey<Fluid> tag = inLava && (mode.getValue() != Mode.Water) ? FluidTags.LAVA : FluidTags.WATER;
+        double fluidDepth = mc.player.getFluidHeight(tag);
 
+        // 眼睛已经淹没：放手让玩家自由潜水/上浮，不再干预
+        if (mc.player.isEyeInFluid(FluidTags.WATER) || mc.player.isEyeInFluid(FluidTags.LAVA)) return;
+        // 玩家几乎完全没入（脚下没有支撑面，脑袋顶到水面）：也放手，避免"卡在半水中"
+        if (fluidDepth >= 0.85) return;
+
+        // 站在水面：给一个持续的向上小推力，让玩家浮在流体表面而不是漂在水里下沉。
+        // 使用固定 0.1 而不是把 Y 置零，模拟"踩在方块顶面"的短促上抛，
+        // vanilla 每 tick 会施加重力/浮力，我们只覆盖当前 tick 的位移。
         Vec3 vel = mc.player.getDeltaMovement();
-        mc.player.setDeltaMovement(vel.x, 0.0, vel.z);
+        double targetY = 0.1;
+        event.setY(targetY);
+        mc.player.setDeltaMovement(vel.x, targetY, vel.z);
         mc.player.resetFallDistance();
     }
 }
