@@ -7,95 +7,81 @@
 </h4>
 
 <p align="center">
-  <a href="https://github.com/NekoyaHouse/Epsilon/actions"><img alt="Build" src="https://img.shields.io/badge/build-gradle-4c1?style=flat-square"></a>
+  <a href="https://github.com/NDBlockConnect/EpsilonBC/actions"><img alt="Build" src="https://img.shields.io/badge/build-gradle-4c1?style=flat-square"></a>
   <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-GPLv3-blue?style=flat-square"></a>
-  <img alt="Loaders" src="https://img.shields.io/badge/loaders-NeoForge%20%26%20Fabric%20%26%20Forge-6a5acd?style=flat-square">
-  <a href="https://discord.gg/vYbaae3X7e"><img alt="Discord" src="https://img.shields.io/badge/Discord-Join%20Server-5865F2?style=flat-square&logo=discord&logoColor=white"></a>
-</p>
-
-<p align="center">
-  <b>BlockConnect Community Group</b>
-</p>
-
-<p align="center">
-  <a href="https://qm.qq.com/q/71qUqMO87e"><img alt="BlockConnect QQ Group" src="https://img.shields.io/badge/BlockConnect%20%E7%A4%BE%E5%8C%BA%E7%BE%A4-join-12B7F5?style=flat-square&logo=tencentqq&logoColor=white"></a>
-</p>
-
-<p align="center">
-  <sub>Epsilon Official Groups</sub>
-</p>
-
-<p align="center">
-  <a href="https://qm.qq.com/q/WPvwQZvYci"><img alt="QQ Group 1" src="https://img.shields.io/badge/QQ%201%E7%BE%A4-join-12B7F5?style=flat-square&logo=tencentqq&logoColor=white"></a>
-  <a href="https://qm.qq.com/q/3hhg8ww9ag"><img alt="QQ Group 2" src="https://img.shields.io/badge/QQ%202%E7%BE%A4-join-12B7F5?style=flat-square&logo=tencentqq&logoColor=white"></a>
+  <img alt="MC Version" src="https://img.shields.io/badge/minecraft-26.1.2-62b47a?style=flat-square">
+  <img alt="Loaders" src="https://img.shields.io/badge/loaders-NeoForge%20%26%20Fabric-6a5acd?style=flat-square">
+  <a href="https://github.com/NDBlockConnect/EpsilonBC/releases"><img alt="Release" src="https://img.shields.io/github/v/release/NDBlockConnect/EpsilonBC?include_prereleases&style=flat-square&label=latest"></a>
 </p>
 
 > [!IMPORTANT]
-> ## 🔀 BlockConnect Fork Notice
-> This repository is a **community-maintained fork** by **BlockConnect**, continued from the original [Epsilon](https://github.com/NekoyaHouse/Epsilon) project.
->
-> The original Epsilon repository has been archived and public development has ceased. We at BlockConnect have forked the project to continue maintenance, bug fixes, and feature development for the community.
->
-> **Join our community:** [BlockConnect Community Group](https://qm.qq.com/q/71qUqMO87e)
+> **EpsilonBC is a closed-source HvH client for FishWish PvP server.**
+> Distributed exclusively as an obfuscated binary to registered HvH players.
+> This repository contains the source from which EpsilonBC is built — it is **not** a general-purpose public client.
 
 > [!NOTE]
-> ## Original Archive Notice (from Epsilon)
-> The original repository was being prepared for archival and remains available as a public reference for the source release. Active public development, issue triage, and free public releases were wound down.
+> ## About EpsilonBC
+> EpsilonBC is a fork of the original [Epsilon](https://github.com/NekoyaHouse/Epsilon) project, developed and maintained by **BlockConnect / StarsailsClover** for FishWish PvP's HvH game mode.
 >
-> Maintaining a feature-rich client takes sustained time and resources. Repackaged and modified builds being monetized by others made the previous public-development model unsustainable.
+> The original Epsilon repository has been archived. EpsilonBC continues development with new HvH-focused modules, multi-language support, and ongoing compatibility updates.
 >
-> The code already published here remains available under the [GNU General Public License v3.0](LICENSE). This notice does not change the license or rights for existing releases.
+> **Engine:** Epsilon Kernel 2026.8.1 · **Base:** Epsilon 2026.8.2 · **Rendering:** OpenLumin v26.0 Alpha 0 (Lumin Graphics+)
 
 ## 📌 Overview
-A modern multi loader Minecraft utility client built on NeoForge/Forge & Fabric with advanced rendering system and modular architecture.
+
+A modern Minecraft HvH utility client for FishWish PvP, built on NeoForge & Fabric with advanced rendering (Lumin Graphics+), full CJK language support, and a growing suite of HvH-specific modules.
+
+**Current release:** v26.0 Alpha 2 · Minecraft 26.1.2
+
+## 🆕 What's New in Alpha 2
+
+See the full [Release Notes](https://github.com/NDBlockConnect/EpsilonBC/releases/tag/v26.0.0-alpha.2) for the complete changelog.
+
+Highlights:
+- **30+ new modules** across Combat, Movement, Render, and Player categories
+- **Complete HvH identification system** (AllyMarker, AllyManager, MatchDetector, EnemyView)
+- **Full i18n** — Chinese, Korean, Japanese, Russian translations
+- **In-game account switching** and GitHub update checker
+- **GUI & stability fixes** — dropdown flicker, waterfall panel layout, singleplayer disconnect, and more
 
 ## 🚀 Addon System
+
 [Epsilon Addon Template](https://github.com/slmpc/Epsilon-Addon-Template)
 
 [Addon Development Guide](docs/addon-development.md)
 
 ## 🎨 Graphics System
 
-The Lumin rendering system provides custom render pipelines for:
-- Rectangles & Round Rectangles
-- Shadows & Blur effects
-- TTF Font rendering
-- Texture rendering
-- Custom vertex formats
+The **Lumin Graphics+** rendering engine provides:
+- Rectangles & Round Rectangles with shadows
+- TTF Font rendering (with CJK support)
+- Texture, blur, and custom vertex formats
+- Declarative UI layer (UiTree / UiScene)
 
-See [Lumin Graphics README](common/src/main/java/com/github/epsilon/graphics/README.md) for details.
+See [Lumin Graphics README](common/src/main/java/com/github/epsilon/graphics/README.md) and [GUI Library Guide](docs/gui-library.md).
 
-The declarative UI layer built on Lumin is documented in the [Epsilon GUI Library Guide](docs/gui-library.md).
+## ⚙️ Build
 
-## ⚙️ Build & Run
+> Requires **JDK 25** (full JDK, not JRE).
 
 ```bash
-# Build the mod
-./gradlew build
+# Build all loaders
+./gradlew :fabric:jar :neoforge:jar -x test
 
-# Run client
-./gradlew runClient
+# Run dev client (Fabric)
+./gradlew :fabric:runClient
 ```
 
 ## 🙏 Credits
-Special thanks to the following projects. See NOTICE for third-party code attributions.
 
-Meteor Client
+Special thanks to the following projects. See [NOTICE](NOTICE.md) for third-party attributions.
 
-Orbit
-
-LeavesHack
-
-TrollHack
-
-Original Repository
-
-Epsilon — the original project by NekoyaHouse, on which this fork is based.
+- [Meteor Client](https://github.com/MeteorDevelopment/meteor-client)
+- Orbit · LeavesHack · TrollHack
+- [Epsilon](https://github.com/NekoyaHouse/Epsilon) — original project by NekoyaHouse
 
 ## 📝 License
 
-This project, including Lumin Graphics, is licensed under the GNU General Public License v3.0.
+This project, including Lumin Graphics, is licensed under the **GNU General Public License v3.0**.
 
-Copyright © 2026 NekoyaHouse.
-
-Forked by BlockConnect@StarsailsClover
+Copyright © 2026 NekoyaHouse. Fork maintained by BlockConnect @ StarsailsClover.
