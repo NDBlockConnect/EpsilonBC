@@ -24,6 +24,70 @@
       "epsilon:shutdown"
     ]
   },
+  "reisa_welcome": {
+    "sounds": [
+      {
+        "name": "epsilon:reisa/welcome",
+        "stream": true
+      }
+    ]
+  },
+  "reisa_bye": {
+    "sounds": [
+      {
+        "name": "epsilon:reisa/bye",
+        "stream": true
+      }
+    ]
+  },
+  "reisa_death": {
+    "sounds": [
+      {
+        "name": "epsilon:reisa/death_1",
+        "stream": true
+      },
+      {
+        "name": "epsilon:reisa/death_2",
+        "stream": true
+      }
+    ]
+  },
+  "hinata_welcome": {
+    "sounds": [
+      {
+        "name": "epsilon:hinata/welcome_1",
+        "stream": true
+      },
+      {
+        "name": "epsilon:hinata/welcome_2",
+        "stream": true
+      }
+    ]
+  },
+  "hinata_bye": {
+    "sounds": [
+      {
+        "name": "epsilon:hinata/bye_1",
+        "stream": true
+      }
+    ]
+  },
+  "hinata_death": {
+    "sounds": [
+      {
+        "name": "epsilon:hinata/death_1",
+        "stream": true
+      }
+    ]
+  },
+  "easter_egg_001": {
+    "sounds": [
+      {
+        "name": "epsilon:easter_egg_001",
+        "stream": true
+      }
+    ]
+  },
   "uwu": {
     "sounds": [
       "epsilon:uwu"

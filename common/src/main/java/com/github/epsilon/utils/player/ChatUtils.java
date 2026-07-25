@@ -12,7 +12,7 @@ import static com.github.epsilon.Constants.mc;
 
 public class ChatUtils {
 
-    public static final String PREFIX = "[Epsilon] ";
+    public static final String PREFIX = "[EpsilonBC] ";
 
     private static final double GRADIENT_CHAR_STEP = 0.55D;
 

@@ -43,12 +43,15 @@ public class ModuleHolder {
 
         // Combat
         addModule(AimBot.INSTANCE);
+        addModule(AllyMarker.INSTANCE);
         addModule(AnchorBlast.INSTANCE);
         addModule(AntiBot.INSTANCE);
         addModule(AutoClicker.INSTANCE);
         addModule(AutoDtap.INSTANCE);
         addModule(AutoHitCrystal.INSTANCE);
         addModule(AutoMend.INSTANCE);
+        addModule(AutoOffhand.INSTANCE);
+        addModule(AutoPot.INSTANCE);
         addModule(AutoTotem.INSTANCE);
         addModule(AutoWeapon.INSTANCE);
         addModule(Criticals.INSTANCE);
@@ -61,31 +64,55 @@ public class ModuleHolder {
         addModule(KillAura.INSTANCE);
         addModule(KeyPearl.INSTANCE);
         addModule(MaceAura.INSTANCE);
+        addModule(Nuker.INSTANCE);
         addModule(PacketMine.INSTANCE);
+        addModule(Reach.INSTANCE);
+        addModule(Regen.INSTANCE);
         addModule(SafeAnchor.INSTANCE);
         addModule(SafeCrystal.INSTANCE);
         addModule(SilentAim.INSTANCE);
         addModule(SpearKill.INSTANCE);
         addModule(TriggerBot.INSTANCE);
+        addModule(Surround.INSTANCE);
+        addModule(HoleFiller.INSTANCE);
+        addModule(ShieldBreaker.INSTANCE);
+        addModule(SelfTrap.INSTANCE);
+        addModule(FacePlace.INSTANCE);
+        addModule(AutoCrystalSwitch.INSTANCE);
 
         // Player
+        addModule(AltManager.INSTANCE);
         addModule(AutoArmor.INSTANCE);
+        addModule(AntiAFK.INSTANCE);
+        addModule(AutoDisconnect.INSTANCE);
+        addModule(AutoReconnect.INSTANCE);
+        addModule(AutoEject.INSTANCE);
+        addModule(AutoReplace.INSTANCE);
+        addModule(AutoEat.INSTANCE);
+        addModule(AutoFish.INSTANCE);
         addModule(AutoFirework.INSTANCE);
+        addModule(AutoRespawn.INSTANCE);
         addModule(AutoKouZi.INSTANCE);
         addModule(AutoTool.INSTANCE);
         addModule(BreakCooldown.INSTANCE);
+        addModule(BucketLand.INSTANCE);
         addModule(Disabler.INSTANCE);
         addModule(ElytraSwap.INSTANCE);
         addModule(FakePlayer.INSTANCE);
+        addModule(FastPlace.INSTANCE);
         addModule(GhostHand.INSTANCE);
         addModule(InvManager.INSTANCE);
         addModule(JumpCooldown.INSTANCE);
+        addModule(MatchDetector.INSTANCE);
         addModule(MultiTask.INSTANCE);
+        addModule(NameProtect.INSTANCE);
         addModule(NoRotate.INSTANCE);
         addModule(PacketEat.INSTANCE);
         addModule(PlayerAlarms.INSTANCE);
+        addModule(RangeNotifier.INSTANCE);
         addModule(SoundFX.INSTANCE);
         addModule(Stealer.INSTANCE);
+        addModule(StructureFinder.INSTANCE);
         addModule(Timer.INSTANCE);
         addModule(UseCooldown.INSTANCE);
         addModule(AutoQueue.INSTANCE);
@@ -93,7 +120,9 @@ public class ModuleHolder {
         // Movement
         addModule(ElytraFly.INSTANCE);
         addModule(Follower.INSTANCE);
+        addModule(AirJump.INSTANCE);
         addModule(AutoSprint.INSTANCE);
+        addModule(Bhop.INSTANCE);
         addModule(Blink.INSTANCE);
         addModule(Eagle.INSTANCE);
         addModule(AutoMap.INSTANCE);
@@ -101,19 +130,23 @@ public class ModuleHolder {
         addModule(Flight.INSTANCE);
         addModule(GUIMove.INSTANCE);
         addModule(HoleSnap.INSTANCE);
+        addModule(Jesus.INSTANCE);
         addModule(JumpReset.INSTANCE);
         addModule(KeepSprint.INSTANCE);
         addModule(MovementFix.INSTANCE);
         addModule(NoFall.INSTANCE);
+        addModule(NoPush.INSTANCE);
         addModule(NoSlow.INSTANCE);
         addModule(Phase.INSTANCE);
         addModule(SafeWalk.INSTANCE);
         addModule(Scaffold.INSTANCE);
         addModule(Speed.INSTANCE);
+        addModule(Spider.INSTANCE);
         addModule(Step.INSTANCE);
         addModule(Strafe.INSTANCE);
         addModule(Stuck.INSTANCE);
         addModule(Velocity.INSTANCE);
+        addModule(Burrow.INSTANCE);
 
         // Render
         addModule(AntiAlias.INSTANCE);
@@ -122,7 +155,9 @@ public class ModuleHolder {
         addModule(BlockHighlight.INSTANCE);
         addModule(CameraClip.INSTANCE);
         addModule(Chams.INSTANCE);
+        addModule(ChunkViewer.INSTANCE);
         addModule(CrystalChams.INSTANCE);
+        addModule(EnemyView.INSTANCE);
         addModule(ESP2D.INSTANCE);
         addModule(Filter.INSTANCE);
         addModule(FootBlock.INSTANCE);
@@ -132,6 +167,7 @@ public class ModuleHolder {
         addModule(HandsView.INSTANCE);
         addModule(Hat.INSTANCE);
         addModule(HitParticles.INSTANCE);
+        addModule(Hitboxes.INSTANCE);
         addModule(HoleESP.INSTANCE);
         addModule(JumpCircle.INSTANCE);
         addModule(MasEffects.INSTANCE);
@@ -141,6 +177,9 @@ public class ModuleHolder {
         addModule(PopChams.INSTANCE);
         addModule(Shaders.INSTANCE);
         addModule(SneakTweak.INSTANCE);
+        addModule(Tracers.INSTANCE);
+        addModule(Trajectories.INSTANCE);
+        addModule(TrueSight.INSTANCE);
         addModule(Xray.INSTANCE);
 
     }

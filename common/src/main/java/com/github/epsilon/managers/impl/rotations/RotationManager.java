@@ -16,6 +16,11 @@ import static com.github.epsilon.Constants.mc;
 
 public abstract class RotationManager {
 
+    public enum RotationMode {
+        SILENT,
+        SNAP
+    }
+
     private final Rot2f offset = new Rot2f(0, 0);
     public Rot2f rotations = new Rot2f(0, 0);
     public Rot2f lastRotations = new Rot2f(0, 0);
@@ -59,7 +64,7 @@ public abstract class RotationManager {
         }
 
         this.targetRotations = rotations;
-        this.rotationSpeed = rotationSpeed * 18.0;
+        this.rotationSpeed = rotationSpeed;
         this.raytrace = raytrace;
         this.priority = priority.priority;
         this.active = true;
@@ -116,7 +121,7 @@ public abstract class RotationManager {
                 }
             }
 
-            rotations = RotationUtils.smooth(new Rot2f(targetYaw, targetPitch), Math.ceil(rotationSpeed) + Math.random());
+            rotations = RotationUtils.smooth(new Rot2f(targetYaw, targetPitch), rotationSpeed + Math.random());
         }
 
         smoothed = true;
@@ -249,10 +254,5 @@ public abstract class RotationManager {
     }
 
     protected abstract void handleSendPosition(SendPositionEvent event);
-
-    public enum RotationMode {
-        SILENT,
-        SNAP
-    }
 
 }

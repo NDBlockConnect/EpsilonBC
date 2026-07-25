@@ -10,6 +10,8 @@ buildConfig {
     buildConfigField("String", "MOD_ID", "\"${project.property("mod_id")}\"")
     val effectiveVersion = project.version.toString()
     buildConfigField("String", "VERSION", "new String(\"${effectiveVersion.replace("\\", "\\\\").replace("\"", "\\\"")}\")")
+    val displayVersion = (project.findProperty("display_version") ?: effectiveVersion).toString()
+    buildConfigField("String", "DISPLAY_VERSION", "new String(\"${displayVersion.replace("\\", "\\\\").replace("\"", "\\\"")}\")")
 }
 
 tasks.named("generateBuildConfigClasses") {

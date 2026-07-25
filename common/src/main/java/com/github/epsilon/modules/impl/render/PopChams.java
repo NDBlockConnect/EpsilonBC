@@ -20,7 +20,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityEvent;
 import net.minecraft.world.entity.player.Player;
-import org.jspecify.annotations.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -40,8 +40,8 @@ public class PopChams extends Module {
     private final EnumSetting<Easing> yEasing = enumSetting("Y Easing", Easing.EASE_IN_OUT_EXPO);
     private final DoubleSetting scaleModifier = doubleSetting("Scale Modifier", -0.25, -4.0, 4.0, 0.05);
     private final BoolSetting fadeOut = boolSetting("Fade Out", true);
-    private final ColorSetting sideColor = colorSetting("Side Color", new Color(255, 255, 255, 25), true);
-    private final ColorSetting lineColor = colorSetting("Line Color", new Color(255, 255, 255, 127), true);
+    private final ColorSetting sideColor = colorSetting("Side Color", new Color(255, 255, 255, 25));
+    private final ColorSetting lineColor = colorSetting("Line Color", new Color(255, 255, 255, 127));
 
     private final List<GhostPlayer> ghosts = new ArrayList<>();
 
@@ -54,7 +54,6 @@ public class PopChams extends Module {
 
     @EventHandler
     private void onReceivePacket(PacketEvent.Receive event) {
-        if (nullCheck()) return;
         if (!(event.getPacket() instanceof ClientboundEntityEventPacket packet) || packet.getEventId() != EntityEvent.PROTECTED_FROM_DEATH)
             return;
 
@@ -69,7 +68,6 @@ public class PopChams extends Module {
 
     @EventHandler
     private void onRender3D(Render3DEvent event) {
-        if (nullCheck()) return;
         synchronized (ghosts) {
             if (ghosts.isEmpty()) {
                 return;
@@ -90,7 +88,6 @@ public class PopChams extends Module {
 
         private GhostPlayer(Player player) {
             super(mc.level, new GameProfile(player.getGameProfile().id(), player.getGameProfile().name()));
-            setId(player.getId());
             float tickDelta = mc.level.tickRateManager().isFrozen() ? 1.0f : mc.getDeltaTracker().getGameTimeDeltaPartialTick(true);
             walkPosition = player.walkAnimation.position(tickDelta);
             walkSpeed = player.walkAnimation.speed(tickDelta);

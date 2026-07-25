@@ -72,3 +72,15 @@ required by that license.
 
 The original code has been modified and adapted for Epsilon's module,
 setting, rotation, and event systems.
+
+## Blue Archive - Uzawa Reisa Assets
+
+- Character: Uzawa Reisa (宇沢レイサ)
+- Artwork sources: [Blue Archive Wiki standard Reisa expression sprites](https://bluearchive.wiki/wiki/Special:PrefixIndex?prefix=Reisa_&namespace=6),
+  `Reisa_00.png` through `Reisa_18.png` and `Reisa_99.png`
+- Voice sources: [Reisa LogIn 1](https://bluearchive.wiki/wiki/File:Reisa_LogIn_1.ogg) and [Reisa Relationship Up 4](https://bluearchive.wiki/wiki/File:Reisa_Relationship_Up_4.ogg)
+- Used in Epsilon: animated main-menu greeting and client shutdown voice.
+
+Blue Archive and the character artwork/voice recordings are properties of
+their respective rights holders. They are not covered by Epsilon's GPLv3
+license.

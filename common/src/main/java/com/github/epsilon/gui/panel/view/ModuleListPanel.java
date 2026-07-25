@@ -118,14 +118,20 @@ public class ModuleListPanel implements AutoCloseable {
                 for (Module module : modules) {
                     ModuleRow row = new ModuleRow(ModuleViewModel.from(module), new UiRect(viewport.x(), y, rowWidth, ModuleRow.HEIGHT));
                     rows.add(row);
-                    Animation hoverAnimation = hoverAnimations.computeIfAbsent(module, ignored -> new Animation(Easing.EASE_OUT_CUBIC, 120L));
-                    Animation selectionAnimation = selectionAnimations.computeIfAbsent(module, ignored -> new Animation(Easing.EASE_OUT_CUBIC, 160L));
-                    Animation toggleAnimation = toggleAnimations.computeIfAbsent(module, ignored -> new Animation(Easing.EASE_OUT_ELASTIC, 620L));
-                    Animation toggleHoverAnimation = toggleHoverAnimations.computeIfAbsent(module, ignored -> new Animation(Easing.EASE_OUT_CUBIC, 120L));
-                    hoverAnimation.run(row.getBounds().contains(mouseX, mouseY) ? 1.0f : 0.0f);
-                    selectionAnimation.run(state.getSelectedModule() == module ? 1.0f : 0.0f);
-                    toggleAnimation.run(module.isEnabled() ? 1.0f : 0.0f);
-                    toggleHoverAnimation.run(row.getToggleBounds().contains(mouseX, mouseY) ? 1.0f : 0.0f);
+                    boolean selectedNow = state.getSelectedModule() == module;
+                    boolean enabledNow = module.isEnabled();
+                    boolean hoveredNow = row.getBounds().contains(mouseX, mouseY);
+                    boolean toggleHoveredNow = row.getToggleBounds().contains(mouseX, mouseY);
+                    // Seed newly created animations with the current state so that switching to a
+                    // category page does not replay the enable/select bounce for already-active rows.
+                    Animation hoverAnimation = hoverAnimations.computeIfAbsent(module, ignored -> seed(new Animation(Easing.EASE_OUT_CUBIC, 120L), hoveredNow));
+                    Animation selectionAnimation = selectionAnimations.computeIfAbsent(module, ignored -> seed(new Animation(Easing.EASE_OUT_CUBIC, 160L), selectedNow));
+                    Animation toggleAnimation = toggleAnimations.computeIfAbsent(module, ignored -> seed(new Animation(Easing.EASE_OUT_ELASTIC, 620L), enabledNow));
+                    Animation toggleHoverAnimation = toggleHoverAnimations.computeIfAbsent(module, ignored -> seed(new Animation(Easing.EASE_OUT_CUBIC, 120L), toggleHoveredNow));
+                    hoverAnimation.run(hoveredNow ? 1.0f : 0.0f);
+                    selectionAnimation.run(selectedNow ? 1.0f : 0.0f);
+                    toggleAnimation.run(enabledNow ? 1.0f : 0.0f);
+                    toggleHoverAnimation.run(toggleHoveredNow ? 1.0f : 0.0f);
                     boolean marqueeActive = row.hasOverflowingKeybind(textRenderer);
                     contentState.noteAnimation(!hoverAnimation.isFinished()
                             || !selectionAnimation.isFinished()
@@ -358,6 +364,11 @@ public class ModuleListPanel implements AutoCloseable {
         lastCategorySnapshot = CategorySnapshot.of(state.getSelectedCategory().name(), modules);
         lastSelectedModuleName = state.getSelectedModule() == null ? "" : state.getSelectedModule().getName();
         lastContentSignature = contentSignature;
+    }
+
+    private static Animation seed(Animation animation, boolean active) {
+        animation.setStartValue(active ? 1.0f : 0.0f);
+        return animation;
     }
 
     private long buildContentSignature(List<Module> modules) {

@@ -107,6 +107,9 @@ public class TargetManager {
     private boolean isValidTarget(LivingEntity entity, TargetRequest request) {
         if (!entity.isAlive() || entity.isDeadOrDying()) return false;
         if (AntiBot.INSTANCE.isBot(entity)) return false;
+        // Allies (incl. middle-click-marked mobs, which have no name and so never enter
+        // FriendManager) are never attacked.
+        if (Managers.ALLY.isAlly(entity)) return false;
 
         double dist = RotationUtils.getEyeDistanceToEntity(entity);
         if (dist > request.range()) return false;

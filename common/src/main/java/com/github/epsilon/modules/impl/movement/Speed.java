@@ -54,7 +54,9 @@ public class Speed extends Module {
     private final BoolSetting airStop = boolSetting("AirStop", true, () -> !mode.is(Mode.Grim));
     private final DoubleSetting lagTime = doubleSetting("LagTime", 500, 0, 1000, 1, () -> !mode.is(Mode.Grim));
 
-    private final BoolSetting jump = boolSetting("Jump", true, () -> mode.is(Mode.Strafe));
+    // 默认关掉：这个开关会让 Speed(Strafe) 在 stage==2 强制 setMotionY 起跳，等价于隐性 Bhop。
+    // 开启会和独立 Bhop 模块叠加，导致玩家关掉 Bhop 后以为 bhop 停了、实际是这里在跳。
+    private final BoolSetting jump = boolSetting("Jump", false, () -> mode.is(Mode.Strafe));
     private final DoubleSetting strafeSpeed = doubleSetting("Speed", 0.2873, 0, 1.0, 0.0001, () -> mode.is(Mode.Strafe));
     private final BoolSetting explosions = boolSetting("ExplosionsBoost", false, () -> mode.is(Mode.Strafe));
     private final BoolSetting velocity = boolSetting("VelocityBoost", true, () -> mode.is(Mode.Strafe));

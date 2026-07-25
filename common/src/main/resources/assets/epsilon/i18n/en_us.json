@@ -1,6 +1,6 @@
 {
   "epsilon": {
-    "_value": "Epsilon",
+    "_value": "EpsilonBC",
     "categories": {
       "combat": "Combat",
       "player": "Player",
@@ -31,7 +31,11 @@
         "singleplayer": "Singleplayer",
         "multiplayer": "Multiplayer",
         "options": "Options",
-        "quit": "Quit"
+        "quit": "Quit",
+        "reisa_greeting": "Hi, Sensei! Reisa reporting in!",
+        "reisa_farewell": "Sensei, see you tomorrow! Reisa is signing off!",
+        "hinata_greeting": "Hey, Sensei! Where shall we start today?",
+        "hinata_farewell": "Sensei, Hoshino is signing off! See you tomorrow!"
       },
       "tab": {
         "general": "General",
@@ -228,6 +232,8 @@
         "general": "General",
         "anti cheat": "Anti Cheat",
         "appearance": "Appearance",
+        "companion": "Companion",
+        "uzawa reisa": "Uzawa Reisa",
         "notification": "Notification",
         "open hud editor": "Open HUD Editor",
         "gui keybind": "Gui Keybind",
@@ -246,6 +252,9 @@
           "_value": "Language",
           "english": "English",
           "chinese simplified": "简体中文",
+          "korean": "한국어",
+          "japanese": "日本語",
+          "russian": "Русский",
           "custom": "Custom"
         },
         "custom language": "Custom Language",
@@ -295,23 +304,45 @@
           "_value": "Custom Icon",
           "vanilla": "Vanilla",
           "minecraft_1_8_9": "Minecraft 1.8.9",
-          "epsilon": "Epsilon"
+          "epsilon": "EpsilonBC"
         },
         "custom title": {
           "_value": "Custom Title",
           "vanilla": "Vanilla",
           "minecraft_1_8_9": "Minecraft 1.8.9",
-          "epsilon": "Epsilon"
+          "epsilon": "EpsilonBC"
         },
         "use mainmenu": "Use Main Menu",
         "mainmenu background": {
           "_value": "Main Menu Background",
           "sea_level": "Sea Level",
+          "clouds": "Clouds",
+          "alien_terrain": "Alien Terrain",
+          "inferno": "Inferno",
           "planet": "Planet",
           "black_hole": "Black Hole",
           "minecraft": "Minecraft"
         },
         "show welcome screen": "Show Welcome Screen",
+        "show reisa in dropdown": "Show Reisa In Dropdown",
+        "show reisa on startup": "Show Reisa On Startup",
+        "show reisa on shutdown": "Show Reisa On Shutdown",
+        "reisa volume": "Reisa Volume",
+        "companion character": {
+          "_value": "Companion Character",
+          "reisa": "Reisa",
+          "hinata": "Hinata"
+        },
+        "show companion in dropdown": "Show Companion In Dropdown",
+        "show companion on startup": "Show Companion On Startup",
+        "show companion on shutdown": "Show Companion On Shutdown",
+        "show companion on death": "Show Companion On Death",
+        "companion volume": "Companion Volume",
+        "wide hinata easter egg": "Wide Hinata Easter Egg",
+        "wide hinata probability": "Wide Hinata Probability",
+        "wide hinata duration": "Wide Hinata Duration",
+        "wide hinata max width": "Wide Hinata Max Width",
+        "check for updates": "Check For Updates",
         "sound notify": "Sound Notify",
         "chat notify": "Chat Notify",
         "animated chat prefix": "Animated Chat Prefix",
@@ -1718,6 +1749,7 @@
           "sigmoid": "Sigmoid",
           "ease_out_elastic": "Ease Out Elastic",
           "ease_in_back": "Ease In Back",
+          "ease_out_back": "Ease Out Back",
           "dynamic_island": "Dynamic Island"
         },
         "scale modifier": "Scale Modifier",
@@ -1816,6 +1848,325 @@
         "quartz": "Quartz",
         "water": "Water",
         "lava": "Lava"
+      },
+      "surround": {
+        "_value": "Surround",
+        "mode": {
+          "_value": "Mode",
+          "normal": "Normal",
+          "strict": "Strict"
+        },
+        "only on ground": "Only On Ground",
+        "height": "Height",
+        "rotate": "Rotate"
+      },
+      "hole filler": {
+        "_value": "Hole Filler",
+        "fill block": {
+          "_value": "Fill Block",
+          "obsidian": "Obsidian",
+          "any": "Any"
+        },
+        "range": "Range",
+        "only players": "Only Players"
+      },
+      "self trap": {
+        "_value": "Self Trap",
+        "mode": {
+          "_value": "Mode",
+          "normal": "Normal",
+          "strict": "Strict"
+        },
+        "height": "Height",
+        "only on ground": "Only On Ground"
+      },
+      "face place": {
+        "_value": "Face Place",
+        "health threshold": "Health Threshold",
+        "armor threshold": "Armor Threshold",
+        "armor threshold value": "Armor Threshold Value"
+      },
+      "shield breaker": {
+        "_value": "Shield Breaker",
+        "axe priority": {
+          "_value": "Axe Priority",
+          "damage": "Damage",
+          "speed": "Speed"
+        },
+        "range": "Range",
+        "switch back": "Switch Back",
+        "only when enemy shields": "Only When Enemy Shields"
+      },
+      "auto crystal switch": {
+        "_value": "Auto Crystal Switch",
+        "strategy": {
+          "_value": "Strategy",
+          "crystalobsidian": "Crystal To Obsidian",
+          "smart": "Smart"
+        },
+        "switch back": "Switch Back",
+        "delay": "Delay"
+      },
+      "hitboxes": {
+        "_value": "Hitboxes",
+        "expand width": "Expand Width",
+        "expand height": "Expand Height",
+        "render": "Render"
+      },
+      "burrow": {
+        "_value": "Burrow",
+        "smart": "Smart",
+        "on ground only": "On Ground Only"
+      },
+      "ally marker": {
+        "_value": "Ally Marker",
+        "scope": {
+          "_value": "Scope",
+          "permanent": "Permanent",
+          "timed": "Timed",
+          "match": "Match"
+        },
+        "timed seconds": "Timed Seconds",
+        "mark entities": "Mark Entities",
+        "only living": "Only Living",
+        "notify": "Notify"
+      },
+      "match detector": {
+        "_value": "Match Detector",
+        "start keywords": "Start Keywords",
+        "end keywords": "End Keywords",
+        "scan title": "Scan Title",
+        "scan subtitle": "Scan Subtitle",
+        "scan action bar": "Scan Action Bar",
+        "scan chat": "Scan Chat",
+        "reset on start": "Reset On Start",
+        "reset on end": "Reset On End",
+        "reset on leave": "Reset On Leave",
+        "notify": "Notify"
+      },
+      "enemy view": {
+        "_value": "Enemy View",
+        "style": {
+          "_value": "Style",
+          "box": "Box",
+          "solid": "Solid",
+          "glow": "Glow"
+        },
+        "hide model": "Hide Model",
+        "outline": "Outline",
+        "line thickness": "Line Thickness",
+        "fill alpha": "Fill Alpha",
+        "players": "Players",
+        "creatures": "Creatures",
+        "monsters": "Monsters",
+        "ambients": "Ambients",
+        "others": "Others",
+        "max range": "Max Range",
+        "players color": "Players Color",
+        "creatures color": "Creatures Color",
+        "monsters color": "Monsters Color",
+        "ambients color": "Ambients Color",
+        "others color": "Others Color"
+      },
+      "auto pot": {
+        "_value": "Auto Pot",
+        "switch mode": {
+          "_value": "Switch Mode",
+          "normal": "Normal",
+          "silent": "Silent"
+        },
+        "health": "Health",
+        "only on ground": "Only On Ground",
+        "delay": "Delay",
+        "swing hand": "Swing Hand"
+      },
+      "auto offhand": {
+        "_value": "Auto Offhand",
+        "item": {
+          "_value": "Item",
+          "totem": "Totem",
+          "goldenapple": "Golden Apple",
+          "enchantedgoldenapple": "Enchanted Golden Apple"
+        },
+        "strict": "Strict",
+        "only when empty": "Only When Empty",
+        "health": "Health"
+      },
+      "auto respawn": {
+        "_value": "Auto Respawn",
+        "delay": "Delay"
+      },
+      "auto disconnect": {
+        "_value": "Auto Disconnect",
+        "health": "Health",
+        "only hurt": "Only Hurt",
+        "notify": "Notify"
+      },
+      "reach": {
+        "_value": "Reach",
+        "entity reach": "Entity Reach",
+        "override block": "Override Block",
+        "block reach": "Block Reach"
+      },
+      "regen": {
+        "_value": "Regen",
+        "health": "Health",
+        "min hunger": "Min Hunger",
+        "delay": "Delay",
+        "only on ground": "Only On Ground"
+      },
+      "autoreconnect": {
+        "_value": "AutoReconnect",
+        "delay": "Delay"
+      },
+      "autoeject": {
+        "_value": "AutoEject",
+        "list mode": {
+          "_value": "List Mode",
+          "whitelist": "Whitelist",
+          "blacklist": "Blacklist"
+        },
+        "items": "Items",
+        "delay": "Delay",
+        "only in inventory": "Only In Inventory",
+        "ignore hotbar": "Ignore Hotbar"
+      },
+      "autoreplace": {
+        "_value": "AutoReplace",
+        "threshold": "Threshold",
+        "only blocks": "Only Blocks",
+        "refill tools": "Refill Tools",
+        "delay": "Delay"
+      },
+      "rangenotifier": {
+        "_value": "RangeNotifier",
+        "alert mode": {
+          "_value": "Alert Mode",
+          "chat": "Chat",
+          "notification": "Notification",
+          "both": "Both"
+        },
+        "range": "Range",
+        "notify leave": "Notify Leave",
+        "ignore friends": "Ignore Friends",
+        "play sound": "Play Sound",
+        "volume": "Volume",
+        "pitch": "Pitch",
+        "sound": "Sound"
+      },
+      "nameprotect": {
+        "_value": "NameProtect",
+        "replacement": "Replacement",
+        "protect own name": "Protect Own Name",
+        "extra names": "Extra Names"
+      },
+      "jesus": {
+        "_value": "Jesus",
+        "mode": {
+          "_value": "Mode",
+          "water": "Water",
+          "lava": "Lava",
+          "both": "Both"
+        },
+        "sneak to sink": "Sneak To Sink"
+      },
+      "autofish": {
+        "_value": "AutoFish",
+        "dip threshold": "Dip Threshold",
+        "re-throw delay": "Re-Throw Delay"
+      },
+      "antiafk": {
+        "_value": "AntiAFK",
+        "mode": {
+          "_value": "Mode",
+          "rotate": "Rotate",
+          "jump": "Jump",
+          "sneak": "Sneak"
+        },
+        "interval (ticks)": "Interval (Ticks)"
+      },
+      "nuker": {
+        "_value": "Nuker",
+        "mode": {
+          "_value": "Mode",
+          "normal": "Normal",
+          "packet": "Packet"
+        },
+        "shape": {
+          "_value": "Shape",
+          "sphere": "Sphere",
+          "flat": "Flat"
+        },
+        "range": "Range",
+        "max blocks": "Max Blocks",
+        "delay": "Delay",
+        "only exposed": "Only Exposed",
+        "auto tool": "Auto Tool",
+        "swing": "Swing",
+        "render": "Render",
+        "side color": "Side Color",
+        "line color": "Line Color"
+      },
+      "structurefinder": {
+        "_value": "StructureFinder",
+        "chunk radius": "Chunk Radius",
+        "render": "Render",
+        "color": "Color",
+        "thickness": "Thickness",
+        "scan interval": "Scan Interval"
+      },
+      "chunkviewer": {
+        "_value": "ChunkViewer",
+        "mode": {
+          "_value": "Mode",
+          "loaded": "Loaded",
+          "new": "New"
+        },
+        "full height": "Full Height",
+        "height offset": "Height Offset",
+        "thickness": "Thickness",
+        "fade time": "Fade Time",
+        "color": "Color"
+      },
+      "auto eat": {
+        "_value": "Auto Eat",
+        "hunger": "Hunger",
+        "health": "Health",
+        "avoid bad food": "Avoid Bad Food",
+        "gapple at low hp": "Gapple At Low HP",
+        "pause near enemies": "Pause Near Enemies",
+        "enemy range": "Enemy Range",
+        "gapple override": "Gapple Override"
+      },
+      "bucketland": {
+        "_value": "BucketLand",
+        "fall distance": "Fall Distance",
+        "only on ground": "Only On Ground"
+      },
+      "airjump": {
+        "_value": "AirJump",
+        "max jumps": "Max Jumps",
+        "jump power": "Jump Power",
+        "cooldown": "Cooldown",
+        "reset fall": "Reset Fall",
+        "hold mode": "Hold Mode"
+      },
+      "spider": "Spider",
+      "nopush": "NoPush",
+      "fastplace": "FastPlace",
+      "altmanager": {
+        "_value": "AltManager",
+        "mode": {
+          "_value": "Mode",
+          "offline": "Offline",
+          "token": "Token"
+        },
+        "username": "Username",
+        "uuid": "UUID",
+        "access token": "Access Token",
+        "login": "Login",
+        "resolve name from uuid": "Resolve Name From UUID",
+        "restore original": "Restore Original"
       }
     },
     "elements": {

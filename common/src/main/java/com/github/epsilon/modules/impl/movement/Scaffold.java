@@ -38,7 +38,6 @@ import net.minecraft.world.phys.Vec3;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Scaffold extends Module {
@@ -114,9 +113,11 @@ public class Scaffold extends Module {
     private final BoolSetting snap = boolSetting("Snap", false, () -> mode.is(Mode.GodBridge));
     private final EnumSetting<RotationMode> rotationMode = enumSetting("Rotation Mode", RotationMode.Rise);
     private final EnumSetting<RaytraceMode> raytrace = enumSetting("Raytrace Mode", RaytraceMode.Normal);
-    private final IntSetting rotateSpeed = intSetting("Rotation Speed", 10, 1, 10, 1, () -> rotationMode.is(RotationMode.Rise));
-    private final IntSetting rotateBackSpeed = intSetting("Rotation Back Speed", 10, 1, 10, 1, () -> mode.is(Mode.TellyBridge));
+    private final IntSetting rotateSpeed = intSetting("Rotation Speed", 180, 10, 180, 10, () -> rotationMode.is(RotationMode.Rise));
+    private final IntSetting rotateBackSpeed = intSetting("Rotation Back Speed", 180, 10, 180, 10, () -> mode.is(Mode.TellyBridge));
     private final IntSetting tellyTicks = intSetting("Telly Ticks", 1, 0, 6, 1, () -> mode.is(Mode.TellyBridge));
+    private final BoolSetting autoJump = boolSetting("Auto Jump", true, () -> mode.is(Mode.TellyBridge));
+    private final BoolSetting motionAim = boolSetting("Motion Aim", true);
 
     private final BoolSetting swingHand = boolSetting("Swing Hand", true);
     private final BoolSetting render = boolSetting("Render", true);
@@ -274,7 +275,7 @@ public class Scaffold extends Module {
 
     @EventHandler
     private void onMoveInput(KeyboardInputEvent event) {
-        if (mc.player.onGround() && !mc.options.keyJump.isDown() && mc.player.isMoving() && mode.is(Mode.TellyBridge)) {
+        if (autoJump.getValue() && mc.player.onGround() && !mc.options.keyJump.isDown() && mc.player.isMoving() && mode.is(Mode.TellyBridge)) {
             event.setJump(true);
         }
     }
@@ -309,7 +310,7 @@ public class Scaffold extends Module {
         double speed = rotateSpeed.getValue();
 
         if (rotationMode.is(RotationMode.Hypixel)) {
-            speed = airTicks <= 1 ? 7.055 : 1.944;
+            speed = airTicks <= 1 ? 127 : 35;
         }
 
         Managers.ROTATION.setRotations(rotation, speed);
@@ -374,7 +375,14 @@ public class Scaffold extends Module {
         blockPos = null;
         direction = null;
 
-        Vec3 baseVec = mc.player.getEyePosition();
+        // 用"下一 tick 的预估脚下位置"当搜索基点。玩家在斜跳/急停时，如果只按当前位置定位，
+        // 常常会把方块放到已经离开的格子导致走空。这里把水平位移带进去，方向就跟着真实运动走。
+        Vec3 eye = mc.player.getEyePosition();
+        Vec3 baseVec = eye;
+        if (motionAim.getValue()) {
+            Vec3 delta = mc.player.getDeltaMovement();
+            baseVec = eye.add(delta.x, 0.0, delta.z);
+        }
         BlockPos base = BlockPos.containing(baseVec.x, getYLevel(), baseVec.z);
         int baseX = base.getX();
         int baseZ = base.getZ();
@@ -413,7 +421,7 @@ public class Scaffold extends Module {
             return false;
         }
 
-        Vec3 center = Vec3.atBottomCenterOf(pos);
+        Vec3 center = pos.getBottomCenter();
         for (Direction dir : Direction.values()) {
             Vec3 normal = dir.getUnitVec3();
             Vec3 hit = center.add(normal.scale(0.5));
@@ -450,46 +458,50 @@ public class Scaffold extends Module {
             return rotation;
         }
 
+        // 目标方块面的实际几何朝向。这才是"真正应该看的角度"，历史上被硬编码 8 方向 yaw 数组盖掉了，
+        // 导致玩家朝向和世界正方向不一致时，铺出去的方块方向和实际移动方向对不上。
         Rot2f calculated = RotationUtils.calculate(pos, direction);
-        Float[] yawArray = {
-                -135F,
-                -90F,
-                -45F,
-                0F,
-                45F,
-                90F,
-                135F,
-                180F,
-                calculated.getYaw()
-        };
-        Arrays.sort(yawArray, (a, b) ->
-                Float.compare(
-                        Math.abs(Mth.wrapDegrees(mc.player.getYRot() - 180 - a)),
-                        Math.abs(Mth.wrapDegrees(mc.player.getYRot() - 180 - b))
-                )
-        );
+        float baseYaw = calculated.getYaw();
 
-        float[] pitchArray = {75.0F, 82.0F, 87.0F};
+        // 先按几何 yaw + 常规 pitch 短路。绝大多数场景这一步就返回。
+        float[] pitchArray = {calculated.getPitch(), 82.0F, 87.0F, 75.0F};
+        for (float pitch : pitchArray) {
+            Rot2f candidate = new Rot2f(baseYaw + MathUtils.getRandom(-0.3F, 0.3F), pitch + MathUtils.getRandom(-0.3F, 0.3F));
+            if (raytraceHits(candidate, pos, direction)) {
+                return candidate;
+            }
+        }
 
-        for (float yaw : yawArray) {
+        // Raytrace 没过：以几何 yaw 为中心做小角度扫描，配合玩家当前朝向的相对偏移。
+        // 用**相对于玩家 yaw 的偏移**而不是绝对世界方位，这样铺路方向永远跟着移动走。
+        float playerYaw = mc.player.getYRot();
+        float[] relativeOffsets = {0F, -15F, 15F, -30F, 30F, -45F, 45F, -60F, 60F};
+
+        for (float offset : relativeOffsets) {
+            float yaw = Mth.wrapDegrees(playerYaw + 180F + offset);
             for (float pitch : pitchArray) {
                 Rot2f candidate = new Rot2f(yaw + MathUtils.getRandom(-0.3F, 0.3F), pitch + MathUtils.getRandom(-0.3F, 0.3F));
-                boolean matches = raytrace.is(RaytraceMode.Normal) ? RaytraceUtils.overBlock(candidate, pos) : RaytraceUtils.overBlock(candidate, pos, direction);
-                if (matches) {
-                    return candidate;
-                }
-            }
-
-            for (int pitch = -90; pitch < 90; pitch++) {
-                Rot2f candidate = new Rot2f(yaw, pitch);
-                boolean matches = raytrace.is(RaytraceMode.Normal) ? RaytraceUtils.overBlock(candidate, pos) : RaytraceUtils.overBlock(candidate, pos, direction);
-                if (matches) {
+                if (raytraceHits(candidate, pos, direction)) {
                     return candidate;
                 }
             }
         }
 
+        // 最后兜底：以几何 yaw 扫全 pitch。别再迭代那个绝对方位数组了。
+        for (int pitch = 40; pitch < 90; pitch++) {
+            Rot2f candidate = new Rot2f(baseYaw, pitch);
+            if (raytraceHits(candidate, pos, direction)) {
+                return candidate;
+            }
+        }
+
         return calculated;
+    }
+
+    private boolean raytraceHits(Rot2f candidate, BlockPos pos, Direction direction) {
+        return raytrace.is(RaytraceMode.Normal)
+                ? RaytraceUtils.overBlock(candidate, pos)
+                : RaytraceUtils.overBlock(candidate, pos, direction);
     }
 
     private boolean onAir() {

@@ -18,7 +18,6 @@ import com.github.epsilon.utils.timer.TimerUtils;
 import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.monster.cubemob.Slime;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -88,7 +87,7 @@ public class MaceAura extends Module {
             return;
         }
 
-        Managers.ROTATION.setRotations(RotationUtils.getRotationsToEntity(target), 10, Priority.Medium);
+        Managers.ROTATION.setRotations(RotationUtils.getRotationsToEntity(target), 180, Priority.Medium);
 
         if (!isReadyToAttack()) return;
 

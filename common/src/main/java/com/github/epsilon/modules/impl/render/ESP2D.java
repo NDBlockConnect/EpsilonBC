@@ -55,7 +55,7 @@ public class ESP2D extends Module {
 
     @EventHandler
     private void onRender2D(Render2DEvent.Level event) {
-        if (nullCheck() || mc.gui.hud.isHidden()) return;
+        if (nullCheck() || mc.options.hideGui) return;
 
         RectRenderer rectRenderer = rectRendererSupplier.get();
         float partialTick = mc.getDeltaTracker().getGameTimeDeltaPartialTick(true);
@@ -68,9 +68,6 @@ public class ESP2D extends Module {
             Vector4d position = WorldToScreen.getEntityPositionsOn2D(livingEntity, partialTick);
             if (position == null || position.z < 0.0 || position.w < 0.0 || position.x > screenWidth || position.y > screenHeight)
                 continue;
-
-            final var projectedPosition = WorldToScreen.getWorldPositionToScreen(livingEntity.position());
-            if (projectedPosition.z > 1.0f || projectedPosition.z < 0.5f) continue;
 
             float x = (float) position.x;
             float y = (float) position.y;
@@ -101,6 +98,8 @@ public class ESP2D extends Module {
     private boolean shouldRender(Entity entity) {
         if (mc.player == null) return false;
         if (!entity.isAlive() || entity.isSpectator()) return false;
+        // Allies (incl. middle-click-marked mobs) are exempt from all enemy visuals.
+        if (Managers.ALLY.isAlly(entity)) return false;
 
         if (entity instanceof Player player) {
             if (entity == mc.player) return false;

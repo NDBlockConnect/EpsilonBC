@@ -61,9 +61,11 @@ public class HitParticles extends Module {
     private final EnumSetting<ColorMode> colorMode = enumSetting("Color Mode", ColorMode.Sync);
     private final ColorSetting color = colorSetting("Color", new Color(0, 255, 0, 53), true, () -> colorMode.is(ColorMode.Custom));
     private final BoolSetting onlySelf = boolSetting("Only Self", false);
+    private final BoolSetting collide = boolSetting("Collide", true);
     private final IntSetting amount = intSetting("Amount", 2, 1, 5, 1);
     private final IntSetting lifeTime = intSetting("Life Time", 2, 1, 10, 1);
     private final IntSetting speed = intSetting("Speed", 2, 1, 20, 1);
+    private final IntSetting maxParticles = intSetting("Max Particles", 200, 20, 2000, 10);
     private final DoubleSetting scale = doubleSetting("Scale", 3.0, 1.0, 10.0, 0.1);
 
     private final List<Particle> particles = new ArrayList<>();
@@ -88,23 +90,39 @@ public class HitParticles extends Module {
     private void onTick(PlayerTickEvent.Pre event) {
         particles.removeIf(Particle::tick);
 
+        int cap = maxParticles.getValue();
+        // 到达上限就不再新增，防止群战一开每 tick 塞几百个粒子把渲染 tessellate 打爆。
+        if (particles.size() >= cap) return;
+
+        boolean selfOnly = onlySelf.getValue();
+        if (selfOnly) {
+            if (mc.player == null || mc.player.hurtTime <= 0) return;
+            spawnBurst(mc.player, cap);
+            return;
+        }
+
         for (Entity entity : mc.level.entitiesForRendering()) {
             if (!(entity instanceof LivingEntity livingEntity)) continue;
-            if (onlySelf.getValue() && livingEntity != mc.player) continue;
             if (livingEntity.hurtTime <= 0) continue;
-
-            Color particleColor = resolveColor((int) MathUtils.getRandom(1.0f, 228.0f));
-            for (int i = 0; i < amount.getValue(); i++) {
-                particles.add(new Particle(
-                        (float) livingEntity.getX(),
-                        MathUtils.getRandom((float) livingEntity.getY(), (float) (livingEntity.getY() + livingEntity.getBbHeight())),
-                        (float) livingEntity.getZ(),
-                        particleColor,
-                        MathUtils.getRandom(0.0f, 180.0f),
-                        MathUtils.getRandom(10.0f, 60.0f)
-                ));
-            }
+            if (!spawnBurst(livingEntity, cap)) return;
         }
+    }
+
+    private boolean spawnBurst(LivingEntity livingEntity, int cap) {
+        int perEntity = amount.getValue();
+        Color particleColor = resolveColor((int) MathUtils.getRandom(1.0f, 228.0f));
+        for (int i = 0; i < perEntity; i++) {
+            if (particles.size() >= cap) return false;
+            particles.add(new Particle(
+                    (float) livingEntity.getX(),
+                    MathUtils.getRandom((float) livingEntity.getY(), (float) (livingEntity.getY() + livingEntity.getBbHeight())),
+                    (float) livingEntity.getZ(),
+                    particleColor,
+                    MathUtils.getRandom(0.0f, 180.0f),
+                    MathUtils.getRandom(10.0f, 60.0f)
+            ));
+        }
+        return true;
     }
 
     @EventHandler
@@ -166,8 +184,6 @@ public class HitParticles extends Module {
         }
 
         private boolean tick() {
-            double horizontalSpeed = Math.sqrt(motionX * motionX + motionZ * motionZ);
-
             prevX = x;
             prevY = y;
             prevZ = z;
@@ -176,20 +192,24 @@ public class HitParticles extends Module {
             y += motionY;
             z += motionZ;
 
-            if (isSolidBlock(x, y - scale.getValue().floatValue() / 10.0f, z)) {
-                motionY = -motionY / 1.1f;
-                motionX /= 1.1f;
-                motionZ /= 1.1f;
-            } else if (isSolidBlock(x - horizontalSpeed, y, z - horizontalSpeed)
-                    || isSolidBlock(x + horizontalSpeed, y, z + horizontalSpeed)
-                    || isSolidBlock(x + horizontalSpeed, y, z - horizontalSpeed)
-                    || isSolidBlock(x - horizontalSpeed, y, z + horizontalSpeed)
-                    || isSolidBlock(x + horizontalSpeed, y, z)
-                    || isSolidBlock(x - horizontalSpeed, y, z)
-                    || isSolidBlock(x, y, z + horizontalSpeed)
-                    || isSolidBlock(x, y, z - horizontalSpeed)) {
-                motionX = -motionX;
-                motionZ = -motionZ;
+            // 碰撞检测每个粒子每 tick 会做 9 次 getBlockState，粒子上百时占 CPU。给用户一个开关一次省掉 90%+。
+            if (collide.getValue()) {
+                double horizontalSpeed = Math.sqrt(motionX * motionX + motionZ * motionZ);
+                if (isSolidBlock(x, y - scale.getValue().floatValue() / 10.0f, z)) {
+                    motionY = -motionY / 1.1f;
+                    motionX /= 1.1f;
+                    motionZ /= 1.1f;
+                } else if (isSolidBlock(x - horizontalSpeed, y, z - horizontalSpeed)
+                        || isSolidBlock(x + horizontalSpeed, y, z + horizontalSpeed)
+                        || isSolidBlock(x + horizontalSpeed, y, z - horizontalSpeed)
+                        || isSolidBlock(x - horizontalSpeed, y, z + horizontalSpeed)
+                        || isSolidBlock(x + horizontalSpeed, y, z)
+                        || isSolidBlock(x - horizontalSpeed, y, z)
+                        || isSolidBlock(x, y, z + horizontalSpeed)
+                        || isSolidBlock(x, y, z - horizontalSpeed)) {
+                    motionX = -motionX;
+                    motionZ = -motionZ;
+                }
             }
 
             if (physics.is(Physics.Fall)) {

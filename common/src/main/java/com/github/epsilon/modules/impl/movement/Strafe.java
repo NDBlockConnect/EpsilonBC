@@ -19,7 +19,8 @@ public class Strafe extends Module {
     }
 
     private final BoolSetting airStop = boolSetting("Air Stop", true);
-    private final BoolSetting autoJump = boolSetting("Auto Jump", true);
+    // 独立的连跳节奏应该由 Bhop 模块负责，Strafe 只做空中加速。默认关，避免"开 Strafe 就狂跳"的隐性行为。
+    private final BoolSetting autoJump = boolSetting("Auto Jump", false);
 
     @EventHandler
     private void onMove(MoveEvent event) {

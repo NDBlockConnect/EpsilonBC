@@ -12,7 +12,6 @@ import com.github.epsilon.settings.impl.DoubleSetting;
 import com.github.epsilon.settings.impl.RegistryListSetting;
 import com.github.epsilon.utils.player.ChatUtils;
 import com.github.epsilon.utils.timer.TimerUtils;
-import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.util.Util;
@@ -39,21 +38,39 @@ public class BlockESP extends Module {
         super("Block ESP", Category.RENDER);
     }
 
-    private final RegistryListSetting<Block> blockListValue = blockListSetting("Block List", defaultBlockList());
-
-    private static List<Block> defaultBlockList() {
-        List<Block> blocks = new ArrayList<>(List.of(
-                Blocks.CHEST,
-                Blocks.TRAPPED_CHEST,
-                Blocks.ENDER_CHEST,
-                Blocks.BARREL,
-                Blocks.SHULKER_BOX
-        ));
-        blocks.addAll(Blocks.COPPER_CHEST.asList());
-        blocks.addAll(Blocks.DYED_SHULKER_BOX.asList());
-        return blocks;
-    }
-
+    private final RegistryListSetting<Block> blockListValue = blockListSetting("Block List",
+            List.of(
+                    Blocks.CHEST,
+                    Blocks.TRAPPED_CHEST,
+                    Blocks.COPPER_CHEST,
+                    Blocks.EXPOSED_COPPER_CHEST,
+                    Blocks.WEATHERED_COPPER_CHEST,
+                    Blocks.OXIDIZED_COPPER_CHEST,
+                    Blocks.WAXED_COPPER_CHEST,
+                    Blocks.WAXED_EXPOSED_COPPER_CHEST,
+                    Blocks.WAXED_WEATHERED_COPPER_CHEST,
+                    Blocks.WAXED_OXIDIZED_COPPER_CHEST,
+                    Blocks.ENDER_CHEST,
+                    Blocks.BARREL,
+                    Blocks.SHULKER_BOX,
+                    Blocks.WHITE_SHULKER_BOX,
+                    Blocks.ORANGE_SHULKER_BOX,
+                    Blocks.MAGENTA_SHULKER_BOX,
+                    Blocks.LIGHT_BLUE_SHULKER_BOX,
+                    Blocks.YELLOW_SHULKER_BOX,
+                    Blocks.LIME_SHULKER_BOX,
+                    Blocks.PINK_SHULKER_BOX,
+                    Blocks.GRAY_SHULKER_BOX,
+                    Blocks.LIGHT_GRAY_SHULKER_BOX,
+                    Blocks.CYAN_SHULKER_BOX,
+                    Blocks.PURPLE_SHULKER_BOX,
+                    Blocks.BLUE_SHULKER_BOX,
+                    Blocks.BROWN_SHULKER_BOX,
+                    Blocks.GREEN_SHULKER_BOX,
+                    Blocks.RED_SHULKER_BOX,
+                    Blocks.BLACK_SHULKER_BOX
+            )
+    );
     private final BoolSetting illegals = boolSetting("Illegals", true);
     private final DoubleSetting range = doubleSetting("Range", 64.0, 1.0, 128.0, 1.0);
     private final ColorSetting sideColor = colorSetting("Side Color", new Color(160, 210, 255, 30));
@@ -94,10 +111,17 @@ public class BlockESP extends Module {
             return;
         }
 
-        for (AABB aabb : Lists.newArrayList(boxes)) {
-            if (blur.getValue()) Render3DScheduler.INSTANCE.addBlurredBox(aabb, blurStrength.getValue());
-            Render3DScheduler.INSTANCE.addFilledBox(aabb, sideColor.getValue());
-            Render3DScheduler.INSTANCE.addOutlineBox(aabb, lineColor.getValue());
+        // boxes 是 volatile-style 引用替换（scan 线程赋新 List 给 static 字段），本线程只读遍历，
+        // 之前 Lists.newArrayList(boxes) 每帧多复制一份 O(n) 是白白浪费。抓一次本地引用防 mid-frame 替换即可。
+        List<AABB> snapshot = boxes;
+        boolean drawBlur = blur.getValue();
+        Color side = sideColor.getValue();
+        Color line = lineColor.getValue();
+        double blurQuality = blurStrength.getValue();
+        for (AABB aabb : snapshot) {
+            if (drawBlur) Render3DScheduler.INSTANCE.addBlurredBox(aabb, blurQuality);
+            Render3DScheduler.INSTANCE.addFilledBox(aabb, side);
+            Render3DScheduler.INSTANCE.addOutlineBox(aabb, line);
         }
     }
 

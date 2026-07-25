@@ -18,6 +18,7 @@ public class Inventory extends HudModule {
 
     private Inventory() {
         super("Inventory HUD", 0f, 0f, 180f, 80f);
+        setDefaultEnabled(true);
     }
 
     private final DoubleSetting scale = doubleSetting("Scale", 1.0, 0.5, 2.0, 0.1);
@@ -25,8 +26,8 @@ public class Inventory extends HudModule {
     private final ColorSetting backgroundColor = colorSetting("Background Color", new Color(15, 15, 15, 135));
     private final ColorSetting slotColor = colorSetting("Slot Color", new Color(0, 0, 0, 70));
     private final BoolSetting drawShadow = boolSetting("Drop Shadow", true);
-    private final DoubleSetting shadowBlur = doubleSetting("Shadow Blur", 2.2, 0.1, 32.0, 0.5, drawShadow::getValue);
-    private final ColorSetting shadowColor = colorSetting("Shadow Color", new Color(0, 0, 0, 70), drawShadow::getValue);
+    private final DoubleSetting shadowBlur = doubleSetting("Shadow Blur", DEFAULT_SHADOW_BLUR, MIN_SHADOW_BLUR, MAX_SHADOW_BLUR, SHADOW_BLUR_STEP, drawShadow::getValue);
+    private final ColorSetting shadowColor = colorSetting("Shadow Color", DEFAULT_SHADOW_COLOR, drawShadow::getValue);
     private final BoolSetting backgroundBlur = boolSetting("Background Blur", true);
     private final IntSetting blurStrength = intSetting("Blur Strength", 5, 1, 16, 1);
 

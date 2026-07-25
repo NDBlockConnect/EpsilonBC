@@ -18,12 +18,16 @@ import java.util.List;
 
 public class WelcomeScreen extends Screen {
 
-    private static final String TITLE_B64 = "5qyi6L+O5L2/55SoIEVwc2lsb24gLyBXZWxjb21lIHRvIEVwc2lsb24=";
-    private static final String NOTICE_B64 = "5pys5a6i5oi356uv5a6M5YWo5YWN6LS577yM6K+35Yu/5ZCR5Lu75L2V5Lq65LuY6LS56LSt5Lmw44CCLyBUaGlzIGNsaWVudCBpcyBjb21wbGV0ZWx5IGZyZWUuIFBsZWFzZSBkbyBub3QgcGF5IGFueW9uZSBmb3IgaXQu";
+    // 欢迎来到 EpsilonBC / Welcome to EpsilonBC
+    private static final String TITLE_B64 = "5qyi6L+O5p2l5YiwIEVwc2lsb25CQyAvIFdlbGNvbWUgdG8gRXBzaWxvbkJD";
+    // 本客户端完全免费。/ This client is completely free.
+    private static final String NOTICE_B64 = "5pys5a6i5oi356uv5a6M5YWo5YWN6LS544CCLyBUaGlzIGNsaWVudCBpcyBjb21wbGV0ZWx5IGZyZWUu";
     private static final String GITHUB_PREFIX_ZH_B64 = "R2l0SHViIOS7k+W6kzog";
     private static final String GITHUB_PREFIX_EN_B64 = "R2l0SHViIHJlcG9zaXRvcnk6IA==";
-    private static final String REPO_LABEL_B64 = "TmVrb3lhSG91c2UvRXBzaWxvbg==";
-    private static final String REPOSITORY_URL_B64 = "aHR0cHM6Ly9naXRodWIuY29tL05la295YUhvdXNlL0Vwc2lsb24=";
+    // NDBlockConnect/EpsilonBC
+    private static final String REPO_LABEL_B64 = "TkRCbG9ja0Nvbm5lY3QvRXBzaWxvbkJD";
+    // https://github.com/NDBlockConnect/EpsilonBC
+    private static final String REPOSITORY_URL_B64 = "aHR0cHM6Ly9naXRodWIuY29tL05EQmxvY2tDb25uZWN0L0Vwc2lsb25CQw==";
     private static final String CONTINUE_B64 = "57un57utIC8gQ29udGludWU=";
     private static final String DONT_SHOW_AGAIN_B64 = "5LiL5qyh5LiN5YaN5pi+56S6IC8gRG8gbm90IHNob3cgYWdhaW4=";
     private static final String OPEN_GITHUB_B64 = "5omT5byAR2l0aHViIC8gT3BlbiBHaXRodWI=";

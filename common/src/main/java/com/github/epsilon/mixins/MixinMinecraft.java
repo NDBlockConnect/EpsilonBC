@@ -4,7 +4,11 @@ import com.github.epsilon.Constants;
 import com.github.epsilon.events.bus.EventBus;
 import com.github.epsilon.events.impl.*;
 import com.github.epsilon.graphics.LuminRenderSystem;
+import com.github.epsilon.gui.screen.MainMenuScreen;
+import com.github.epsilon.managers.Managers;
+import com.github.epsilon.managers.impl.sound.SoundKey;
 import com.github.epsilon.modules.impl.ClientSetting;
+import com.github.epsilon.modules.impl.player.FastPlace;
 import com.github.epsilon.modules.impl.player.MultiTask;
 import com.github.epsilon.modules.impl.player.UseCooldown;
 import com.github.epsilon.modules.impl.render.FreeCamera;
@@ -16,6 +20,8 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.HitResult;
@@ -31,9 +37,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Minecraft.class)
 public abstract class MixinMinecraft {
 
-    @Unique
-    private boolean epsilon$freeCameraSet = false;
-
     @Shadow
     private int rightClickDelay;
 
@@ -46,14 +49,96 @@ public abstract class MixinMinecraft {
     @Shadow
     public abstract void pick(float partialTicks);
 
+    @Shadow
+    public abstract void stop();
+
+    @Unique
+    private boolean epsilon$freeCameraSet = false;
+
+    @Unique
+    private SoundInstance epsilon$shutdownSound;
+
+    @Unique
+    private boolean epsilon$shutdownReady;
+
+    @Inject(method = "onGameLoadFinished", at = @At("TAIL"))
+    private void onGameLoadFinished(CallbackInfo ci) {
+        if (!ClientSetting.INSTANCE.showReisaOnStartup.getValue()) return;
+
+        ClientSetting.CompanionCharacter companion = ClientSetting.INSTANCE.companionCharacter.getValue();
+        if (ClientSetting.INSTANCE.useMainMenu.getValue()) {
+            MainMenuScreen.INSTANCE.queueReisaGreeting();
+        } else {
+            Managers.SOUND.playSound(
+                    companion.welcomeKey(),
+                    ClientSetting.INSTANCE.reisaVolume.getValue().floatValue()
+            );
+        }
+    }
+
     @Inject(method = "tick", at = @At("HEAD"))
     private void onPreTick(CallbackInfo info) {
         EventBus.INSTANCE.post(new ClientTickEvent.Pre());
+        if (FastPlace.INSTANCE.isEnabled()) {
+            rightClickDelay = 0;
+        }
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void onPostTick(CallbackInfo info) {
         EventBus.INSTANCE.post(new ClientTickEvent.Post());
+
+        if (epsilon$shutdownSound == null) return;
+
+        Minecraft minecraft = (Minecraft) (Object) this;
+        SoundManager soundManager = minecraft.getSoundManager();
+
+        if (soundManager.isActive(epsilon$shutdownSound)) return;
+
+        epsilon$shutdownSound = null;
+        epsilon$shutdownReady = true;
+
+        stop();
+    }
+
+    @ModifyArg(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/sounds/SoundManager;tick(Z)V"))
+    private boolean tickShutdownSoundWhilePaused(boolean paused) {
+        return epsilon$shutdownSound == null && paused;
+    }
+
+    @Inject(method = "stop", at = @At("HEAD"), cancellable = true)
+    private void delayShutdown(CallbackInfo ci) {
+        if (epsilon$shutdownReady) return;
+
+        if (!ClientSetting.INSTANCE.showReisaOnShutdown.getValue()) {
+            epsilon$shutdownReady = true;
+            return;
+        }
+
+        Minecraft minecraft = (Minecraft) (Object) this;
+        if (minecraft.screen == MainMenuScreen.INSTANCE) {
+            if (MainMenuScreen.INSTANCE.requestShutdown()) {
+                ci.cancel();
+                return;
+            }
+            epsilon$shutdownReady = true;
+            return;
+        }
+
+        if (epsilon$shutdownSound == null) {
+            ClientSetting.CompanionCharacter companion = ClientSetting.INSTANCE.companionCharacter.getValue();
+            minecraft.getSoundManager().stop();
+            epsilon$shutdownSound = Managers.SOUND.playTracked(
+                    companion.byeKey(),
+                    ClientSetting.INSTANCE.reisaVolume.getValue().floatValue()
+            ).orElse(null);
+            if (epsilon$shutdownSound == null) {
+                epsilon$shutdownReady = true;
+                return;
+            }
+        }
+
+        ci.cancel();
     }
 
     @ModifyArg(method = "updateTitle", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/Window;setTitle(Ljava/lang/String;)V"))
@@ -61,8 +146,16 @@ public abstract class MixinMinecraft {
         return switch (ClientSetting.INSTANCE.customTitle.getValue()) {
             case Vanilla -> title;
             case Minecraft_1_8_9 -> "Minecraft 1.8.9";
-            case Epsilon -> Constants.NAME + " " + Constants.VERSION + " for " + title;
+            case Epsilon -> Constants.NAME + " " + Constants.DISPLAY_VERSION + " for " + title;
         };
+    }
+
+    @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
+    private void onSetScreen(Screen screen, CallbackInfo ci) {
+        OpenScreenEvent event = EventBus.INSTANCE.post(new OpenScreenEvent(screen));
+        if (event.isCancelled()) {
+            ci.cancel();
+        }
     }
 
     @Inject(method = "disconnect(Lnet/minecraft/client/gui/screens/Screen;ZZ)V", at = @At("HEAD"))

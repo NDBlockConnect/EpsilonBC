@@ -1,0 +1,326 @@
+{
+  "epsilon": {
+    "_value": "EpsilonBC",
+    "categories": {
+      "combat": "戦闘",
+      "player": "プレイヤー",
+      "movement": "移動",
+      "render": "レンダー"
+    },
+    "keybind": {
+      "none": "なし",
+      "toggle": "トグル",
+      "hold": "ホールド"
+    },
+    "module": {
+      "visible": "表示",
+      "hidden": "非表示",
+      "from": "提供元:",
+      "state": {
+        "prefix": "",
+        "enabled": "有効化されました",
+        "disabled": "無効化されました"
+      }
+    },
+    "gui": {
+      "search": "検索 ...",
+      "clientsettings": "クライアント設定",
+      "no_module": "モジュールなし",
+      "modules": "モジュール",
+      "mainmenu": {
+        "singleplayer": "シングルプレイ",
+        "multiplayer": "マルチプレイ",
+        "options": "オプション",
+        "quit": "ゲームを終了",
+        "reisa_greeting": "先生、こんにちは！レイサ、参上！",
+        "reisa_farewell": "先生、また明日！レイサ、撤収します！",
+        "hinata_greeting": "先生、こんにちは！今日はどこから始めますか？",
+        "hinata_farewell": "先生、ホシノ撤収！また明日！"
+      },
+      "tab": {
+        "general": "一般",
+        "friend": "フレンド",
+        "config": "設定",
+        "addon": "アドオン"
+      },
+      "friend": {
+        "empty": "フレンドがいません",
+        "input": {
+          "placeholder": "フレンド名を入力"
+        }
+      },
+      "config": {
+        "input": {
+          "placeholder": "設定名を入力"
+        },
+        "current": "現在",
+        "switch_hint": "クリックして切り替え",
+        "empty": "設定が見つかりません",
+        "action": {
+          "saveas": "名前を付けて保存",
+          "reload": "再読み込み",
+          "export": "エクスポート",
+          "import": "インポート",
+          "new": "新規作成",
+          "open_folder": "フォルダを開く"
+        },
+        "delete": {
+          "confirm": {
+            "title": "設定を削除",
+            "message": "この設定を削除しますか？",
+            "confirm": "削除",
+            "cancel": "キャンセル"
+          }
+        },
+        "error": {
+          "title": "エラー",
+          "ok": "OK",
+          "save": "設定の保存に失敗しました",
+          "reload": "設定の再読み込みに失敗しました",
+          "export": "設定のエクスポートに失敗しました",
+          "import": "設定のインポートに失敗しました",
+          "open_folder": "設定フォルダを開けませんでした",
+          "switch": "設定の切り替えに失敗しました",
+          "delete": "設定の削除に失敗しました",
+          "delete_last": "最後の設定は削除できません"
+        },
+        "export": {
+          "success": {
+            "title": "エクスポート成功",
+            "message": "設定が正常にエクスポートされました"
+          }
+        }
+      },
+      "dropdown": {
+        "collapse_all": "すべて閉じる",
+        "status": {
+          "saved": "保存済み",
+          "reloaded": "再読み込み済み",
+          "exported": "エクスポート済み",
+          "imported": "インポート済み",
+          "deleted": "削除済み",
+          "switched": "切り替え済み",
+          "created": "作成済み"
+        },
+        "hint": {
+          "search": "Ctrl + F で検索",
+          "panels": "カテゴリをクリックしてパネルを開く",
+          "drag": "ヘッダーをドラッグしてパネルを移動"
+        }
+      },
+      "addon": {
+        "empty": "アドオンが見つかりません",
+        "no_settings": "利用可能な設定がありません",
+        "info": {
+          "id": "ID",
+          "version": "バージョン",
+          "authors": "作者",
+          "modules": "モジュール"
+        }
+      },
+      "inspector": {
+        "_value": "インスペクター",
+        "select": "要素を選択してください"
+      },
+      "list": {
+        "entries": " 件",
+        "blocks": " ブロック",
+        "items": " アイテム",
+        "entities": " エンティティ",
+        "sounds": " サウンド",
+        "enchantments": " エンチャント",
+        "selected": " 選択済み",
+        "type_to_add": "Enterキーで追加...",
+        "search": "検索...",
+        "all": "すべて",
+        "available": "利用可能",
+        "selected_header": "選択済み"
+      }
+    },
+    "modules": {
+      "autoreconnect": {
+        "_value": "自動再接続",
+        "delay": "遅延"
+      },
+      "autoeject": {
+        "_value": "自動ドロップ",
+        "list mode": {
+          "_value": "リストモード",
+          "whitelist": "ホワイトリスト",
+          "blacklist": "ブラックリスト"
+        },
+        "items": "アイテム",
+        "delay": "遅延",
+        "only in inventory": "インベントリのみ",
+        "ignore hotbar": "ホットバー無視"
+      },
+      "autoreplace": {
+        "_value": "自動補充",
+        "threshold": "しきい値",
+        "only blocks": "ブロックのみ",
+        "refill tools": "ツール補充",
+        "delay": "遅延"
+      },
+      "rangenotifier": {
+        "_value": "範囲通知",
+        "alert mode": {
+          "_value": "通知モード",
+          "chat": "チャット",
+          "notification": "HUD通知",
+          "both": "両方"
+        },
+        "range": "範囲",
+        "notify leave": "退出時通知",
+        "ignore friends": "フレンド無視",
+        "play sound": "サウンド再生",
+        "volume": "音量",
+        "pitch": "ピッチ",
+        "sound": "サウンド"
+      },
+      "nameprotect": {
+        "_value": "名前保護",
+        "replacement": "置換テキスト",
+        "protect own name": "自分の名前を保護",
+        "extra names": "追加名前リスト"
+      },
+      "jesus": {
+        "_value": "水上歩行",
+        "mode": {
+          "_value": "モード",
+          "water": "水",
+          "lava": "溶岩",
+          "both": "両方"
+        },
+        "sneak to sink": "スニークで沈む"
+      },
+      "autofish": {
+        "_value": "自動釣り",
+        "dip threshold": "浮き沈みしきい値",
+        "re-throw delay": "再投入遅延"
+      },
+      "antiafk": {
+        "_value": "AFK対策",
+        "mode": {
+          "_value": "モード",
+          "rotate": "回転",
+          "jump": "ジャンプ",
+          "sneak": "スニーク"
+        },
+        "interval (ticks)": "間隔 (Tick)"
+      },
+      "nuker": {
+        "_value": "範囲破壊",
+        "mode": {
+          "_value": "モード",
+          "normal": "通常",
+          "packet": "パケット"
+        },
+        "shape": {
+          "_value": "形状",
+          "sphere": "球形",
+          "flat": "平面"
+        },
+        "range": "範囲",
+        "max blocks": "最大ブロック数",
+        "delay": "遅延",
+        "only exposed": "露出面のみ",
+        "auto tool": "自動ツール",
+        "swing": "振り",
+        "render": "描画",
+        "side color": "面カラー",
+        "line color": "線カラー"
+      },
+      "structurefinder": {
+        "_value": "構造物ファインダー",
+        "chunk radius": "チャンク半径",
+        "render": "描画",
+        "color": "カラー",
+        "thickness": "線の太さ",
+        "scan interval": "スキャン間隔"
+      },
+      "chunkviewer": {
+        "_value": "チャンクビューア",
+        "mode": {
+          "_value": "モード",
+          "loaded": "ロード済み",
+          "new": "新規チャンク"
+        },
+        "full height": "全高さ",
+        "height offset": "高さオフセット",
+        "thickness": "線の太さ",
+        "fade time": "フェード時間",
+        "color": "カラー"
+      },
+      "auto eat": {
+        "_value": "自動進食",
+        "hunger": "満腹度",
+        "health": "体力",
+        "avoid bad food": "悪食避け",
+        "gapple at low hp": "低HP時に金リンゴ優先",
+        "pause near enemies": "敵接近時に停止",
+        "enemy range": "敵検出範囲",
+        "gapple override": "金リンゴ例外"
+      },
+      "bucketland": {
+        "_value": "水バケツ着地",
+        "fall distance": "落下距離",
+        "only on ground": "地面のみ"
+      },
+      "airjump": {
+        "_value": "エアジャンプ",
+        "max jumps": "最大跳躍回数",
+        "jump power": "跳躍力",
+        "cooldown": "クールダウン",
+        "reset fall": "落下距離リセット",
+        "hold mode": "長押しモード"
+      },
+      "spider": "スパイダー",
+      "nopush": "押し出し防止",
+      "fastplace": "高速設置",
+      "client setting": {
+        "_value": "クライアント設定",
+        "general": "一般",
+        "anti cheat": "アンチチート",
+        "appearance": "外観",
+        "companion": "コンパニオン",
+        "uzawa reisa": "宇沢レイサ",
+        "notification": "通知",
+        "language": {
+          "_value": "言語",
+          "english": "English",
+          "chinese simplified": "简体中文",
+          "korean": "한국어",
+          "japanese": "日本語",
+          "russian": "Русский",
+          "custom": "カスタム"
+        },
+        "companion character": {
+          "_value": "コンパニオンキャラクター",
+          "reisa": "レイサ",
+          "hinata": "ヒナタ"
+        },
+        "show companion in dropdown": "ドロップダウンにコンパニオンを表示",
+        "show companion on startup": "起動時にコンパニオンを表示",
+        "show companion on shutdown": "終了時にコンパニオンを表示",
+        "show companion on death": "死亡時にコンパニオンを表示",
+        "check for updates": "アップデートを確認"
+      },
+      "step": {
+        "_value": "ステップ",
+        "mode": {
+          "_value": "モード",
+          "vanilla": "バニラ",
+          "oldncp": "OldNCP",
+          "ncp": "NCP"
+        },
+        "height": "高さ",
+        "timer": "タイマー",
+        "fast": "高速",
+        "feettrap pause": "フィートトラップ停止",
+        "in web pause": "クモの巣内停止",
+        "inside block pause": "ブロック内停止",
+        "sneaking pause": "スニーク中停止"
+      }
+    }
+  }
+}

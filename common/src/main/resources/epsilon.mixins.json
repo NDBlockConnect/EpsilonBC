@@ -53,6 +53,7 @@
     "MixinLocalPlayer",
     "MixinMain",
     "MixinMinecraft",
+    "MixinMinecraftAccessor",
     "MixinMobEffectFogEnvironment",
     "MixinMouseHandler",
     "MixinMultiPlayerGameMode",

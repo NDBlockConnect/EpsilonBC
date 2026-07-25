@@ -3,6 +3,7 @@ package com.github.epsilon.mixins;
 import com.github.epsilon.events.bus.EventBus;
 import com.github.epsilon.events.impl.RaytraceEvent;
 import com.github.epsilon.events.impl.StrafeEvent;
+import com.github.epsilon.modules.impl.movement.NoPush;
 import com.github.epsilon.modules.impl.movement.Velocity;
 import com.github.epsilon.modules.impl.render.FreeCamera;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
@@ -58,6 +59,13 @@ public class MixinEntity {
                 args.set(1, 0.0);
                 args.set(2, 0.0);
             }
+        }
+    }
+
+    @Inject(method = "push(DDD)V", at = @At("HEAD"), cancellable = true)
+    private void cancelPush(double x, double y, double z, CallbackInfo ci) {
+        if ((Object) this == mc.player && NoPush.INSTANCE.isEnabled()) {
+            ci.cancel();
         }
     }
 

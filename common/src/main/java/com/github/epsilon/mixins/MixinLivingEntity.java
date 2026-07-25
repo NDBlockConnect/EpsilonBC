@@ -4,6 +4,7 @@ import com.github.epsilon.events.bus.EventBus;
 import com.github.epsilon.events.impl.FallFlyingEvent;
 import com.github.epsilon.events.impl.JumpEvent;
 import com.github.epsilon.events.impl.RotationAnimationEvent;
+import com.github.epsilon.modules.impl.movement.Spider;
 import com.github.epsilon.modules.impl.player.JumpCooldown;
 import com.github.epsilon.modules.impl.render.HandsView;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -16,6 +17,7 @@ import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static com.github.epsilon.Constants.mc;
@@ -74,6 +76,16 @@ public class MixinLivingEntity {
         HandsView handsView = HandsView.INSTANCE;
         if (handsView.isEnabled() && handsView.modifySwingDuration.getValue()) {
             cir.setReturnValue(handsView.swingDuration.getValue());
+        }
+    }
+
+    @Inject(method = "onClimbable", at = @At("HEAD"), cancellable = true)
+    private void overrideClimbable(CallbackInfoReturnable<Boolean> cir) {
+        if ((Object) this != mc.player) return;
+        if (!Spider.INSTANCE.isEnabled()) return;
+        // Allow climbing when pressing against any solid wall.
+        if (mc.player.horizontalCollision) {
+            cir.setReturnValue(true);
         }
     }
 

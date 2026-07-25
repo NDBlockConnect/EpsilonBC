@@ -20,6 +20,12 @@ public class PacketEat extends Module {
 
     private ItemStack item;
 
+    @Override
+    protected void onEnable() {
+        // Clear any stale reference from a previous world/session.
+        item = null;
+    }
+
     @EventHandler
     private void onPostTick(PlayerTickEvent.Post event) {
         if (mc.player.isUsingItem()) item = mc.player.getUseItem();
@@ -28,6 +34,8 @@ public class PacketEat extends Module {
     @EventHandler
     private void onPacketSend(PacketEvent.Send event) {
         if (event.getPacket() instanceof ServerboundPlayerActionPacket packet && packet.getAction() == ServerboundPlayerActionPacket.Action.RELEASE_USE_ITEM) {
+            // item may still be null if a release action is sent before any use tick.
+            if (item == null) return;
             FoodProperties food = item.get(DataComponents.FOOD);
             if (food != null && food.canAlwaysEat()) {
                 event.cancel();

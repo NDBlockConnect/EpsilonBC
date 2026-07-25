@@ -58,7 +58,7 @@ public class MainDropdownPanel extends AbstractDropdownPanel {
         float versionMaxWidth = x + width - 17.0f - versionX;
         if (versionMaxWidth <= 2.0f) return;
 
-        String version = trimToWidth(Constants.VERSION, versionScale, versionMaxWidth, textMetrics);
+        String version = trimToWidth(Constants.DISPLAY_VERSION, versionScale, versionMaxWidth, textMetrics);
         if (!version.isEmpty()) {
             float nameY = y + (DropdownTheme.PANEL_HEADER_HEIGHT - textMetrics.textHeight(DropdownTheme.HEADER_TEXT_SCALE)) * 0.5f;
             float versionY = nameY + textMetrics.textHeight(DropdownTheme.HEADER_TEXT_SCALE) - textMetrics.textHeight(versionScale);
@@ -100,7 +100,7 @@ public class MainDropdownPanel extends AbstractDropdownPanel {
             }
         }
         int rows = getIconRows();
-        currentY += rows * ICON_SIZE + Math.max(0, rows - 1) * ICON_GAP + 4.0f + CONTENT_PADDING;
+        currentY += rows * ICON_SIZE + Math.max(0, rows - 1) * ICON_GAP + 8.0f + CONTENT_PADDING;
         scope.rect(x + CONTENT_PADDING, currentY - 3.0f, width - CONTENT_PADDING * 2.0f, 0.7f, MD3Theme.withAlpha(MD3Theme.OUTLINE, 55));
         settingsContent.draw(scope, textMetrics, mouseX, mouseY, x, currentY, width, getRenderFrameId());
     }

@@ -37,7 +37,7 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention")
 }
 
-rootProject.name = "Epsilon"
+rootProject.name = "EpsilonBC"
 
 include("common")
 include("fabric")

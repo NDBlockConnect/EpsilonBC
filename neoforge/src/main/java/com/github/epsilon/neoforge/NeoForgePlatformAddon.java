@@ -33,7 +33,7 @@ public class NeoForgePlatformAddon extends EpsilonAddon {
 
     @Override
     public String getVersion() {
-        return Constants.VERSION;
+        return Constants.DISPLAY_VERSION;
     }
 
     @Override

@@ -34,3 +34,11 @@ repo
 .claude
 /references
 /reference
+
+# local dev build/deploy artifacts (not committed)
+/build*.log
+/build_*.log
+/build-log*.txt
+/game-*.log
+/build-fabric.bat
+/deploy.bat

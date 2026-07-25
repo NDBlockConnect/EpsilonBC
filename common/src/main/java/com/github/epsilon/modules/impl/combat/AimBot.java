@@ -16,6 +16,11 @@ import com.github.epsilon.utils.timer.TimerUtils;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.npc.villager.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.phys.HitResult;
@@ -51,7 +56,12 @@ public class AimBot extends Module {
     private final BoolSetting ignoreInvisible = boolSetting("Ignore Invis", false, () -> mode.is(Mode.AimAssist));
     private final IntSetting predictTicks = intSetting("Predict Ticks", 2, 0, 20, 1, () -> mode.is(Mode.BowAim));
 
-    private Entity target;
+    private final BoolSetting targetPlayers = boolSetting("Target Players", true);
+    private final BoolSetting targetMobs = boolSetting("Target Mobs", false);
+    private final BoolSetting targetAnimals = boolSetting("Target Animals", false);
+    private final BoolSetting targetVillagers = boolSetting("Target Villagers", false);
+
+    private LivingEntity target;
     private float rotationYaw, rotationPitch, assistAcceleration;
     private int aimTicks;
     private final TimerUtils visibleTime = new TimerUtils();
@@ -117,7 +127,7 @@ public class AimBot extends Module {
     private void updateBowAim() {
         if (!isUsingBow()) return;
 
-        Player nearestTarget = getTargetByFOV(128.0f);
+        LivingEntity nearestTarget = getTargetByFOV(128.0f);
         target = nearestTarget;
         if (nearestTarget == null) return;
 
@@ -159,7 +169,7 @@ public class AimBot extends Module {
             return;
         }
 
-        Player nearestTarget = getNearestTarget(5.0f);
+        LivingEntity nearestTarget = getNearestTarget(5.0f);
         assistAcceleration = Mth.clamp(assistAcceleration + aimStrength.getValue() / 10000.0f, 0.0f, 1.0f);
 
         if (nearestTarget != null) {
@@ -195,7 +205,7 @@ public class AimBot extends Module {
         aimTicks = 0;
     }
 
-    private float calculateArc(Player target, double duration) {
+    private float calculateArc(LivingEntity target, double duration) {
         double yArc = target.getY() + target.getEyeHeight(target.getPose()) - (mc.player.getY() + mc.player.getEyeHeight(mc.player.getPose()));
         double dX = target.getX() - mc.player.getX();
         double dZ = target.getZ() - mc.player.getZ();
@@ -213,41 +223,54 @@ public class AimBot extends Module {
         return (float) Math.min(y, d);
     }
 
-    private Player getTargetByFOV(float maxFov) {
-        Player best = null;
+    private LivingEntity getTargetByFOV(float maxFov) {
+        LivingEntity best = null;
         float bestFov = maxFov;
         for (Entity entity : mc.level.entitiesForRendering()) {
-            if (!(entity instanceof Player player) || shouldSkipPlayer(player)) continue;
-            float yawDiff = Math.abs(Mth.wrapDegrees(getYawBetween(mc.player.getYRot(), mc.player.getX(), mc.player.getZ(), player.getX(), player.getZ()) - mc.player.getYRot()));
+            if (!(entity instanceof LivingEntity living) || shouldSkipTarget(living)) continue;
+            float yawDiff = Math.abs(Mth.wrapDegrees(getYawBetween(mc.player.getYRot(), mc.player.getX(), mc.player.getZ(), living.getX(), living.getZ()) - mc.player.getYRot()));
             if (yawDiff < bestFov) {
-                best = player;
+                best = living;
                 bestFov = yawDiff;
             }
         }
         return best;
     }
 
-    private Player getNearestTarget(float range) {
-        Player nearest = null;
+    private LivingEntity getNearestTarget(float range) {
+        LivingEntity nearest = null;
         double bestDistance = range * range;
         for (Entity entity : mc.level.entitiesForRendering()) {
-            if (!(entity instanceof Player player) || shouldSkipPlayer(player)) continue;
+            if (!(entity instanceof LivingEntity living) || shouldSkipTarget(living)) continue;
             if (entity.isInvisible() && ignoreInvisible.getValue()) continue;
-            if (!ignoreWalls.getValue() && !mc.player.hasLineOfSight(player)) continue;
-            double distance = mc.player.distanceToSqr(player);
+            if (!ignoreWalls.getValue() && !mc.player.hasLineOfSight(living)) continue;
+            double distance = mc.player.distanceToSqr(living);
             if (distance < bestDistance) {
-                nearest = player;
+                nearest = living;
                 bestDistance = distance;
             }
         }
         return nearest;
     }
 
-    private boolean shouldSkipPlayer(Player player) {
-        if (player == mc.player || !player.isAlive() || player.isDeadOrDying()) return true;
-        if (AntiBot.INSTANCE.isBot(player)) return true;
-        if (Managers.FRIEND.isFriend(player)) return true;
-        return false;
+    private boolean shouldSkipTarget(LivingEntity entity) {
+        if (entity == mc.player || entity instanceof ArmorStand) return true;
+        if (!entity.isAlive() || entity.isDeadOrDying()) return true;
+        if (AntiBot.INSTANCE.isBot(entity)) return true;
+        // Allies (incl. middle-click-marked mobs, which have no name and so never enter
+        // FriendManager) are never aimed at.
+        if (Managers.ALLY.isAlly(entity)) return true;
+        return !isTargetTypeAllowed(entity);
+    }
+
+    private boolean isTargetTypeAllowed(LivingEntity entity) {
+        return switch (entity) {
+            case Player player -> targetPlayers.getValue() && !Managers.FRIEND.isFriend(player);
+            case Villager ignored -> targetVillagers.getValue();
+            case Animal ignored -> targetAnimals.getValue();
+            case Monster ignored -> targetMobs.getValue();
+            default -> targetMobs.getValue();
+        };
     }
 
     private float getYawBetween(float yaw, double srcX, double srcZ, double destX, double destZ) {

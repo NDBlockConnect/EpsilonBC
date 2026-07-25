@@ -62,6 +62,7 @@ import org.joml.Vector3f;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ZealotCrystalPlus extends Module {
 
@@ -165,10 +166,13 @@ public class ZealotCrystalPlus extends Module {
     private final TimerUtils snapshotTimer = new TimerUtils();
     private final TimerUtils explosionSampleTimer = new TimerUtils();
 
-    private final Map<Long, Long> placedPosMap = new HashMap<>();
-    private final Map<Integer, Long> crystalSpawnMap = new HashMap<>();
-    private final Map<Integer, Long> attackedCrystalMap = new HashMap<>();
-    private final Map<Long, Long> attackedPosMap = new HashMap<>();
+    // These maps are written from the netty thread (packet receive handlers) and
+    // read/written from the main thread (tick handlers). Use concurrent maps so
+    // concurrent put/removeIf never corrupts the structure or throws.
+    private final Map<Long, Long> placedPosMap = new ConcurrentHashMap<>();
+    private final Map<Integer, Long> crystalSpawnMap = new ConcurrentHashMap<>();
+    private final Map<Integer, Long> attackedCrystalMap = new ConcurrentHashMap<>();
+    private final Map<Long, Long> attackedPosMap = new ConcurrentHashMap<>();
     private long lastSwapTime;
     private long lastActiveTime;
     private LivingEntity target;
@@ -1327,9 +1331,13 @@ public class ZealotCrystalPlus extends Module {
         int feetY = Mth.floor(feetPos.y);
         int feetZ = Mth.floor(feetPos.z);
 
+        int maxY = mc.level.getMaxY();
+        int minY = mc.level.getMinY();
         for (int x = feetX - floor; x <= feetX + ceil; x++) {
             for (int z = feetZ - floor; z <= feetZ + ceil; z++) {
                 for (int y = feetY - floor; y <= feetY + ceil; y++) {
+                    // 水晶实体高 2 格，放在 support(y).above() 上；y+2 越界服务器就会红字 "建筑高度上限"。
+                    if (y < minY || y + 2 > maxY) continue;
                     BlockPos pos = new BlockPos(x, y, z);
                     if (!mc.level.getWorldBorder().isWithinBounds(pos)) continue;
 
@@ -1535,7 +1543,7 @@ public class ZealotCrystalPlus extends Module {
     }
 
     private double getRotationSpeed() {
-        return Math.max(0.1, yawSpeed.getValue() / 18.0);
+        return Math.max(1.8, yawSpeed.getValue());
     }
 
     private float getRotationDelta(Rot2f from, Rot2f to) {
@@ -2092,4 +2100,3 @@ public class ZealotCrystalPlus extends Module {
         }
     }
 }
-

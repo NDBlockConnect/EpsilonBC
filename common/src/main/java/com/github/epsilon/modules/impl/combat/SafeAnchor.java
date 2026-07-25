@@ -84,8 +84,8 @@ public class SafeAnchor extends Module {
     }
 
     private final EnumSetting<PlaceMode> placeMode = enumSetting("Place Mode", PlaceMode.Adaptive);
-    private final DoubleSetting placeRotationSpeed = doubleSetting("Place Speed", 20.0, 1.0, 100.0, 1.0);
-    private final DoubleSetting explodeRotationSpeed = doubleSetting("Explode Speed", 40.0, 1.0, 100.0, 1.0);
+    private final IntSetting placeRotationSpeed = intSetting("Place Rotation Speed", 180, 10, 180, 10);
+    private final IntSetting explodeRotationSpeed = intSetting("Explode Rotation Speed", 180, 10, 180, 10);
     private final IntSetting placeCps = intSetting("Place CPS", 10, 1, 20, 1);
     private final BoolSetting silentRotation = boolSetting("Silent Rotation", false, () -> false);
     private final BoolSetting dynamicSpeed = boolSetting("DynamicSpeed", true, () -> false);
@@ -436,14 +436,14 @@ public class SafeAnchor extends Module {
             if (block.found()) {
                 InvUtils.swap(block.slot(), false);
                 targetActionPos = placePos;
-                currentRotationSpeed = mapSpeedToInternal(placeRotationSpeed.getValue());
+                currentRotationSpeed = placeRotationSpeed.getValue();
 
                 if (isSidePlacement && targetPlaceSide != null) {
                     HitResult hit = getCrosshairHit();
                     if (isLookingAtPlayerSide(hit)) {
                         targetRotation = null;
                     } else {
-                        Vec3 sideVec = Vec3.atCenterOf(currentAnchorPos).add(
+                        Vec3 sideVec = currentAnchorPos.getCenter().add(
                                 targetPlaceSide.getStepX() * 0.45,
                                 targetPlaceSide.getStepY() * 0.45,
                                 targetPlaceSide.getStepZ() * 0.45
@@ -451,7 +451,7 @@ public class SafeAnchor extends Module {
                         targetRotation = getTargetRotation(sideVec);
                     }
                 } else {
-                    targetRotation = getTargetRotation(Vec3.atCenterOf(placePos));
+                    targetRotation = getTargetRotation(placePos.getCenter());
                 }
 
                 stage = Stage.RotToPlace;
@@ -519,7 +519,7 @@ public class SafeAnchor extends Module {
         }
 
         Vec3 playerPos = mc.player.position();
-        Vec3 anchorPos = Vec3.atCenterOf(currentAnchorPos);
+        Vec3 anchorPos = currentAnchorPos.getCenter();
         for (double i = 0.3; i <= 0.7; i += 0.1) {
             BlockPos pos = BlockPos.containing(playerPos.lerp(anchorPos, i));
             if (isValidPlacePos(pos)) {
@@ -538,9 +538,9 @@ public class SafeAnchor extends Module {
     }
 
     private boolean isSideShielding(Direction side) {
-        Vec3 anchor = Vec3.atCenterOf(currentAnchorPos);
+        Vec3 anchor = currentAnchorPos.getCenter();
         Vec3 player = mc.player.position();
-        Vec3 block = Vec3.atCenterOf(currentAnchorPos.relative(side));
+        Vec3 block = currentAnchorPos.relative(side).getCenter();
         double vx = player.x - anchor.x;
         double vz = player.z - anchor.z;
         double wx = block.x - anchor.x;
@@ -564,7 +564,7 @@ public class SafeAnchor extends Module {
 
     private boolean isExplosionSafe() {
         if (currentAnchorPos == null) return false;
-        Vec3 explosionCenter = Vec3.atCenterOf(currentAnchorPos);
+        Vec3 explosionCenter = currentAnchorPos.getCenter();
         float health = mc.player.getHealth() + mc.player.getAbsorptionAmount();
         float threshold = minHealth.getValue().floatValue();
 
@@ -628,8 +628,8 @@ public class SafeAnchor extends Module {
         }
 
         targetActionPos = currentAnchorPos;
-        currentRotationSpeed = mapSpeedToInternal(explodeRotationSpeed.getValue());
-        targetRotation = explodeNoRotate ? null : getTargetRotation(Vec3.atCenterOf(currentAnchorPos));
+        currentRotationSpeed = explodeRotationSpeed.getValue();
+        targetRotation = explodeNoRotate ? null : getTargetRotation(currentAnchorPos.getCenter());
         stage = Stage.RotToExplode;
     }
 
@@ -772,11 +772,6 @@ public class SafeAnchor extends Module {
         double jitter = baseMs * 0.25 * ThreadLocalRandom.current().nextGaussian();
         long delayMs = (long) Mth.clamp(baseMs + jitter, 50.0, 250.0);
         nextActionTimeMs = System.currentTimeMillis() + delayMs;
-    }
-
-    private double mapSpeedToInternal(double slider) {
-        double clamped = Mth.clamp(slider, 1.0, 100.0);
-        return 0.1 + (clamped - 1.0) * (9.5 - 0.1) / 99.0;
     }
 
     private record RenderBox(AABB aabb, Color lineColor, Color sideColor, long startTime) {

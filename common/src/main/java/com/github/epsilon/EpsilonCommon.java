@@ -3,12 +3,15 @@ package com.github.epsilon;
 import com.github.epsilon.assets.i18n.EpsilonLanguageManager;
 import com.github.epsilon.assets.i18n.I18NFileGenerator;
 import com.github.epsilon.events.bus.EventBus;
+import com.github.epsilon.graphics.schedulers.render3d.Render3DScheduler;
 import com.github.epsilon.holders.AddonHolder;
 import com.github.epsilon.holders.ConfigHolder;
 import com.github.epsilon.holders.HudElementHolder;
 import com.github.epsilon.holders.ModuleHolder;
+import com.github.epsilon.gui.overlay.CompanionDeathOverlay;
 import com.github.epsilon.managers.Managers;
 import com.github.epsilon.modules.impl.ClientSetting;
+import com.github.epsilon.update.UpdateChecker;
 
 import java.lang.invoke.MethodHandles;
 
@@ -28,6 +31,15 @@ public class EpsilonCommon {
 
         // 初始化 Managers
         Managers.initManagers();
+
+        // 注册伴侣角色死亡覆盖层
+        CompanionDeathOverlay.init();
+
+        // 异步检查 GitHub 是否有新版本
+        UpdateChecker.INSTANCE.init();
+
+        // 初始化 Render3DScheduler 里的 RenderPipeline
+        Render3DScheduler.init();
 
         // 生成空的 i18n 文件
         I18NFileGenerator.generate("epsilon-empty-i18n.json");

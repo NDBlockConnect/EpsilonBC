@@ -12,6 +12,7 @@ import com.github.epsilon.modules.Module;
 import com.github.epsilon.settings.impl.BoolSetting;
 import com.github.epsilon.settings.impl.EnumSetting;
 import com.github.epsilon.settings.impl.IntSetting;
+import com.github.epsilon.settings.impl.RegistryListSetting;
 import com.github.epsilon.utils.timer.TimerUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.core.BlockPos;
@@ -25,6 +26,8 @@ import net.minecraft.world.phys.AABB;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Xray extends Module {
@@ -45,7 +48,7 @@ public class Xray extends Module {
     // vanilla and anti-xray alike. Plugin.New alone only shows boxes when the server
     // sends ClientboundBlockUpdatePacket (anti-xray reveal), which never happens on
     // vanilla/no-anticheat servers. Default true so Xray works immediately on enable.
-    public final BoolSetting wallHack = boolSetting("WallHack", true, _ -> mc.levelExtractor.allChanged());
+    public final BoolSetting wallHack = boolSetting("WallHack", true, _ -> mc.levelRenderer.allChanged());
     private final BoolSetting brutForce = boolSetting("Ore Deobf", false);
     private final BoolSetting fast = boolSetting("Fast", false, brutForce::getValue);
     private final IntSetting delay = intSetting("Delay", 25, 1, 100, 1, brutForce::getValue);
@@ -63,9 +66,31 @@ public class Xray extends Module {
     private final BoolSetting quartz = boolSetting("Quartz", false);
     private final BoolSetting water = boolSetting("Water", false);
     private final BoolSetting lava = boolSetting("Lava", false);
+    private final RegistryListSetting<Block> blockList = blockListSetting("Block List",
+            List.of(
+                    Blocks.DIAMOND_ORE,
+                    Blocks.DEEPSLATE_DIAMOND_ORE,
+                    Blocks.ANCIENT_DEBRIS,
+                    Blocks.EMERALD_ORE,
+                    Blocks.DEEPSLATE_EMERALD_ORE,
+                    Blocks.GOLD_ORE,
+                    Blocks.DEEPSLATE_GOLD_ORE,
+                    Blocks.SPAWNER,
+                    Blocks.TRIAL_SPAWNER,
+                    Blocks.VAULT,
+                    Blocks.CHEST,
+                    Blocks.TRAPPED_CHEST,
+                    Blocks.ENDER_CHEST,
+                    Blocks.BARREL,
+                    Blocks.SHULKER_BOX
+            )
+    );
 
     private final TimerUtils delayTimer = new TimerUtils();
-    private final ArrayList<BlockPos> ores = new ArrayList<>();
+    // ores is written from the netty thread (onPacketReceive) and the main thread
+    // (onPlayerTick), and read from the render thread (onRender3D). Use a
+    // copy-on-write list so concurrent add/iterate never throws.
+    private final CopyOnWriteArrayList<BlockPos> ores = new CopyOnWriteArrayList<>();
     private final ArrayList<BlockPos> toCheck = new ArrayList<>();
     private final ArrayList<BlockMemory> checked = new ArrayList<>();
     private BlockPos displayBlock;
@@ -74,6 +99,10 @@ public class Xray extends Module {
 
     @Override
     public void onEnable() {
+        if (nullCheck()) {
+            toggle();
+            return;
+        }
         ores.clear();
         toCheck.clear();
         checked.clear();
@@ -81,13 +110,13 @@ public class Xray extends Module {
         all = toCheck.size();
         done = 0;
         mc.smartCull = false;
-        mc.levelExtractor.allChanged();
+        mc.levelRenderer.allChanged();
         area = getArea();
     }
 
     @Override
     public void onDisable() {
-        mc.levelExtractor.allChanged();
+        mc.levelRenderer.allChanged();
         mc.smartCull = true;
     }
 
@@ -170,6 +199,9 @@ public class Xray extends Module {
             if (block == Blocks.NETHER_QUARTZ_ORE && quartz.getValue()) {
                 draw(stack, pos, 170, 170, 170);
             }
+            if (!block.defaultBlockState().isAir() && blockList.getValue().contains(block) && !isHardcodedOre(block)) {
+                draw(stack, pos, 200, 120, 255);
+            }
         }
 
         if (displayBlock != null && (done != all)) {
@@ -182,7 +214,7 @@ public class Xray extends Module {
 
         if (toCheck.isEmpty() || !brutForce.getValue()) return;
 
-        if (mc.isLocalServer()) {
+        if (mc.isSingleplayer()) {
             log("单人游戏你反你老冯呢");
             toggle();
             return;
@@ -197,7 +229,9 @@ public class Xray extends Module {
         }
 
         if (delayTimer.every(delay.getValue())) {
-            BlockPos pos = toCheck.remove(toCheck.size() - 1 <= 1 ? 0 : ThreadLocalRandom.current().nextInt(0, toCheck.size() - 1));
+            // nextInt(0, bound) is exclusive on the upper end, so pass size() (not
+            // size()-1) or the last index is never picked, skewing the random order.
+            BlockPos pos = toCheck.remove(toCheck.size() <= 1 ? 0 : ThreadLocalRandom.current().nextInt(0, toCheck.size()));
             mc.gameMode.startDestroyBlock(displayBlock = pos, mc.player.getDirection());
             mc.gameMode.stopDestroyBlock();
             mc.getConnection().send(new ServerboundSwingPacket(InteractionHand.MAIN_HAND));
@@ -219,7 +253,19 @@ public class Xray extends Module {
         Render3DScheduler.INSTANCE.addOutlineBox(box, new Color(r, g, b, 200));
     }
 
+    private boolean isHardcodedOre(Block block) {
+        return block == Blocks.DIAMOND_ORE || block == Blocks.DEEPSLATE_DIAMOND_ORE
+                || block == Blocks.GOLD_ORE || block == Blocks.DEEPSLATE_GOLD_ORE || block == Blocks.NETHER_GOLD_ORE
+                || block == Blocks.IRON_ORE || block == Blocks.DEEPSLATE_IRON_ORE
+                || block == Blocks.EMERALD_ORE || block == Blocks.DEEPSLATE_EMERALD_ORE
+                || block == Blocks.REDSTONE_ORE || block == Blocks.DEEPSLATE_REDSTONE_ORE
+                || block == Blocks.COAL_ORE || block == Blocks.DEEPSLATE_COAL_ORE
+                || block == Blocks.LAPIS_ORE || block == Blocks.DEEPSLATE_LAPIS_ORE
+                || block == Blocks.ANCIENT_DEBRIS || block == Blocks.NETHER_QUARTZ_ORE;
+    }
+
     public boolean isCheckableOre(Block block) {
+        if (blockList.getValue().contains(block)) return true;
         if (diamond.getValue() && (block == Blocks.DIAMOND_ORE || block == Blocks.DEEPSLATE_DIAMOND_ORE)) return true;
         if (gold.getValue() && (block == Blocks.GOLD_ORE || block == Blocks.DEEPSLATE_GOLD_ORE || block == Blocks.NETHER_GOLD_ORE))
             return true;
@@ -232,7 +278,6 @@ public class Xray extends Module {
         if (water.getValue() && block == Blocks.WATER) return true;
         if (lava.getValue() && block == Blocks.LAVA) return true;
         if (quartz.getValue() && block == Blocks.NETHER_QUARTZ_ORE) return true;
-        if (lapis.getValue() && (block == Blocks.LAPIS_ORE || block == Blocks.DEEPSLATE_LAPIS_ORE)) return true;
         return lapis.getValue() && (block == Blocks.LAPIS_ORE || block == Blocks.DEEPSLATE_LAPIS_ORE);
     }
 

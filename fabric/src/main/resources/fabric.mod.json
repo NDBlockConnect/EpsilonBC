@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "${mod_id}",
   "version": "${version}",
-  "name": "Epsilon",
-  "description": "",
+  "name": "EpsilonBC",
+  "description": "EpsilonBC HvH 专用客户端",
   "authors": [
     "Chen_Meng",
     "06789"

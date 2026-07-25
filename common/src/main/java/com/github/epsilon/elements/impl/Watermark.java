@@ -17,6 +17,7 @@ public class Watermark extends HudModule {
 
     private Watermark() {
         super("Watermark", 0f, 0f, 200f, 28f);
+        setDefaultEnabled(true);
     }
 
     private final DoubleSetting scale = doubleSetting("Scale", 1.0, 0.5, 2.0, 0.1);

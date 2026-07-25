@@ -29,9 +29,9 @@ public class Chams extends Module {
         super("Chams", Category.RENDER);
     }
 
-    public final BoolSetting noDepth = boolSetting("No Depth", true);
-
     private static final ThreadLocal<Boolean> RENDERING_THIRD_PERSON_HAND_ITEM = ThreadLocal.withInitial(() -> false);
+
+    public final BoolSetting noDepth = boolSetting("No Depth", true);
 
     private static final RenderPipeline ENTITY_CHAMS_PIPELINE = RenderPipeline.builder(RenderPipelines.ENTITY_SNIPPET)
             .withLocation("pipeline/epsilon_entity_chams")
