@@ -63,9 +63,7 @@ The Lumin rendering system provides custom render pipelines for:
 - Texture rendering
 - Custom vertex formats
 
-See [Lumin Graphics README](common/src/main/java/com/github/epsilon/graphics/README.md) for details.
-
-The declarative UI layer built on Lumin is documented in the [Epsilon GUI Library Guide](docs/gui-library.md).
+It has gradually relied on self-developed [OpenLumin](https://github.com/NDBlockConnect/OpenLumin)
 
 ## ⚙️ Build & Run
 
