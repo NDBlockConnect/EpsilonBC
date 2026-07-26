@@ -27,20 +27,23 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(LevelRenderer.class)
 public class MixinLevelRenderer {
 
-    @ModifyArg(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LevelRenderer;cullTerrain(Lnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/culling/Frustum;Z)V"))
-    private boolean update$cullTerraion$modifySpectator(boolean spectator) {
-        return FreeCamera.INSTANCE.isEnabled() || spectator;
-    }
+    // MC 26.2: LevelRenderer.update() and cullTerrain() methods no longer exist (rendering refactored)
+    // FreeCamera spectator mode injection disabled for MC 26.2+
+    // TODO: Find new injection point in MC 26.2's refactored rendering pipeline
+    // @ModifyArg(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LevelRenderer;cullTerrain(Lnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/culling/Frustum;Z)V"))
+    // private boolean update$cullTerraion$modifySpectator(boolean spectator) {
+    //     return FreeCamera.INSTANCE.isEnabled() || spectator;
+    // }
 
-    @Inject(method = "renderLevel", at = @At("RETURN"))
-    private void onPostRenderLevel(GraphicsResourceAllocator resourceAllocator, DeltaTracker deltaTracker, boolean renderOutline, CameraRenderState cameraState, Matrix4fc modelViewMatrix, GpuBufferSlice terrainFog, Vector4f fogColor, boolean shouldRenderSky, ChunkSectionsToRender chunkSectionsToRender, CallbackInfo ci) {
+    @Inject(method = "render", at = @At("RETURN"))
+    private void onPostRenderLevel(GraphicsResourceAllocator resourceAllocator, DeltaTracker deltaTracker, boolean renderOutline, CameraRenderState cameraState, Matrix4fc modelViewMatrix, GpuBufferSlice terrainFog, Vector4f fogColor, boolean shouldRenderSky, CallbackInfo ci) {
         PoseStack poseStack = new PoseStack();
         poseStack.mulPose(modelViewMatrix);
         EventBus.INSTANCE.post(new Render3DEvent(poseStack));
         EventBus.INSTANCE.post(new AfterRender3DEvent());
     }
 
-    @WrapOperation(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/PostChain;addToFrame(Lcom/mojang/blaze3d/framegraph/FrameGraphBuilder;IILnet/minecraft/client/renderer/PostChain$TargetBundle;)V", ordinal = 0))
+    @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/PostChain;addToFrame(Lcom/mojang/blaze3d/framegraph/FrameGraphBuilder;IILnet/minecraft/client/renderer/PostChain$TargetBundle;)V", ordinal = 0))
     private void replaceEntityOutlineShader(PostChain instance, FrameGraphBuilder frame, int screenWidth, int screenHeight, PostChain.TargetBundle providedTargets, Operation<Void> original) {
         if (!Shaders.INSTANCE.isEnabled()) original.call(instance, frame, screenWidth, screenHeight, providedTargets);
     }

@@ -38,7 +38,7 @@ public class MixinPlayer {
     }
 
     @Inject(method = "causeExtraKnockback", at = @At("HEAD"), cancellable = true)
-    private void onCauseExtraKnockback(Entity entity, float knockbackAmount, Vec3 oldMovement, CallbackInfo ci) {
+    private void onCauseExtraKnockback(Entity entity, float knockbackAmount, Vec3 oldMovement, net.minecraft.world.damagesource.DamageSource damageSource, float f, boolean flag, CallbackInfo ci) {
         AttackSlowDownEvent event = EventBus.INSTANCE.post(new AttackSlowDownEvent(entity, knockbackAmount));
         if (event.isCancelled()) {
             ci.cancel();
