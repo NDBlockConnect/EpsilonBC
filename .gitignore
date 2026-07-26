@@ -42,3 +42,7 @@ repo
 /game-*.log
 /build-fabric.bat
 /deploy.bat
+*.log
+HANDOFF.md
+fabric-*-rebuild.log
+neoforge-*-build.log
