@@ -28,7 +28,7 @@ public class Jesus extends Module {
     private final EnumSetting<Mode> mode     = enumSetting("Mode", Mode.Water);
     private final BoolSetting sneakToSink    = boolSetting("Sneak To Sink", true);
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGH)
     private void onMove(MoveEvent event) {
         if (nullCheck()) return;
         if (sneakToSink.getValue() && mc.player.isCrouching()) return;
@@ -53,7 +53,8 @@ public class Jesus extends Module {
         // 玩家几乎完全没入（脚下没有支撑面，脑袋顶到水面）：也放手，避免"卡在半水中"
         if (fluidDepth >= 0.85) return;
 
-        event.setVertical(0.1, EventPriority.HIGHEST);
+        // 修复：恢复为 HIGH 优先级，低于 HoleSnap 的 HIGHEST，避免同优先级竞争
+        event.setVertical(0.1, EventPriority.HIGH);
         mc.player.resetFallDistance();
     }
 }

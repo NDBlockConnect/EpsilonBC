@@ -46,7 +46,8 @@ public class MovementFix extends Module {
 
         float magnitude = Math.max(Math.abs(forward), Math.abs(strafe));
         float difference = Mth.wrapDegrees(getDirection(playerYaw, forward, strafe) - serverYaw);
-        int sector = ((int)((difference + 22.5f) / 45.0f)) & 7;
+        // 修复：使用 Math.floorMod 正确处理负角度，避免向零截断导致的方向错误
+        int sector = Math.floorMod(Math.round(difference / 45.0f), 8);
 
         float newForward = 0.0f;
         float newStrafe = 0.0f;

@@ -35,15 +35,14 @@ public class Bhop extends Module {
         if (nullCheck()) return;
         if (mc.player.getAbilities().flying || mc.player.isFallFlying()) return;
         if (!inWater.getValue() && (mc.player.isInWater() || mc.player.isInLava())) return;
-        // 防止在玩家没有主动按移动键时触发（如其他模块修改了 input）
+
+        // 修复：只检查当前事件输入，不依赖现有速度（玩家静止首次起步时速度尚未形成）
         if (requireMoving.getValue()) {
             float forward = event.getForward();
             float strafe = event.getStrafe();
             if (forward == 0.0f && strafe == 0.0f) return;
-            // 额外检查：确保玩家真的在移动，而不是被其他模块强制设置了输入
-            if (Math.abs(mc.player.getDeltaMovement().x) < 0.001
-                && Math.abs(mc.player.getDeltaMovement().z) < 0.001) return;
         }
+
         if (!mc.player.onGround()) return;
         // 防止在攀爬、骑乘等特殊状态下触发
         if (mc.player.onClimbable() || mc.player.isPassenger()) return;

@@ -64,7 +64,12 @@ public final class WideHinataEasterEgg {
     public float getCurrentAspectRatio(float baseRatio) {
         if (wideStartMs < 0L) return baseRatio;
         long elapsed = Util.getMillis() - wideStartMs;
-        float t = Mth.clamp(elapsed / (float) durationMs, 0.0f, 1.0f);
+        // 修复：超时后立即返回基准宽高比，避免状态矛盾
+        if (elapsed >= durationMs) {
+            wideStartMs = -1L;  // 自动重置过期状态
+            return baseRatio;
+        }
+        float t = elapsed / (float) durationMs;  // 已在范围内，不需要 clamp
         float maxMultiplier = ClientSetting.INSTANCE.wideHinataMaxWidth.getValue().floatValue();
         float multiplier = Mth.lerp(t, 1.0f, maxMultiplier);
         return baseRatio * multiplier;
