@@ -40,7 +40,6 @@ plugins {
 rootProject.name = "EpsilonBC"
 
 include("epsilon-core")
-include("epsilonbc-modules")
 include("common")
 include("fabric")
 include("neoforge")
