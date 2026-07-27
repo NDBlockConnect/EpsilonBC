@@ -31,6 +31,10 @@ dependencies {
     compileOnly(libs.sodium.neoforge)
     sodiumNeoForgeOuterJar(libs.sodium.neoforge)
     compileOnly(extractedSodiumNeoForgeModJar)
+
+    // epsilon-core 需要打包进 jar（NeoForge 的 jarJar 配置）
+    implementation(project(":epsilon-core"))
+    jarJar(project(":epsilon-core"))
 }
 
 neoForge {

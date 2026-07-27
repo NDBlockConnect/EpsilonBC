@@ -14,6 +14,10 @@ dependencies {
     implementation(libs.fabric.api)
     compileOnly(libs.sodium.fabric)
     compileOnly(libs.jsr305)
+
+    // epsilon-core 需要打包进 jar（Fabric Loom 的 include 配置）
+    implementation(project(":epsilon-core"))
+    include(project(":epsilon-core"))
 }
 
 loom {
