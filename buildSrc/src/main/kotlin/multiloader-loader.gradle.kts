@@ -62,4 +62,7 @@ tasks.named<Jar>("sourcesJar") {
 tasks.named<Jar>("jar") {
     dependsOn(epsilonCoreClasses)
     from(epsilonCoreOutput)
+    // epsilon-core 的类可能与 common 重复（common 依赖 epsilon-core 并重新编译了接口）
+    // 使用 EXCLUDE 策略：保留第一次遇到的文件，忽略后续重复
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
