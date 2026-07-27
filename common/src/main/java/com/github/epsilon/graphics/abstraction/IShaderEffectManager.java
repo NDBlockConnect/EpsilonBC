@@ -22,13 +22,14 @@ public interface IShaderEffectManager {
     /**
      * 应用高斯模糊效果（用于背景模糊、面板模糊）
      *
-     * @param x      区域左上角 X
-     * @param y      区域左上角 Y
-     * @param width  区域宽度
-     * @param height 区域高度
-     * @param radius 模糊半径（像素）
+     * @param x            区域左上角 X
+     * @param y            区域左上角 Y
+     * @param width        区域宽度
+     * @param height       区域高度
+     * @param radius       圆角半径
+     * @param blurStrength 模糊强度（0.0-16.0）
      */
-    void applyBlur(float x, float y, float width, float height, float radius);
+    void applyBlur(float x, float y, float width, float height, float radius, float blurStrength);
 
     /**
      * 应用发光效果（用于高亮、强调）

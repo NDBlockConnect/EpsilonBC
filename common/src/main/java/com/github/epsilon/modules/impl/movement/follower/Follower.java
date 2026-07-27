@@ -5,7 +5,7 @@ import com.github.epsilon.events.bus.EventPriority;
 import com.github.epsilon.events.impl.KeyboardInputEvent;
 import com.github.epsilon.events.impl.PlayerTickEvent;
 import com.github.epsilon.events.impl.Render3DEvent;
-import com.github.epsilon.graphics.schedulers.render3d.Render3DScheduler;
+import com.github.epsilon.managers.Managers;
 import com.github.epsilon.managers.Managers;
 import com.github.epsilon.managers.impl.target.TargetRequest;
 import com.github.epsilon.modules.Category;
@@ -128,7 +128,7 @@ public class Follower extends Module {
         if (!renderPath.getValue() || pathPoints.size() < 2 || !canControlElytraFly()) return;
 
         for (int i = 1; i < pathPoints.size(); i++) {
-            Render3DScheduler.INSTANCE.addLine(pathPoints.get(i - 1), pathPoints.get(i), pathColor.getValue(), pathLineWidth.getValue().floatValue());
+            Managers.GRAPHICS.getRender3DScheduler().addLine(pathPoints.get(i - 1), pathPoints.get(i), pathColor.getValue(), pathLineWidth.getValue().floatValue());
         }
     }
 

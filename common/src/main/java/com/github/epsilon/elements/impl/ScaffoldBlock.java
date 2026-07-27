@@ -2,7 +2,7 @@ package com.github.epsilon.elements.impl;
 
 import com.github.epsilon.elements.HudModule;
 import com.github.epsilon.graphics.renderers.TextRenderer;
-import com.github.epsilon.graphics.shaders.BlurShader;
+import com.github.epsilon.managers.Managers;
 import com.github.epsilon.gui.hudeditor.HudEditorScreen;
 import com.github.epsilon.gui.lib.UiRect;
 import com.github.epsilon.gui.lib.UiTree;
@@ -137,7 +137,7 @@ public class ScaffoldBlock extends HudModule {
         float animatedRadius = Math.min(layout.radius(), animatedWidth / 2.0f);
 
         if (backgroundBlur.getValue()) {
-            BlurShader.INSTANCE.render(animatedX, this.y, animatedWidth, layout.height(), animatedRadius, blurStrength.getValue());
+            Managers.GRAPHICS.getShaderEffectManager().applyBlur(animatedX, this.y, animatedWidth, layout.height(), animatedRadius, blurStrength.getValue());
         }
         if (drawShadow.getValue()) {
             scope.shadow(animatedX, this.y, animatedWidth, layout.height(), animatedRadius, shadowBlur.getValue().floatValue(), withAlpha(shadowColor.getValue(), animation.contentAlpha()));

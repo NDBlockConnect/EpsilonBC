@@ -77,6 +77,42 @@ public interface IRender3DScheduler {
     void addGradientLine(Vec3 from, Vec3 to, Color colorStart, Color colorEnd);
 
     /**
+     * 添加模糊盒渲染（背景模糊效果的立方体区域）
+     *
+     * @param box          世界空间 AABB
+     * @param blurStrength 模糊强度（0.0 - 16.0）
+     */
+    void addBlurredBox(AABB box, double blurStrength);
+
+    /**
+     * 添加渐变填充盒渲染（底部到顶部颜色渐变）
+     *
+     * @param box         世界空间 AABB
+     * @param bottomColor 底部颜色（ARGB 格式）
+     * @param topColor    顶部颜色（ARGB 格式）
+     */
+    void addFilledFadeBox(AABB box, int bottomColor, int topColor);
+
+    /**
+     * 添加单面填充渲染（只渲染立方体的某一面）
+     *
+     * @param box       世界空间 AABB
+     * @param color     填充颜色（ARGB 格式）
+     * @param direction 要渲染的面
+     */
+    void addFilledSide(AABB box, int color, net.minecraft.core.Direction direction);
+
+    /**
+     * 添加单面轮廓渲染（只渲染立方体某一面的边框）
+     *
+     * @param box       世界空间 AABB
+     * @param color     线条颜色（ARGB 格式）
+     * @param thickness 线宽（像素）
+     * @param direction 要渲染的面
+     */
+    void addSideOutline(AABB box, int color, float thickness, net.minecraft.core.Direction direction);
+
+    /**
      * 清空当前帧的渲染队列（通常在帧结束时自动调用）
      */
     void clear();

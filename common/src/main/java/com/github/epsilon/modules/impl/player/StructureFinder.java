@@ -3,7 +3,7 @@ package com.github.epsilon.modules.impl.player;
 import com.github.epsilon.events.bus.EventHandler;
 import com.github.epsilon.events.impl.PlayerTickEvent;
 import com.github.epsilon.events.impl.Render3DEvent;
-import com.github.epsilon.graphics.schedulers.render3d.Render3DScheduler;
+import com.github.epsilon.managers.Managers;
 import com.github.epsilon.modules.Category;
 import com.github.epsilon.modules.Module;
 import com.github.epsilon.settings.impl.BoolSetting;
@@ -65,10 +65,10 @@ public class StructureFinder extends Module {
     @EventHandler
     private void onRender3D(Render3DEvent event) {
         if (!render.getValue() || found.isEmpty()) return;
-        int rgb = boxColor.getValue().getRGB();
+        Color boxColorValue = boxColor.getValue();
         float thick = thickness.getValue().floatValue();
         for (FoundStructure s : found) {
-            Render3DScheduler.INSTANCE.addOutlineBox(s.box(), rgb, thick);
+            Managers.GRAPHICS.getRender3DScheduler().addOutlineBox(s.box(), boxColorValue, thick);
         }
     }
 

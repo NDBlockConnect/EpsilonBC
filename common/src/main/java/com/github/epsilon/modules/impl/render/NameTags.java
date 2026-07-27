@@ -103,16 +103,19 @@ public class NameTags extends Module {
             float itemRowGap = equipmentItems.isEmpty() ? 0.0f : (3.0f * renderScale);
             float totalHeight = boxHeight + (equipmentItems.isEmpty() ? 0.0f : itemRowGap + itemSize);
 
-            final var currentPosition = WorldToScreen.interpolate(target, partialTick);
+            final var currentPosition = Managers.GRAPHICS.getWorldToScreen().interpolate(target, partialTick);
 
-            final var projectedPosition = WorldToScreen.getWorldPositionToScreen(currentPosition.add(0.0f, heightOffset.getValue() + target.getEyeHeight(), 0.0f));
-            if (projectedPosition.z > 1.0f || projectedPosition.z < 0.0f) continue;
+            final var projectedPosition = Managers.GRAPHICS.getWorldToScreen().toScreen(currentPosition.add(0.0f, heightOffset.getValue() + target.getEyeHeight(), 0.0f), partialTick);
+            if (projectedPosition.isEmpty()) continue;
+
+            var screenPos = projectedPosition.get();
+            if (screenPos.z() > 1.0f || screenPos.z() < 0.0f) continue;
 
             float guiScale = (float) LuminRenderSystem.getGuiScale();
 
-            float centerX = projectedPosition.x / guiScale;
+            float centerX = (float) (screenPos.x() / guiScale);
             float x = centerX - boxWidth / 2.0f;
-            float y = projectedPosition.y / guiScale - totalHeight - 4.0f * renderScale;
+            float y = (float) (screenPos.y() / guiScale) - totalHeight - 4.0f * renderScale;
             float itemLeft = centerX - itemRowWidth / 2.0f;
             float itemTop = y - (equipmentItems.isEmpty() ? 0.0f : itemRowGap + itemSize);
             float visualLeft = Math.min(x, itemLeft);

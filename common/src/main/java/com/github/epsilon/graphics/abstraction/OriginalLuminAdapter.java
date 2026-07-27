@@ -147,6 +147,26 @@ public class OriginalLuminAdapter implements IGraphicsAdapter {
         }
 
         @Override
+        public void addBlurredBox(AABB box, double blurStrength) {
+            Render3DScheduler.INSTANCE.addBlurredBox(box, blurStrength);
+        }
+
+        @Override
+        public void addFilledFadeBox(AABB box, int bottomColor, int topColor) {
+            Render3DScheduler.INSTANCE.addFilledFadeBox(box, bottomColor, topColor);
+        }
+
+        @Override
+        public void addFilledSide(AABB box, int color, net.minecraft.core.Direction direction) {
+            Render3DScheduler.INSTANCE.addFilledSide(box, color, direction);
+        }
+
+        @Override
+        public void addSideOutline(AABB box, int color, float thickness, net.minecraft.core.Direction direction) {
+            Render3DScheduler.INSTANCE.addSideOutline(box, color, thickness, direction);
+        }
+
+        @Override
         public void clear() {
             Render3DScheduler.INSTANCE.clear();
         }
@@ -226,8 +246,8 @@ public class OriginalLuminAdapter implements IGraphicsAdapter {
 
     private static class ShaderEffectManagerImpl implements IShaderEffectManager {
         @Override
-        public void applyBlur(float x, float y, float width, float height, float radius) {
-            BlurShader.INSTANCE.render(x, y, width, height, 0f, 0f, 0f, 0f, radius);
+        public void applyBlur(float x, float y, float width, float height, float radius, float blurStrength) {
+            BlurShader.INSTANCE.render(x, y, width, height, radius, blurStrength);
         }
 
         @Override

@@ -2,7 +2,6 @@ package com.github.epsilon.modules.impl.render;
 
 import com.github.epsilon.events.bus.EventHandler;
 import com.github.epsilon.events.impl.Render3DEvent;
-import com.github.epsilon.graphics.schedulers.render3d.Render3DScheduler;
 import com.github.epsilon.managers.Managers;
 import com.github.epsilon.modules.Category;
 import com.github.epsilon.modules.Module;
@@ -11,7 +10,6 @@ import com.github.epsilon.settings.impl.ColorSetting;
 import com.github.epsilon.settings.impl.DoubleSetting;
 import com.github.epsilon.settings.impl.EnumSetting;
 import com.github.epsilon.settings.impl.IntSetting;
-import com.github.epsilon.utils.render.WorldToScreen;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -89,16 +87,16 @@ public class EnemyView extends Module {
 
             if (style.is(Style.Solid)) {
                 Color fill = new Color(color.getRed(), color.getGreen(), color.getBlue(), fillAlpha.getValue());
-                Render3DScheduler.INSTANCE.addFilledBox(box, fill);
+                Managers.GRAPHICS.getRender3DScheduler().addFilledBox(box, fill);
             }
             if (outline.getValue()) {
-                Render3DScheduler.INSTANCE.addOutlineBox(box, color.getRGB(), lineWidth);
+                Managers.GRAPHICS.getRender3DScheduler().addOutlineBox(box, color, lineWidth);
             }
         }
     }
 
     private AABB interpolatedBox(Entity entity, float partialTick) {
-        Vec3 pos = WorldToScreen.interpolate(entity, partialTick);
+        Vec3 pos = Managers.GRAPHICS.getWorldToScreen().interpolate(entity, partialTick);
         double halfWidth = entity.getBbWidth() / 2.0;
         double height = entity.getBbHeight();
         return new AABB(

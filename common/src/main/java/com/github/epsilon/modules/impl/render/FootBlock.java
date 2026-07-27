@@ -2,7 +2,6 @@ package com.github.epsilon.modules.impl.render;
 
 import com.github.epsilon.events.bus.EventHandler;
 import com.github.epsilon.events.impl.Render3DEvent;
-import com.github.epsilon.graphics.schedulers.render3d.Render3DScheduler;
 import com.github.epsilon.managers.Managers;
 import com.github.epsilon.modules.Category;
 import com.github.epsilon.modules.Module;
@@ -74,8 +73,8 @@ public class FootBlock extends Module {
             AABB box = shape.isEmpty() ? new AABB(below) : shape.bounds().move(below);
 
             Color fillColor = getEntityColor(livingEntity);
-            if (filled.getValue())  Render3DScheduler.INSTANCE.addFilledBox(box, fillColor);
-            if (outline.getValue()) Render3DScheduler.INSTANCE.addOutlineBox(box, outlineColor.getValue());
+            if (filled.getValue())  Managers.GRAPHICS.getRender3DScheduler().addFilledBox(box, fillColor);
+            if (outline.getValue()) Managers.GRAPHICS.getRender3DScheduler().addOutlineBox(box, outlineColor.getValue());
         }
     }
 

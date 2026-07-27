@@ -5,7 +5,7 @@ import com.github.epsilon.events.bus.EventPriority;
 import com.github.epsilon.events.impl.MoveEvent;
 import com.github.epsilon.events.impl.PacketEvent;
 import com.github.epsilon.events.impl.Render3DEvent;
-import com.github.epsilon.graphics.schedulers.render3d.Render3DScheduler;
+import com.github.epsilon.managers.Managers;
 import com.github.epsilon.managers.Managers;
 import com.github.epsilon.modules.Category;
 import com.github.epsilon.modules.Module;
@@ -174,8 +174,8 @@ public class HoleSnap extends Module {
         Vec3 topEdge = getTopEdge(targetHole, playerPos);
         float width = lineWidth.getValue().floatValue();
 
-        Render3DScheduler.INSTANCE.addLine(playerPos, topEdge, color.getValue(), width);
-        Render3DScheduler.INSTANCE.addLine(topEdge, targetHole.middle, color.getValue(), width);
+        Managers.GRAPHICS.getRender3DScheduler().addLine(playerPos, topEdge, color.getValue(), width);
+        Managers.GRAPHICS.getRender3DScheduler().addLine(topEdge, targetHole.middle, color.getValue(), width);
     }
 
     private Vec3 getTopEdge(Hole hole, Vec3 playerPos) {

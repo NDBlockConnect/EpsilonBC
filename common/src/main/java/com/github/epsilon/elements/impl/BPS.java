@@ -2,7 +2,7 @@ package com.github.epsilon.elements.impl;
 
 import com.github.epsilon.elements.HudModule;
 import com.github.epsilon.graphics.renderers.TextRenderer;
-import com.github.epsilon.graphics.shaders.BlurShader;
+import com.github.epsilon.managers.Managers;
 import com.github.epsilon.gui.lib.UiTree;
 import com.github.epsilon.settings.impl.BoolSetting;
 import com.github.epsilon.settings.impl.ColorSetting;
@@ -93,7 +93,7 @@ public class BPS extends HudModule {
         float panelH = 58f * s;
 
         if (backgroundBlur.getValue()) {
-            BlurShader.INSTANCE.render(this.x, this.y, panelW, panelH, radius, blurStrength.getValue());
+            Managers.GRAPHICS.getShaderEffectManager().applyBlur(this.x, this.y, panelW, panelH, radius, blurStrength.getValue());
         }
 
         if (drawShadow.getValue()) {

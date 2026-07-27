@@ -3,7 +3,7 @@ package com.github.epsilon.modules.impl.combat;
 import com.github.epsilon.events.bus.EventHandler;
 import com.github.epsilon.events.impl.PlayerTickEvent;
 import com.github.epsilon.events.impl.Render3DEvent;
-import com.github.epsilon.graphics.schedulers.render3d.Render3DScheduler;
+import com.github.epsilon.managers.Managers;
 import com.github.epsilon.modules.Category;
 import com.github.epsilon.modules.Module;
 import com.github.epsilon.settings.impl.BoolSetting;
@@ -121,8 +121,8 @@ public class Nuker extends Module {
         if (!render.getValue() || rendered.isEmpty()) return;
         for (BlockPos pos : rendered) {
             AABB box = new AABB(pos);
-            Render3DScheduler.INSTANCE.addFilledBox(box, sideColor.getValue());
-            Render3DScheduler.INSTANCE.addOutlineBox(box, lineColor.getValue());
+            Managers.GRAPHICS.getRender3DScheduler().addFilledBox(box, sideColor.getValue());
+            Managers.GRAPHICS.getRender3DScheduler().addOutlineBox(box, lineColor.getValue());
         }
     }
 

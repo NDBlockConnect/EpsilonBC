@@ -2,7 +2,6 @@ package com.github.epsilon.modules.impl.render;
 
 import com.github.epsilon.events.bus.EventHandler;
 import com.github.epsilon.events.impl.Render3DEvent;
-import com.github.epsilon.graphics.schedulers.render3d.Render3DScheduler;
 import com.github.epsilon.managers.Managers;
 import com.github.epsilon.modules.Category;
 import com.github.epsilon.modules.Module;
@@ -10,7 +9,6 @@ import com.github.epsilon.settings.impl.BoolSetting;
 import com.github.epsilon.settings.impl.ColorSetting;
 import com.github.epsilon.settings.impl.DoubleSetting;
 import com.github.epsilon.settings.impl.EnumSetting;
-import com.github.epsilon.utils.render.WorldToScreen;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
@@ -69,14 +67,14 @@ public class Tracers extends Module {
             if (!(entity instanceof LivingEntity livingEntity) || !shouldRender(livingEntity)) continue;
             if (cameraPos.distanceToSqr(entity.position()) > maxDistanceSq) continue;
 
-            Vec3 interpolated = WorldToScreen.interpolate(entity, partialTick);
+            Vec3 interpolated = Managers.GRAPHICS.getWorldToScreen().interpolate(entity, partialTick);
             Vec3 end = switch (target.getValue()) {
                 case Head -> interpolated.add(0.0, entity.getBbHeight(), 0.0);
                 case Body -> interpolated.add(0.0, entity.getBbHeight() / 2.0, 0.0);
                 case Feet -> interpolated;
             };
 
-            Render3DScheduler.INSTANCE.addLine(start, end, getEntityColor(livingEntity), lineWidth);
+            Managers.GRAPHICS.getRender3DScheduler().addLine(start, end, getEntityColor(livingEntity), lineWidth);
         }
     }
 

@@ -6,7 +6,7 @@ import com.github.epsilon.events.bus.listeners.ConsumerListener;
 import com.github.epsilon.events.impl.PacketEvent;
 import com.github.epsilon.events.impl.PlayerTickEvent;
 import com.github.epsilon.events.impl.Render3DEvent;
-import com.github.epsilon.graphics.schedulers.render3d.Render3DScheduler;
+import com.github.epsilon.managers.Managers;
 import com.github.epsilon.managers.Managers;
 import com.github.epsilon.modules.Category;
 import com.github.epsilon.modules.Module;
@@ -64,8 +64,8 @@ public class SafeAnchor extends Module {
                         Color side = new Color(sideColor.getRed(), sideColor.getGreen(), sideColor.getBlue(), (int) (sideColor.getAlpha() * alphaFactor));
                         Color line = new Color(lineColor.getRed(), lineColor.getGreen(), lineColor.getBlue(), (int) (lineColor.getAlpha() * alphaFactor));
 
-                        Render3DScheduler.INSTANCE.addFilledBox(box.aabb, side);
-                        Render3DScheduler.INSTANCE.addOutlineBox(box.aabb, line);
+                        Managers.GRAPHICS.getRender3DScheduler().addFilledBox(box.aabb, side);
+                        Managers.GRAPHICS.getRender3DScheduler().addOutlineBox(box.aabb, line);
                     }
                 }
         ));

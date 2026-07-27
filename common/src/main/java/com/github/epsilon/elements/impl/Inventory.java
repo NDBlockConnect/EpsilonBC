@@ -1,7 +1,7 @@
 package com.github.epsilon.elements.impl;
 
 import com.github.epsilon.elements.HudModule;
-import com.github.epsilon.graphics.shaders.BlurShader;
+import com.github.epsilon.managers.Managers;
 import com.github.epsilon.settings.impl.BoolSetting;
 import com.github.epsilon.settings.impl.ColorSetting;
 import com.github.epsilon.settings.impl.DoubleSetting;
@@ -54,7 +54,7 @@ public class Inventory extends HudModule {
         float totalHeight = padding * 2f + 3 * slotSize + (3 - 1) * gap;
 
         if (backgroundBlur.getValue()) {
-            BlurShader.INSTANCE.render(this.x, this.y, totalWidth, totalHeight, radius, blurStrength.getValue());
+            Managers.GRAPHICS.getShaderEffectManager().applyBlur(this.x, this.y, totalWidth, totalHeight, radius, blurStrength.getValue());
         }
 
         if (drawShadow.getValue()) {

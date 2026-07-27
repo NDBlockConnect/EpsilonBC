@@ -2,7 +2,7 @@ package com.github.epsilon.elements.impl;
 
 import com.github.epsilon.elements.HudModule;
 import com.github.epsilon.graphics.renderers.TextRenderer;
-import com.github.epsilon.graphics.shaders.BlurShader;
+import com.github.epsilon.managers.Managers;
 import com.github.epsilon.graphics.text.StaticFontLoader;
 import com.github.epsilon.gui.lib.UiTree;
 import com.github.epsilon.holders.ModuleHolder;
@@ -346,7 +346,7 @@ public class ModuleList extends HudModule {
     private void drawOpenBox(UiTree.Scope scope, float x, float y, float width, float height, float radius, float alpha) {
         Color background = withAlpha(backgroundColor.getValue(), alpha);
         if (openBackgroundBlur.getValue()) {
-            BlurShader.INSTANCE.render(x, y, width, height, radius, openBlurStrength.getValue());
+            Managers.GRAPHICS.getShaderEffectManager().applyBlur(x, y, width, height, radius, openBlurStrength.getValue());
         }
         if (drawOpenShadow.getValue()) {
             scope.shadow(x, y, width, height, radius, openShadowBlur.getValue().floatValue(), withAlpha(openShadowColor.getValue(), alpha));

@@ -3,7 +3,7 @@ package com.github.epsilon.modules.impl.render;
 import com.github.epsilon.events.bus.EventHandler;
 import com.github.epsilon.events.impl.PlayerTickEvent;
 import com.github.epsilon.events.impl.Render3DEvent;
-import com.github.epsilon.graphics.schedulers.render3d.Render3DScheduler;
+import com.github.epsilon.managers.Managers;
 import com.github.epsilon.modules.Category;
 import com.github.epsilon.modules.Module;
 import com.github.epsilon.settings.impl.BoolSetting;
@@ -100,9 +100,9 @@ public class BlockESP extends Module {
         Color line = lineColor.getValue();
         double blurQuality = blurStrength.getValue();
         for (AABB aabb : snapshot) {
-            if (drawBlur) Render3DScheduler.INSTANCE.addBlurredBox(aabb, blurQuality);
-            Render3DScheduler.INSTANCE.addFilledBox(aabb, side);
-            Render3DScheduler.INSTANCE.addOutlineBox(aabb, line);
+            if (drawBlur) Managers.GRAPHICS.getRender3DScheduler().addBlurredBox(aabb, blurQuality);
+            Managers.GRAPHICS.getRender3DScheduler().addFilledBox(aabb, side);
+            Managers.GRAPHICS.getRender3DScheduler().addOutlineBox(aabb, line);
         }
     }
 

@@ -3,7 +3,7 @@ package com.github.epsilon.modules.impl.render;
 import com.github.epsilon.events.bus.EventHandler;
 import com.github.epsilon.events.impl.PacketEvent;
 import com.github.epsilon.events.impl.Render3DEvent;
-import com.github.epsilon.graphics.schedulers.render3d.Render3DScheduler;
+import com.github.epsilon.managers.Managers;
 import com.github.epsilon.modules.Category;
 import com.github.epsilon.modules.Module;
 import com.github.epsilon.settings.impl.BoolSetting;
@@ -104,8 +104,8 @@ public class ChunkViewer extends Module {
             double z0 = cz << 4;
 
             AABB box = new AABB(x0, y0, z0, x0 + 16.0, y1, z0 + 16.0);
-            int rgb = new Color(base.getRed(), base.getGreen(), base.getBlue(), alpha).getRGB();
-            Render3DScheduler.INSTANCE.addOutlineBox(box, rgb, thick);
+            Color colorWithAlpha = new Color(base.getRed(), base.getGreen(), base.getBlue(), alpha);
+            Managers.GRAPHICS.getRender3DScheduler().addOutlineBox(box, colorWithAlpha, thick);
         }
     }
 

@@ -2,7 +2,7 @@ package com.github.epsilon.modules.impl.render;
 
 import com.github.epsilon.events.bus.EventHandler;
 import com.github.epsilon.events.impl.Render3DEvent;
-import com.github.epsilon.graphics.schedulers.render3d.Render3DScheduler;
+import com.github.epsilon.managers.Managers;
 import com.github.epsilon.modules.Category;
 import com.github.epsilon.modules.Module;
 import com.github.epsilon.settings.impl.BoolSetting;
@@ -37,7 +37,7 @@ public class Hitboxes extends Module {
         for (Entity entity : mc.level.entitiesForRendering()) {
             if (entity == mc.player) continue;
             AABB box = getExpandedAABB(entity.getBoundingBox());
-            Render3DScheduler.INSTANCE.addOutlineBox(box, new Color(255, 100, 100, 200));
+            Managers.GRAPHICS.getRender3DScheduler().addOutlineBox(box, new Color(255, 100, 100, 200));
         }
     }
 

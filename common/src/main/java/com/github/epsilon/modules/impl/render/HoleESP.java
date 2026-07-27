@@ -3,7 +3,7 @@ package com.github.epsilon.modules.impl.render;
 import com.github.epsilon.events.bus.EventHandler;
 import com.github.epsilon.events.impl.PlayerTickEvent;
 import com.github.epsilon.events.impl.Render3DEvent;
-import com.github.epsilon.graphics.schedulers.render3d.Render3DScheduler;
+import com.github.epsilon.managers.Managers;
 import com.github.epsilon.modules.Category;
 import com.github.epsilon.modules.Module;
 import com.github.epsilon.settings.SettingGroup;
@@ -351,10 +351,13 @@ public class HoleESP extends Module {
         if (fill.getValue()) {
             int bottomColor = withAlpha(fillColor.getValue(), alpha);
             int topColor = fade.getValue() ? withAlpha(fadeColor.getValue(), alpha) : bottomColor;
-            Render3DScheduler.INSTANCE.addFilledFadeBox(bounds, bottomColor, topColor);
+            Managers.GRAPHICS.getRender3DScheduler().addFilledFadeBox(bounds, bottomColor, topColor);
         }
         if (box.getValue()) {
-            Render3DScheduler.INSTANCE.addOutlineBox(bounds, withAlpha(boxColor.getValue(), alpha));
+            Color boxColorValue = boxColor.getValue();
+            Color colorWithAlpha = new Color(boxColorValue.getRed(), boxColorValue.getGreen(),
+                    boxColorValue.getBlue(), (int)(boxColorValue.getAlpha() * alpha));
+            Managers.GRAPHICS.getRender3DScheduler().addOutlineBox(bounds, colorWithAlpha);
         }
     }
 

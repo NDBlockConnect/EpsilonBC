@@ -2,7 +2,7 @@ package com.github.epsilon.elements.impl;
 
 import com.github.epsilon.elements.HudModule;
 import com.github.epsilon.graphics.renderers.TextRenderer;
-import com.github.epsilon.graphics.shaders.BlurShader;
+import com.github.epsilon.managers.Managers;
 import com.github.epsilon.settings.impl.BoolSetting;
 import com.github.epsilon.settings.impl.ColorSetting;
 import com.github.epsilon.settings.impl.DoubleSetting;
@@ -110,7 +110,7 @@ public class Potions extends HudModule {
             float rowX = computeRowX(rowWidth, hAnchor);
 
             if (backgroundBlur.getValue()) {
-                BlurShader.INSTANCE.render(rowX, currentY, rowWidth, rowHeight, radius, blurStrength.getValue());
+                Managers.GRAPHICS.getShaderEffectManager().applyBlur(rowX, currentY, rowWidth, rowHeight, radius, blurStrength.getValue());
             }
 
             if (drawShadow.getValue()) {

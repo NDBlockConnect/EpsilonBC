@@ -3,7 +3,7 @@ package com.github.epsilon.elements.impl;
 import com.github.epsilon.elements.HudModule;
 import com.github.epsilon.graphics.LuminTexture;
 import com.github.epsilon.graphics.renderers.TextRenderer;
-import com.github.epsilon.graphics.shaders.BlurShader;
+import com.github.epsilon.managers.Managers;
 import com.github.epsilon.gui.hudeditor.HudEditorScreen;
 import com.github.epsilon.gui.lib.UiTree;
 import com.github.epsilon.managers.Managers;
@@ -174,7 +174,7 @@ public class TargetHUD extends HudModule {
         float finalHeadRadius = scaledHeadRadius * headDamageScale;
         Color headTintColor = withAlpha(tintColor(Color.WHITE, damageProgress), animationScale);
 
-        BlurShader.INSTANCE.render(scaledPanelX, scaledPanelY, scaledPanelWidth, scaledPanelHeight, scaledCornerRadius, blurStrength.getValue().floatValue());
+        Managers.GRAPHICS.getShaderEffectManager().applyBlur(scaledPanelX, scaledPanelY, scaledPanelWidth, scaledPanelHeight, scaledCornerRadius, blurStrength.getValue().floatValue());
 
         if (drawShadow.getValue()) {
             scope.shadow(scaledPanelX, scaledPanelY, scaledPanelWidth, scaledPanelHeight, scaledCornerRadius, shadowBlur.getValue().floatValue() * animationScale, withAlpha(shadowColor.getValue(), animationScale));

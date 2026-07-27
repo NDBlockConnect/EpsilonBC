@@ -2,7 +2,7 @@ package com.github.epsilon.modules.impl.render;
 
 import com.github.epsilon.events.bus.EventHandler;
 import com.github.epsilon.events.impl.Render3DEvent;
-import com.github.epsilon.graphics.schedulers.render3d.Render3DScheduler;
+import com.github.epsilon.managers.Managers;
 import com.github.epsilon.modules.Category;
 import com.github.epsilon.modules.Module;
 import com.github.epsilon.settings.impl.BoolSetting;
@@ -122,7 +122,7 @@ public class Trajectories extends Module {
                 }
             }
 
-            Render3DScheduler.INSTANCE.addLine(pos, segEnd, lineColor, lineWidth);
+            Managers.GRAPHICS.getRender3DScheduler().addLine(pos, segEnd, lineColor, lineWidth);
             landing = segEnd;
 
             if (stop) break;
@@ -138,7 +138,7 @@ public class Trajectories extends Module {
             AABB box = new AABB(
                     landing.x - s, landing.y - s, landing.z - s,
                     landing.x + s, landing.y + s, landing.z + s);
-            Render3DScheduler.INSTANCE.addOutlineBox(box, boxColor.getValue().getRGB(), lineWidth);
+            Managers.GRAPHICS.getRender3DScheduler().addOutlineBox(box, boxColor.getValue(), lineWidth);
         }
     }
 
