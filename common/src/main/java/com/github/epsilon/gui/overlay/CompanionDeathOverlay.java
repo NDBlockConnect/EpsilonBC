@@ -41,6 +41,7 @@ public class CompanionDeathOverlay {
 
     /** 死亡动画开始时间戳，-1 表示未激活 */
     private long deathStartMs = -1L;
+    private long holdDurationMs = HOLD_DURATION_MS;
 
     private LuminRenderSystem.LuminRenderTarget renderTarget;
     private final UiScene scene = new UiScene(EpsilonUiTheme.INSTANCE);
@@ -72,6 +73,9 @@ public class CompanionDeathOverlay {
                     ClientSetting.INSTANCE.reisaVolume.getValue().floatValue()
             );
             WideHinataEasterEgg.INSTANCE.tryTrigger();
+            holdDurationMs = WideHinataEasterEgg.INSTANCE.isActive()
+                    ? Math.max(HOLD_DURATION_MS, WideHinataEasterEgg.INSTANCE.getDurationMs())
+                    : HOLD_DURATION_MS;
         });
     }
 
@@ -162,10 +166,7 @@ public class CompanionDeathOverlay {
      * 设置真正生效；否则用默认的 {@link #HOLD_DURATION_MS}。
      */
     private long effectiveHoldMs() {
-        if (WideHinataEasterEgg.INSTANCE.isActive()) {
-            return Math.max(HOLD_DURATION_MS, WideHinataEasterEgg.INSTANCE.getDurationMs());
-        }
-        return HOLD_DURATION_MS;
+        return holdDurationMs;
     }
 
     /** 淡出开始时刻（相对 deathStartMs 的毫秒偏移）。 */

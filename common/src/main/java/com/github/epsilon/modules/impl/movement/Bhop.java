@@ -35,7 +35,9 @@ public class Bhop extends Module {
         if (nullCheck()) return;
         if (mc.player.getAbilities().flying || mc.player.isFallFlying()) return;
         if (!inWater.getValue() && (mc.player.isInWater() || mc.player.isInLava())) return;
-        if (requireMoving.getValue() && !mc.player.isMoving()) return;
+        if (requireMoving.getValue()
+                && event.getForward() == 0.0f
+                && event.getStrafe() == 0.0f) return;
         if (!mc.player.onGround()) return;
 
         if (cooldown > 0) {

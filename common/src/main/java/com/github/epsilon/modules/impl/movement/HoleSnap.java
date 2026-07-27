@@ -121,16 +121,12 @@ public class HoleSnap extends Module {
 
         if (mc.player.getX() == hole.middle.x && mc.player.getZ() == hole.middle.z) {
             if (mc.player.getY() == hole.middle.y) {
-                event.setX(0.0);
-                event.setZ(0.0);
-                event.cancel();
+                event.setHorizontal(0.0, 0.0, EventPriority.HIGHEST);
                 toggle();
             } else if (hasBlockCollision(mc.player.getBoundingBox().move(0.0, -0.05, 0.0))) {
                 toggle();
             } else {
-                event.setX(0.0);
-                event.setZ(0.0);
-                event.cancel();
+                event.setHorizontal(0.0, 0.0, EventPriority.HIGHEST);
             }
             return;
         }
@@ -158,13 +154,15 @@ public class HoleSnap extends Module {
             jumpTicks--;
         } else if (jump.getValue() && hasBlockCollision(mc.player.getBoundingBox().move(0.0, -0.05, 0.0))) {
             jumpTicks = jumpCooldown.getValue();
-            event.setY(0.42);
+            event.setVertical(0.42, EventPriority.HIGHEST);
         }
 
         boostLeft--;
-        event.setX(Math.abs(motionX) < Math.abs(distanceX) ? motionX : distanceX);
-        event.setZ(Math.abs(motionZ) < Math.abs(distanceZ) ? motionZ : distanceZ);
-        event.cancel();
+        event.setHorizontal(
+                Math.abs(motionX) < Math.abs(distanceX) ? motionX : distanceX,
+                Math.abs(motionZ) < Math.abs(distanceZ) ? motionZ : distanceZ,
+                EventPriority.HIGHEST
+        );
     }
 
     @EventHandler

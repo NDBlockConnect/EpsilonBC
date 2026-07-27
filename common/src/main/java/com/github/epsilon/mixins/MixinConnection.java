@@ -53,17 +53,22 @@ public class MixinConnection {
         if (PacketUtils.bypassedPackets.contains(packet)) {
             PacketUtils.bypassedPackets.remove(packet);
             Packet<?> filteredPacket = ClientIdentityHider.filterServerboundPacket(packet);
-            if (filteredPacket != null) {
-                original.call(instance, filteredPacket, listener, flush);
-            }
+            sendFilteredPacket(instance, filteredPacket, listener, flush, original);
         } else {
             PacketEvent.Send event = EventBus.INSTANCE.post(new PacketEvent.Send(packet));
             if (!event.isCancelled()) {
                 Packet<?> filteredPacket = ClientIdentityHider.filterServerboundPacket(event.getPacket());
-                if (filteredPacket != null) {
-                    original.call(instance, filteredPacket, listener, flush);
-                }
+                sendFilteredPacket(instance, filteredPacket, listener, flush, original);
             }
+        }
+    }
+
+    private void sendFilteredPacket(Connection instance, Packet<?> packet, @Nullable ChannelFutureListener listener,
+                                    boolean flush, Operation<Void> original) {
+        if (packet == null) return;
+        original.call(instance, packet, listener, flush);
+        if (Managers.ROTATION != null) {
+            Managers.ROTATION.recordSentPacket(packet);
         }
     }
 

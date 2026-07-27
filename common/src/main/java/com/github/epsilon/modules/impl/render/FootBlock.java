@@ -6,6 +6,7 @@ import com.github.epsilon.graphics.schedulers.render3d.Render3DScheduler;
 import com.github.epsilon.managers.Managers;
 import com.github.epsilon.modules.Category;
 import com.github.epsilon.modules.Module;
+import com.github.epsilon.settings.impl.DoubleSetting;
 import com.github.epsilon.settings.impl.BoolSetting;
 import com.github.epsilon.settings.impl.ColorSetting;
 import net.minecraft.core.BlockPos;
@@ -38,6 +39,7 @@ public class FootBlock extends Module {
     private final BoolSetting monsters  = boolSetting("Monsters",  true);
     private final BoolSetting ambients  = boolSetting("Ambients",  false);
     private final BoolSetting others    = boolSetting("Others",    false);
+    private final DoubleSetting range   = doubleSetting("Range", 64.0, 8.0, 256.0, 8.0);
 
     // --- Render mode ---
     private final BoolSetting filled  = boolSetting("Filled",  true);
@@ -58,8 +60,10 @@ public class FootBlock extends Module {
     private void onRender3D(Render3DEvent event) {
         if (nullCheck()) return;
 
+        double rangeSq = range.getValue() * range.getValue();
         for (Entity entity : mc.level.entitiesForRendering()) {
             if (!(entity instanceof LivingEntity livingEntity)) continue;
+            if (mc.player.distanceToSqr(entity) > rangeSq) continue;
             if (!shouldRender(livingEntity)) continue;
 
             BlockPos below = entity.blockPosition().below();

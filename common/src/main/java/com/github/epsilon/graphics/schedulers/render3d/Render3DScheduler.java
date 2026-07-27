@@ -24,7 +24,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.github.epsilon.Constants.mc;
 
 public final class Render3DScheduler {
 
@@ -135,15 +134,15 @@ public final class Render3DScheduler {
         lines.add(new LineCommand(from, to, color, thickness));
     }
 
-    public void flush(PoseStack stack) {
+    public void flush(Render3DEvent event) {
         if (isEmpty()) {
             return;
         }
 
         try {
-            flushBlur();
-            flushFilled();
-            flushLines(stack);
+            flushBlur(event.getCameraState().viewRotationMatrix, event.getCameraState().pos);
+            flushFilled(event.getCameraState().viewRotationMatrix, event.getCameraState().pos);
+            flushLines(event.getPoseStack(), event.getCameraState().pos);
         } finally {
             clear();
         }
@@ -151,10 +150,10 @@ public final class Render3DScheduler {
 
     @EventHandler(priority = -999)
     private void onRender3D(Render3DEvent event) {
-        flush(event.getPoseStack());
+        flush(event);
     }
 
-    private void flushBlur() {
+    private void flushBlur(Matrix4f matrix, Vec3 camPos) {
         if (blurredBoxes.isEmpty()) {
             return;
         }
@@ -165,18 +164,16 @@ public final class Render3DScheduler {
         }
 
         for (Map.Entry<Double, List<AABB>> entry : groupedBoxes.entrySet()) {
-            BlurShader.INSTANCE.render3DBoxes(entry.getValue(), entry.getKey());
+            BlurShader.INSTANCE.render3DBoxes(entry.getValue(), entry.getKey(), matrix, camPos);
         }
     }
 
-    private void flushFilled() {
+    private void flushFilled(Matrix4f matrix, Vec3 camPos) {
         if (filledBoxes.isEmpty() && filledSides.isEmpty()) {
             return;
         }
 
         LuminImmediateRenderer.PosColorQuads builder = LuminImmediateRenderer.beginPosColorQuads(FILLED_BOX_PIPELINE);
-        Matrix4f matrix = mc.gameRenderer.gameRenderState().levelRenderState.cameraRenderState.viewRotationMatrix;
-        Vec3 camPos = mc.getEntityRenderDispatcher().camera.position();
 
         for (FilledBoxCommand command : filledBoxes) {
             emitFilledBox(builder, matrix, camPos, command);
@@ -189,13 +186,12 @@ public final class Render3DScheduler {
         builder.end();
     }
 
-    private void flushLines(PoseStack stack) {
+    private void flushLines(PoseStack stack, Vec3 camPos) {
         if (outlineBoxes.isEmpty() && sideOutlines.isEmpty() && lines.isEmpty()) {
             return;
         }
 
         LuminImmediateRenderer.Lines builder = LuminImmediateRenderer.beginLines(LINES_PIPELINE);
-        Vec3 camPos = mc.getEntityRenderDispatcher().camera.position();
         PoseStack.Pose pose = stack.last();
         Matrix4f matrix = pose.pose();
 

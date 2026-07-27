@@ -77,6 +77,7 @@ public class ShaderHolder {
     private RenderTarget chestTarget;
     private boolean renderingHands;
     private boolean capturedHands;
+    private boolean capturedEntities;
     private boolean renderingChests;
     private boolean capturedChests;
     private boolean preparedChests;
@@ -86,7 +87,25 @@ public class ShaderHolder {
     private ShaderHolder() {
     }
 
-    public void processEntityOutlineTarget(RenderTarget target, Shader shader) {
+    public void markEntityOutlineCaptured() {
+        capturedEntities = true;
+    }
+
+    public void processCapturedEntityOutlineTarget(RenderTarget target, Shader shader) {
+        boolean shouldProcess = capturedEntities;
+        capturedEntities = false;
+        if (!shouldProcess) {
+            return;
+        }
+
+        processEntityOutlineTarget(target, shader);
+    }
+
+    public void resetEntityOutlineCapture() {
+        capturedEntities = false;
+    }
+
+    private void processEntityOutlineTarget(RenderTarget target, Shader shader) {
         if (target == null || target.width <= 0 || target.height <= 0 || target.getColorTextureView() == null) {
             return;
         }

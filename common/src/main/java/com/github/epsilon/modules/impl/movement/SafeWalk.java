@@ -91,9 +91,7 @@ public class SafeWalk extends Module {
             }
         }
 
-        event.setX(movementX);
-        event.setZ(movementZ);
-        event.cancel();
+        event.finalizeHorizontal(movementX, movementZ);
     }
 
     private boolean canSafeWalk(double movementX, double movementZ) {

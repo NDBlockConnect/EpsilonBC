@@ -180,7 +180,7 @@ public class BlurShader {
         render(x, y, width, height, radius, radius, radius, radius, blurStrength);
     }
 
-    public void render3DBoxes(List<AABB> boxes, double blurStrength) {
+    public void render3DBoxes(List<AABB> boxes, double blurStrength, Matrix4f viewRotationMatrix, Vec3 cameraPos) {
         if (boxes.isEmpty()) {
             return;
         }
@@ -227,7 +227,7 @@ public class BlurShader {
 
         BufferBuilder buffer = LuminTessellator.getInstance().begin(PrimitiveTopology.QUADS, DefaultVertexFormat.POSITION_COLOR);
         for (AABB box : boxes) {
-            addBoxVertices(buffer, box);
+            addBoxVertices(buffer, box, viewRotationMatrix, cameraPos);
         }
         MeshData mesh = buffer.buildOrThrow();
 
@@ -261,17 +261,13 @@ public class BlurShader {
         mesh.close();
     }
 
-    private void addBoxVertices(BufferBuilder buffer, AABB box) {
-        Vec3 camPos = mc.getEntityRenderDispatcher().camera.position();
-
+    private void addBoxVertices(BufferBuilder buffer, AABB box, Matrix4f matrix, Vec3 camPos) {
         float minX = (float) (box.minX - camPos.x);
         float minY = (float) (box.minY - camPos.y);
         float minZ = (float) (box.minZ - camPos.z);
         float maxX = (float) (box.maxX - camPos.x);
         float maxY = (float) (box.maxY - camPos.y);
         float maxZ = (float) (box.maxZ - camPos.z);
-
-        Matrix4f matrix = mc.gameRenderer.gameRenderState().levelRenderState.cameraRenderState.viewRotationMatrix;
 
         vertex(buffer, matrix, minX, minY, minZ);
         vertex(buffer, matrix, minX, minY, maxZ);

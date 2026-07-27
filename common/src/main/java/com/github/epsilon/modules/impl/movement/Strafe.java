@@ -1,6 +1,7 @@
 package com.github.epsilon.modules.impl.movement;
 
 import com.github.epsilon.events.bus.EventHandler;
+import com.github.epsilon.events.bus.EventPriority;
 import com.github.epsilon.events.impl.KeyboardInputEvent;
 import com.github.epsilon.events.impl.MoveEvent;
 import com.github.epsilon.modules.Category;
@@ -44,9 +45,7 @@ public class Strafe extends Module {
         }
 
         double[] strafe = MoveUtils.forward(speed);
-        event.setX(strafe[0]);
-        event.setZ(strafe[1]);
-        event.cancel();
+        event.setHorizontal(strafe[0], strafe[1], EventPriority.MEDIUM);
     }
 
     @EventHandler

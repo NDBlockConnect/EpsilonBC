@@ -19,11 +19,12 @@ public class WorldToScreen {
     }
 
     public static Vector3f getWorldPositionToScreen(Vec3 pos) {
-        Vector3f cameraRelativePos = pos.subtract(mc.gameRenderer.mainCamera().position()).toVector3f();
+        CameraRenderState cameraState = getCameraState();
+        Vector3f cameraRelativePos = pos.subtract(cameraState.pos).toVector3f();
         Vector4f projected = new Vector4f();
         int[] viewport = getViewport();
 
-        getViewProjectionMatrix().project(cameraRelativePos, viewport, projected);
+        getViewProjectionMatrix(cameraState).project(cameraRelativePos, viewport, projected);
         projected.y = viewport[3] - projected.y;
 
         return new Vector3f(projected.x, projected.y, projected.z);
@@ -41,7 +42,8 @@ public class WorldToScreen {
     }
 
     public static Vector4d projectAbsoluteAABBOn2D(AABB absoluteBoundingBox) {
-        Vector4d projection = projectEntity(getViewport(), getViewProjectionMatrix(), absoluteBoundingBox);
+        CameraRenderState cameraState = getCameraState();
+        Vector4d projection = projectEntity(getViewport(), getViewProjectionMatrix(cameraState), absoluteBoundingBox, cameraState.pos);
         if (projection == null) {
             return null;
         }
@@ -50,7 +52,7 @@ public class WorldToScreen {
     }
 
     public static Vector4d projectEntity(int[] viewport, Matrix4f matrix, AABB absoluteBoundingBox) {
-        return projectEntity(viewport, matrix, absoluteBoundingBox, mc.gameRenderer.mainCamera().position());
+        return projectEntity(viewport, matrix, absoluteBoundingBox, getCameraState().pos);
     }
 
     public static Vector4d projectEntity(int[] viewport, Matrix4f matrix, AABB absoluteBoundingBox, Vec3 cameraPos) {
@@ -92,8 +94,11 @@ public class WorldToScreen {
         );
     }
 
-    private static Matrix4f getViewProjectionMatrix() {
-        CameraRenderState cameraState = mc.gameRenderer.gameRenderState().levelRenderState.cameraRenderState;
+    private static CameraRenderState getCameraState() {
+        return mc.gameRenderer.gameRenderState().levelRenderState.cameraRenderState;
+    }
+
+    private static Matrix4f getViewProjectionMatrix(CameraRenderState cameraState) {
         return new Matrix4f(cameraState.projectionMatrix).mul(cameraState.viewRotationMatrix);
     }
 

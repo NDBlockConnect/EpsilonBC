@@ -32,9 +32,11 @@ public class MixinGameRenderer {
         Shaders shaders = Shaders.INSTANCE;
         if (shaders.isEnabled()) {
             RenderTarget target = minecraft.levelRenderer.entityOutlineTarget;
-            ShaderHolder.INSTANCE.processEntityOutlineTarget(target, shaders.mode.getValue());
+            ShaderHolder.INSTANCE.processCapturedEntityOutlineTarget(target, shaders.mode.getValue());
             ShaderHolder.INSTANCE.processChestOutlineTarget(minecraft.gameRenderer.mainRenderTarget());
             ShaderHolder.INSTANCE.processHandOutlineTarget(minecraft.gameRenderer.mainRenderTarget());
+        } else {
+            ShaderHolder.INSTANCE.resetEntityOutlineCapture();
         }
     }
 

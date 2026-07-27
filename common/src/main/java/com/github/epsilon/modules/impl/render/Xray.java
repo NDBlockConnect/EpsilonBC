@@ -1,6 +1,7 @@
 package com.github.epsilon.modules.impl.render;
 
 import com.github.epsilon.events.bus.EventHandler;
+import com.github.epsilon.events.bus.EventPriority;
 import com.github.epsilon.events.impl.MoveEvent;
 import com.github.epsilon.events.impl.PacketEvent;
 import com.github.epsilon.events.impl.PlayerTickEvent;
@@ -143,9 +144,7 @@ public class Xray extends Module {
     private void onMove(MoveEvent event) {
         if (brutForce.getValue()) {
             if (all != done) {
-                event.setZ(0);
-                event.setX(0);
-                event.cancel();
+                event.setHorizontal(0.0, 0.0, EventPriority.HIGHEST + 1);
                 if (mc.player.tickCount % 8 == 0 && mc.player.isMoving()) {
                     log("Don't move while deobf!");
                 }

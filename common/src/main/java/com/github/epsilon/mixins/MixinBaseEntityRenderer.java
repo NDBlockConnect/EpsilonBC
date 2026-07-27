@@ -1,5 +1,6 @@
 package com.github.epsilon.mixins;
 
+import com.github.epsilon.holders.ShaderHolder;
 import com.github.epsilon.modules.impl.render.EnemyView;
 import com.github.epsilon.modules.impl.render.Shaders;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -18,6 +19,7 @@ public class MixinBaseEntityRenderer<T extends Entity, S extends EntityRenderSta
         Shaders shaders = Shaders.INSTANCE;
         if (shaders.isEnabled() && shaders.shouldRender(entity)) {
             state.outlineColor = shaders.outlineColor.getValue().getRGB();
+            ShaderHolder.INSTANCE.markEntityOutlineCaptured();
         } else if (EnemyView.INSTANCE.shouldGlow(entity)) {
             state.outlineColor = EnemyView.INSTANCE.glowColor(entity);
         }

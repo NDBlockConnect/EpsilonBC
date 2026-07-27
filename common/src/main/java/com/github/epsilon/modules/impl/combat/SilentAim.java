@@ -57,6 +57,7 @@ public class SilentAim extends Module {
 
         HitResult hitResult = mc.hitResult;
         if (hitResult != null && hitResult.getType() == HitResult.Type.ENTITY) {
+            Managers.ROTATION.sendRotationsNow();
             mc.gameMode.attack(mc.player, target);
             mc.player.swing(InteractionHand.MAIN_HAND);
             redirecting = false;

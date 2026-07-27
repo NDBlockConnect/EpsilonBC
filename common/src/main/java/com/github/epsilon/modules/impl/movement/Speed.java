@@ -54,8 +54,6 @@ public class Speed extends Module {
     private final BoolSetting airStop = boolSetting("AirStop", true, () -> !mode.is(Mode.Grim));
     private final DoubleSetting lagTime = doubleSetting("LagTime", 500, 0, 1000, 1, () -> !mode.is(Mode.Grim));
 
-    // 默认关掉：这个开关会让 Speed(Strafe) 在 stage==2 强制 setMotionY 起跳，等价于隐性 Bhop。
-    // 开启会和独立 Bhop 模块叠加，导致玩家关掉 Bhop 后以为 bhop 停了、实际是这里在跳。
     private final BoolSetting jump = boolSetting("Jump", false, () -> mode.is(Mode.Strafe));
     private final DoubleSetting strafeSpeed = doubleSetting("Speed", 0.2873, 0, 1.0, 0.0001, () -> mode.is(Mode.Strafe));
     private final BoolSetting explosions = boolSetting("ExplosionsBoost", false, () -> mode.is(Mode.Strafe));
@@ -203,8 +201,7 @@ public class Speed extends Module {
             } else if (this.stage == 2 && mc.player.onGround() && (mc.options.keyJump.isDown() || this.jump.getValue())) {
                 double yMotion = 0.3999 + getJumpSpeed();
                 setMotionY(yMotion);
-                event.setY(yMotion);
-                event.cancel();
+                event.setVertical(yMotion, EventPriority.MEDIUM);
                 this.speed = this.speed * (this.boost ? 1.6835 : 1.395);
             } else if (this.stage == 3) {
                 this.speed = this.distance - 0.66
@@ -229,12 +226,14 @@ public class Speed extends Module {
             double n2 = moveVector.x;
             double n3 = mc.player.getYRot();
             if (n == 0.0 && n2 == 0.0) {
-                event.setX(0.0);
-                event.setZ(0.0);
+                event.setHorizontal(0.0, 0.0, EventPriority.MEDIUM);
+            } else {
+                event.setHorizontal(
+                        (n * this.speed * -Math.sin(Math.toRadians(n3)) + n2 * this.speed * Math.cos(Math.toRadians(n3))) * 0.99,
+                        (n * this.speed * Math.cos(Math.toRadians(n3)) - n2 * this.speed * -Math.sin(Math.toRadians(n3))) * 0.99,
+                        EventPriority.MEDIUM
+                );
             }
-            event.setX((n * this.speed * -Math.sin(Math.toRadians(n3)) + n2 * this.speed * Math.cos(Math.toRadians(n3))) * 0.99);
-            event.setZ((n * this.speed * Math.cos(Math.toRadians(n3)) - n2 * this.speed * -Math.sin(Math.toRadians(n3))) * 0.99);
-            event.cancel();
 
             this.stage++;
             return;
@@ -262,14 +261,12 @@ public class Speed extends Module {
             if (strafe == 1) {
                 speed = 1.35f * base - 0.01f;
             } else if (strafe == 2) {
-                if (mc.player.input.keyPresses.jump() || !mc.player.onGround()) {
-                    return;
+                if (mc.player.input.keyPresses.jump() && mc.player.onGround()) {
+                    float jumpMotion = 0.3999999463558197f + jumpEffect;
+                    event.setVertical(jumpMotion, EventPriority.MEDIUM);
+                    setMotionY(jumpMotion);
+                    speed *= 2.149;
                 }
-                float jump = 0.3999999463558197f + jumpEffect;
-                event.setY(jump);
-                event.cancel();
-                setMotionY(jump);
-                speed *= 2.149;
             } else if (strafe == 3) {
                 double moveSpeed = 0.66 * (distance - base);
                 speed = distance - moveSpeed;
@@ -289,9 +286,7 @@ public class Speed extends Module {
                 strictTicks = 0;
             }
             final Vec2 motion = handleStrafeMotion((float) speed);
-            event.setX(motion.x);
-            event.setZ(motion.y);
-            event.cancel();
+            event.setHorizontal(motion.x, motion.y, EventPriority.MEDIUM);
             strafe++;
         }
     }

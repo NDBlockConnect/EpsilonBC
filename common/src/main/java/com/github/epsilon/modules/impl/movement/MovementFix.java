@@ -11,11 +11,10 @@ public class MovementFix extends Module {
 
     private MovementFix() {
         super("Movement Fix", Category.MOVEMENT);
-        setDefaultEnabled(true);
     }
 
-    private float getDirection(float forward, float strafe) {
-        float direction = mc.player.getYRot();
+    private float getDirection(float playerYaw, float forward, float strafe) {
+        float direction = playerYaw;
 
         boolean isMovingForward = forward > 0.0f;
         boolean isMovingBack = forward < 0.0f;
@@ -51,36 +50,43 @@ public class MovementFix extends Module {
         return direction;
     }
 
-    public void fixMovement(KeyboardInputEvent event, float yaw) {
+    public void fixMovement(KeyboardInputEvent event, float playerYaw, float serverYaw) {
         float forward = event.getForward();
         float strafe = event.getStrafe();
 
-        int angleUnit = 45;
-        float angleTolerance = 22.5f;
-        float directionFactor = Math.max(Math.abs(forward), Math.abs(strafe));
-        double angleDifference = Mth.wrapDegrees(getDirection(forward, strafe) - yaw);
-        double angleDistance = Math.abs(angleDifference);
+        if ((forward == 0.0f && strafe == 0.0f)
+                || !Float.isFinite(playerYaw)
+                || !Float.isFinite(serverYaw)) return;
 
-        forward = 0.0f;
-        strafe = 0.0f;
+        float magnitude = Math.max(Math.abs(forward), Math.abs(strafe));
+        float difference = Mth.wrapDegrees(getDirection(playerYaw, forward, strafe) - serverYaw);
+        int sector = Math.floorMod(Math.round(difference / 45.0f), 8);
 
-        if (angleDistance <= (double) ((float) angleUnit + angleTolerance)) {
-            forward++;
-        } else if (angleDistance >= (double) (180.0F - (float) angleUnit - angleTolerance)) {
-            forward--;
+        event.setForward(0.0f);
+        event.setStrafe(0.0f);
+
+        switch (sector) {
+            case 0 -> event.setForward(magnitude);
+            case 1 -> {
+                event.setForward(magnitude);
+                event.setStrafe(-magnitude);
+            }
+            case 2 -> event.setStrafe(-magnitude);
+            case 3 -> {
+                event.setForward(-magnitude);
+                event.setStrafe(-magnitude);
+            }
+            case 4 -> event.setForward(-magnitude);
+            case 5 -> {
+                event.setForward(-magnitude);
+                event.setStrafe(magnitude);
+            }
+            case 6 -> event.setStrafe(magnitude);
+            case 7 -> {
+                event.setForward(magnitude);
+                event.setStrafe(magnitude);
+            }
         }
-
-        if (angleDifference >= (double) ((float) angleUnit - angleTolerance) && angleDifference <= (double) (180.0F - (float) angleUnit + angleTolerance)) {
-            strafe--;
-        } else if (angleDifference <= (double) ((float) (-angleUnit) + angleTolerance) && angleDifference >= (double) (-180.0F + (float) angleUnit - angleTolerance)) {
-            strafe++;
-        }
-
-        forward *= directionFactor;
-        strafe *= directionFactor;
-
-        event.setForward(forward);
-        event.setStrafe(strafe);
     }
 
 }

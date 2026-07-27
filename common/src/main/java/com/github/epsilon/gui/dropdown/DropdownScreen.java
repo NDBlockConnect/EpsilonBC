@@ -48,6 +48,7 @@ public class DropdownScreen extends Screen {
     public static final DropdownScreen INSTANCE = new DropdownScreen();
 
     private final List<DropdownPanel> panels = new ArrayList<>();
+    private final List<DropdownPanel> layoutPanels = new ArrayList<>();
     private final TextRenderer textMetrics = TextRenderer.create();
     private final UiTextMetrics uiTextMetrics = new DropdownTextMetrics();
     private final UiScene scene = new UiScene(EpsilonUiTheme.INSTANCE);
@@ -496,6 +497,7 @@ public class DropdownScreen extends Screen {
 
     private void buildPanels() {
         panels.clear();
+        layoutPanels.clear();
         int index = 0;
         MainDropdownPanel mainPanel = new MainDropdownPanel(index++, this::handleMainPanelAction, this::anySubPanelVisible, this::isPanelVisible);
         mainPanel.setPosition(DropdownTheme.PANEL_MARGIN_X, DropdownTheme.PANEL_MARGIN_Y);
@@ -515,6 +517,7 @@ public class DropdownScreen extends Screen {
         panels.add(createSubPanel(new AddonDropdownPanel(index), x, y));
 
         DropdownLayoutState.load(panels);
+        layoutPanels.addAll(panels);
     }
 
     private DropdownPanel createSubPanel(DropdownPanel panel, float x, float y) {
@@ -601,7 +604,7 @@ public class DropdownScreen extends Screen {
      */
     private void reflowRightColumn() {
         float y = DropdownTheme.PANEL_MARGIN_Y;
-        for (DropdownPanel panel : panels) {
+        for (DropdownPanel panel : layoutPanels) {
             if ("main".equals(panel.getId())) continue;
             if (!panel.isVisible()) continue;
             panel.setPosition(panel.getX(), y);

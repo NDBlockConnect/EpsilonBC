@@ -1,17 +1,16 @@
 package com.github.epsilon.modules.impl.combat;
 
 import com.github.epsilon.events.bus.EventHandler;
-import com.github.epsilon.events.bus.EventPriority;
 import com.github.epsilon.events.impl.PlayerTickEvent;
 import com.github.epsilon.events.impl.Render3DEvent;
-import com.github.epsilon.events.impl.SendPositionEvent;
-import com.github.epsilon.events.impl.UseItemEvent;
 import com.github.epsilon.managers.Managers;
 import com.github.epsilon.modules.Category;
 import com.github.epsilon.modules.Module;
 import com.github.epsilon.settings.impl.BoolSetting;
 import com.github.epsilon.settings.impl.EnumSetting;
 import com.github.epsilon.settings.impl.IntSetting;
+import com.github.epsilon.utils.rotation.Priority;
+import com.github.epsilon.utils.rotation.Rot2f;
 import com.github.epsilon.utils.timer.TimerUtils;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.util.Mth;
@@ -85,22 +84,6 @@ public class AimBot extends Module {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
-    private void onSendPosition(SendPositionEvent event) {
-        if (mode.is(Mode.BowAim) && isUsingBow() && !Float.isNaN(rotationYaw) && !Float.isNaN(rotationPitch)) {
-            event.setYaw(rotationYaw);
-            event.setPitch(rotationPitch);
-        }
-    }
-
-    @EventHandler(priority = EventPriority.HIGH)
-    private void onUseItem(UseItemEvent event) {
-        if (mode.is(Mode.BowAim) && isUsingBow() && !Float.isNaN(rotationYaw) && !Float.isNaN(rotationPitch)) {
-            event.setYaw(rotationYaw);
-            event.setPitch(rotationPitch);
-        }
-    }
-
     @EventHandler
     private void onRender3D(Render3DEvent event) {
         if (mode.is(Mode.AimAssist)) {
@@ -118,10 +101,6 @@ public class AimBot extends Module {
             }
         }
 
-        if (rotation.is(Rotation.Client) && mode.is(Mode.BowAim) && isUsingBow()) {
-            mc.player.setYRot(Mth.lerp(tickDelta, mc.player.yRotO, rotationYaw));
-            mc.player.setXRot(Mth.lerp(tickDelta, mc.player.xRotO, rotationPitch));
-        }
     }
 
     private void updateBowAim() {
@@ -144,6 +123,10 @@ public class AimBot extends Module {
         iZ = distance / 2.0 * iZ * (mc.player.isSprinting() ? 1.3 : 1.1);
         rotationYaw = (float) Math.toDegrees(Math.atan2(predicted.z + iZ - mc.player.getZ(), predicted.x + iX - mc.player.getX())) - 90.0f;
         rotationPitch = pitch;
+
+        if (rotation.is(Rotation.Silent)) {
+            Managers.ROTATION.setRotations(new Rot2f(rotationYaw, rotationPitch), 180.0, Priority.High);
+        }
     }
 
     private void updateAimAssist() {

@@ -76,7 +76,7 @@ public final class WideHinataEasterEgg {
     }
 
     public boolean isActive() {
-        return wideStartMs >= 0L;
+        return wideStartMs >= 0L && Util.getMillis() - wideStartMs < durationMs;
     }
 
     /**

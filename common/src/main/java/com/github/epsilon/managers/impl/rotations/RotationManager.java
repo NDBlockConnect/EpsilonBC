@@ -6,8 +6,10 @@ import com.github.epsilon.events.impl.*;
 import com.github.epsilon.utils.rotation.Priority;
 import com.github.epsilon.utils.rotation.Rot2f;
 import com.github.epsilon.utils.rotation.RotationUtils;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundPlayerPositionPacket;
 import net.minecraft.network.protocol.game.ClientboundPlayerRotationPacket;
+import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
 import net.minecraft.util.Mth;
 
 import java.util.function.Function;
@@ -24,6 +26,7 @@ public abstract class RotationManager {
     private final Rot2f offset = new Rot2f(0, 0);
     public Rot2f rotations = new Rot2f(0, 0);
     public Rot2f lastRotations = new Rot2f(0, 0);
+    private Rot2f serverRotation;
     public Rot2f targetRotations;
     public Rot2f animationRotation = null;
     public Rot2f lastAnimationRotation = null;
@@ -129,13 +132,6 @@ public abstract class RotationManager {
         mc.pick(1.0f);
     }
 
-    protected void correctDisabledRotations() {
-        Rot2f rotations = new Rot2f(mc.player.getYRot(), mc.player.getXRot());
-        Rot2f fixedRotations = RotationUtils.resetRotation(RotationUtils.applySensitivityPatch(rotations, lastRotations));
-        mc.player.setYRot(fixedRotations.getYaw());
-        mc.player.setXRot(fixedRotations.getPitch());
-    }
-
     public float getYaw() {
         return getRotation().getYaw();
     }
@@ -150,6 +146,47 @@ public abstract class RotationManager {
 
     public Rot2f getLastRotation() {
         return lastRotations != null ? lastRotations : new Rot2f(mc.player.yRotO, mc.player.xRotO);
+    }
+
+    public Rot2f getServerRotation() {
+        return serverRotation != null
+                ? serverRotation
+                : new Rot2f(mc.player.getYRot(), mc.player.getXRot());
+    }
+
+    public void recordSentPacket(Packet<?> packet) {
+        if (!(packet instanceof ServerboundMovePlayerPacket movementPacket)) return;
+
+        Rot2f fallback = getServerRotation();
+        setServerRotation(
+                movementPacket.getYRot(fallback.getYaw()),
+                movementPacket.getXRot(fallback.getPitch())
+        );
+    }
+
+    public void sendRotationsNow() {
+        if (!active || rotations == null || mc.getConnection() == null) return;
+
+        float yaw = rotations.getYaw();
+        float pitch = rotations.getPitch();
+        if (!Float.isFinite(yaw) || !Float.isFinite(pitch)) return;
+
+        Rot2f sentRotation = getServerRotation();
+        if (Math.abs(Mth.wrapDegrees(yaw - sentRotation.getYaw())) < 1.0e-4f
+                && Math.abs(pitch - sentRotation.getPitch()) < 1.0e-4f) return;
+
+        mc.getConnection().send(new ServerboundMovePlayerPacket.Rot(
+                yaw,
+                pitch,
+                mc.player.onGround(),
+                mc.player.horizontalCollision
+        ));
+    }
+
+    protected void setServerRotation(float yaw, float pitch) {
+        if (Float.isFinite(yaw) && Float.isFinite(pitch)) {
+            serverRotation = new Rot2f(yaw, pitch);
+        }
     }
 
     public boolean isActive() {
@@ -171,6 +208,7 @@ public abstract class RotationManager {
     public void copyStateFrom(RotationManager manager) {
         this.rotations = manager.rotations;
         this.lastRotations = manager.lastRotations;
+        this.serverRotation = manager.serverRotation;
         this.targetRotations = manager.targetRotations;
         this.animationRotation = manager.animationRotation;
         this.lastAnimationRotation = manager.lastAnimationRotation;
@@ -186,6 +224,7 @@ public abstract class RotationManager {
         offset.set(0, 0);
         rotations = new Rot2f(0, 0);
         lastRotations = new Rot2f(0, 0);
+        serverRotation = null;
         targetRotations = null;
         animationRotation = null;
         lastAnimationRotation = null;
@@ -220,9 +259,13 @@ public abstract class RotationManager {
     protected void afterPlayerTick() {
     }
 
+    protected boolean shouldApplyAnimationRotation() {
+        return true;
+    }
+
     @EventHandler
     protected void onAnimation(RotationAnimationEvent event) {
-        if (active && animationRotation != null && lastAnimationRotation != null) {
+        if (shouldApplyAnimationRotation() && active && animationRotation != null && lastAnimationRotation != null) {
             event.setYaw(animationRotation.getYaw());
             event.setLastYaw(lastAnimationRotation.getYaw());
             event.setPitch(animationRotation.getPitch());
@@ -235,10 +278,11 @@ public abstract class RotationManager {
         if (active && rotations != null) {
             handleSendPosition(event);
 
-            if (Math.abs((rotations.getYaw() - mc.player.getYRot()) % 360) < 1 && Math.abs((rotations.getPitch() - mc.player.getXRot())) < 1) {
+            if (targetRotations != null
+                    && Math.abs(Mth.wrapDegrees(rotations.getYaw() - targetRotations.getYaw())) < 1.0f
+                    && Math.abs(rotations.getPitch() - targetRotations.getPitch()) < 1.0f) {
                 active = false;
                 priority = 0;
-                this.correctDisabledRotations();
             }
 
             lastRotations = rotations;

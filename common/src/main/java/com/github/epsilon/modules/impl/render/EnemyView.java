@@ -80,12 +80,9 @@ public class EnemyView extends Module {
         if (style.is(Style.Glow)) return;
 
         float partialTick = mc.getDeltaTracker().getGameTimeDeltaPartialTick(true);
-        double maxSq = maxRange.getValue() * (double) maxRange.getValue();
         float lineWidth = thickness.getValue().floatValue();
-
         for (Entity entity : mc.level.entitiesForRendering()) {
-            if (!(entity instanceof LivingEntity) || !isTarget(entity)) continue;
-            if (mc.player.distanceToSqr(entity.position()) > maxSq) continue;
+            if (!shouldRenderReplacement(entity)) continue;
 
             AABB box = interpolatedBox(entity, partialTick);
             Color color = colorFor(entity);
@@ -113,7 +110,21 @@ public class EnemyView extends Module {
 
     /** True when the enemy's vanilla model should be culled (Box/Solid styles with Hide Model). */
     public boolean shouldHideModel(Entity entity) {
-        return isEnabled() && hideModel.getValue() && !style.is(Style.Glow) && isTarget(entity);
+        return isEnabled()
+                && hideModel.getValue()
+                && !style.is(Style.Glow)
+                && hasVisibleReplacement()
+                && shouldRenderReplacement(entity);
+    }
+
+    private boolean hasVisibleReplacement() {
+        return outline.getValue() || style.is(Style.Solid) && fillAlpha.getValue() > 0;
+    }
+
+    private boolean shouldRenderReplacement(Entity entity) {
+        if (!(entity instanceof LivingEntity) || entity.isRemoved() || !isTarget(entity)) return false;
+        double maxSq = maxRange.getValue() * (double) maxRange.getValue();
+        return mc.player.distanceToSqr(entity) <= maxSq;
     }
 
     /** True when the enemy should be painted with a glow outline instead of a box. */

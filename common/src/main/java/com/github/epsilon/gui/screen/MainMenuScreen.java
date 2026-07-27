@@ -198,7 +198,9 @@ public class MainMenuScreen extends Screen {
         boolean fallbackFinished = reisaWelcomeSound == null && now - reisaGreetingStartMs >= REISA_FALLBACK_VISIBLE_MS;
         if (welcomeFinished || fallbackFinished) {
             reisaWelcomeSound = null;
-            reisaExitStartMs = now;
+            if (!WideHinataEasterEgg.INSTANCE.isActive()) {
+                reisaExitStartMs = now;
+            }
         }
     }
 

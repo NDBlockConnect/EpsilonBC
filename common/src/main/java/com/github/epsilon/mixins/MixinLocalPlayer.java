@@ -106,13 +106,10 @@ public class MixinLocalPlayer extends AbstractClientPlayer {
         return event.isSlowdown();
     }
 
-    @Inject(method = "move", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/AbstractClientPlayer;move(Lnet/minecraft/world/entity/MoverType;Lnet/minecraft/world/phys/Vec3;)V"), cancellable = true)
-    private void onMove(MoverType moverType, Vec3 delta, CallbackInfo ci) {
+    @WrapOperation(method = "move", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/AbstractClientPlayer;move(Lnet/minecraft/world/entity/MoverType;Lnet/minecraft/world/phys/Vec3;)V"))
+    private void onMove(AbstractClientPlayer player, MoverType moverType, Vec3 delta, Operation<Void> original) {
         MoveEvent event = EventBus.INSTANCE.post(new MoveEvent(delta.x, delta.y, delta.z));
-        if (event.isCancelled()) {
-            super.move(moverType, new Vec3(event.getX(), event.getY(), event.getZ()));
-            ci.cancel();
-        }
+        original.call(player, moverType, new Vec3(event.getX(), event.getY(), event.getZ()));
     }
 
 }

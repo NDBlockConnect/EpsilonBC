@@ -22,7 +22,6 @@ import com.github.epsilon.utils.rotation.RotationUtils;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
 import net.minecraft.network.protocol.game.ServerboundSwingPacket;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -243,9 +242,8 @@ public class Scaffold extends Module {
                 event.cancel();
 
                 rotateCount++;
-                Managers.ROTATION.rotations = rotation;
-                Managers.ROTATION.setActive(true);
-                mc.getConnection().send(new ServerboundMovePlayerPacket.Rot(rotation.getYaw(), rotation.getPitch(), mc.player.onGround(), mc.player.horizontalCollision));
+                Managers.ROTATION.setRotations(rotation, rotateSpeed.getValue());
+                Managers.ROTATION.sendRotationsNow();
 
                 swap();
 
@@ -381,7 +379,9 @@ public class Scaffold extends Module {
         Vec3 baseVec = eye;
         if (motionAim.getValue()) {
             Vec3 delta = mc.player.getDeltaMovement();
-            baseVec = eye.add(delta.x, 0.0, delta.z);
+            double horizontalSpeed = delta.horizontal().length();
+            double predictionScale = horizontalSpeed > 1.0 ? 1.0 / horizontalSpeed : 1.0;
+            baseVec = eye.add(delta.x * predictionScale, 0.0, delta.z * predictionScale);
         }
         BlockPos base = BlockPos.containing(baseVec.x, getYLevel(), baseVec.z);
         int baseX = base.getX();

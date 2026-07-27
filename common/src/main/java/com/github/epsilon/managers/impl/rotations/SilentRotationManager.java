@@ -1,7 +1,6 @@
 package com.github.epsilon.managers.impl.rotations;
 
 import com.github.epsilon.events.bus.EventHandler;
-import com.github.epsilon.events.bus.EventPriority;
 import com.github.epsilon.events.impl.*;
 import com.github.epsilon.modules.impl.ClientSetting;
 import com.github.epsilon.modules.impl.movement.MovementFix;
@@ -10,6 +9,11 @@ import com.github.epsilon.modules.impl.render.FreeCamera;
 import static com.github.epsilon.Constants.mc;
 
 public class SilentRotationManager extends RotationManager {
+
+    @Override
+    protected boolean shouldApplyAnimationRotation() {
+        return false;
+    }
 
     @Override
     protected void handleSendPosition(SendPositionEvent event) {
@@ -22,11 +26,11 @@ public class SilentRotationManager extends RotationManager {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler
     private void onMoveInput(KeyboardInputEvent event) {
         MovementFix moveFix = MovementFix.INSTANCE;
         if (moveFix.isEnabled() && active && rotations != null && !mc.player.isFallFlying()) {
-            moveFix.fixMovement(event, rotations.getYaw());
+            moveFix.fixMovement(event, mc.player.getYRot(), rotations.getYaw());
         }
     }
 
@@ -86,7 +90,7 @@ public class SilentRotationManager extends RotationManager {
 
     @EventHandler
     private void onAttack(AttackYawEvent event) {
-        if (rotations != null) {
+        if (active && rotations != null) {
             event.setYaw(rotations.getYaw());
         }
     }
