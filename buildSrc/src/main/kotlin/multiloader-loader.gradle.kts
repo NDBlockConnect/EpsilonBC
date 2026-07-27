@@ -14,6 +14,8 @@ val commonBuildConfig = commonProject.tasks.named("generateBuildConfigClasses")
 val commonBuildConfigJava = commonProject.layout.buildDirectory.dir("generated/sources/buildConfig/main")
 
 val epsilonCoreProject = project(":epsilon-core")
+val epsilonCoreClasses = epsilonCoreProject.tasks.named<JavaCompile>("compileJava")
+val epsilonCoreOutput = epsilonCoreProject.sourceSets.main.get().output
 
 dependencies {
     val loaderAttribute = Attribute.of("io.github.mcgradleconventions.loader", String::class.java)
@@ -53,4 +55,11 @@ tasks.named<Jar>("sourcesJar") {
     from(commonBuildConfigJava)
     dependsOn(commonResources)
     from(commonResources)
+    dependsOn(epsilonCoreClasses)
+    from(epsilonCoreOutput)
+}
+
+tasks.named<Jar>("jar") {
+    dependsOn(epsilonCoreClasses)
+    from(epsilonCoreOutput)
 }

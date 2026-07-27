@@ -15,9 +15,9 @@ dependencies {
     compileOnly(libs.sodium.fabric)
     compileOnly(libs.jsr305)
 
-    // epsilon-core 需要打包进 jar（Fabric Loom 的 include 配置）
+    // epsilon-core 作为 implementation 依赖，不使用 include
+    // 它的 class 文件会通过 multiloader-loader.gradle.kts 中的 commonJava 配置合并到最终 jar
     implementation(project(":epsilon-core"))
-    include(project(":epsilon-core"))
 }
 
 loom {
