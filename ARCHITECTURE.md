@@ -90,19 +90,21 @@ class OpenLuminAdapter implements IGraphicsAdapter {
 
 **目标**: 定义 IGraphicsAdapter 接口族，不破坏现有代码
 
-1. 创建 `common/src/main/java/com/github/epsilon/graphics/abstraction/`:
-   - `IGraphicsAdapter.java` (主适配器接口)
-   - `IRender2DScheduler.java`, `IRender3DScheduler.java`
-   - `IRoundRectRenderer.java`, `ITextureRenderer.java`
-   - `IWorldToScreen.java`, `IShaderEffect.java`
+1. ✅ 创建 `common/src/main/java/com/github/epsilon/graphics/abstraction/`:
+   - ✅ `IGraphicsAdapter.java` (主适配器接口)
+   - ✅ `IRender2DScheduler.java`, `IRender3DScheduler.java`
+   - ✅ `IRoundRectRenderer.java`, `ITextureRenderer.java`
+   - ✅ `IWorldToScreen.java`, `IShaderEffectManager.java`
 
-2. 实现 `OriginalLuminAdapter`:
-   - 包装现有 `graphics/*` 包中的所有类
-   - 保持现有功能完全不变
+2. ✅ 实现 `OriginalLuminAdapter`:
+   - ✅ 包装现有 `graphics/*` 包中的所有类
+   - ✅ 保持现有功能完全不变
 
-3. 重构调用点：
-   - 32 个渲染模块改为通过 `IGraphicsAdapter` 获取渲染器
-   - Managers 增加 `GraphicsManager`（持有当前适配器实例）
+3. ⚙️ 重构调用点（进行中）：
+   - ⏳ 32 个渲染模块改为通过 `IGraphicsAdapter` 获取渲染器
+   - ✅ Managers 增加 `GRAPHICS`（持有当前适配器实例）
+
+**当前状态**: 接口定义和适配器实现已完成并提交（commit 56b87546），编译验证通过。下一步：重构渲染模块调用点。
 
 **验收**: 所有模块编译通过，实机渲染无退化
 
