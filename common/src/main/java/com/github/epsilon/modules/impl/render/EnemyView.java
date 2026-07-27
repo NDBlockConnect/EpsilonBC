@@ -82,6 +82,10 @@ public class EnemyView extends Module {
         for (Entity entity : mc.level.entitiesForRendering()) {
             if (!shouldRenderReplacement(entity)) continue;
 
+            // 额外验证：确保实体插值位置有效
+            Vec3 interpolated = Managers.GRAPHICS.getWorldToScreen().interpolate(entity, partialTick);
+            if (!Double.isFinite(interpolated.x) || !Double.isFinite(interpolated.y) || !Double.isFinite(interpolated.z)) continue;
+
             AABB box = interpolatedBox(entity, partialTick);
             Color color = colorFor(entity);
 

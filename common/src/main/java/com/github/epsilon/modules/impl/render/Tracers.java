@@ -68,6 +68,9 @@ public class Tracers extends Module {
             if (cameraPos.distanceToSqr(entity.position()) > maxDistanceSq) continue;
 
             Vec3 interpolated = Managers.GRAPHICS.getWorldToScreen().interpolate(entity, partialTick);
+            // 验证插值位置有效性
+            if (!Double.isFinite(interpolated.x) || !Double.isFinite(interpolated.y) || !Double.isFinite(interpolated.z)) continue;
+
             Vec3 end = switch (target.getValue()) {
                 case Head -> interpolated.add(0.0, entity.getBbHeight(), 0.0);
                 case Body -> interpolated.add(0.0, entity.getBbHeight() / 2.0, 0.0);

@@ -65,9 +65,18 @@ public class ESP2D extends Module {
         for (Entity entity : mc.level.entitiesForRendering()) {
             if (!(entity instanceof LivingEntity livingEntity) || !shouldRender(livingEntity)) continue;
 
+            // 距离限制：超过 256 方块不渲染，防止远处实体漂移
+            if (mc.player.distanceToSqr(livingEntity) > 256.0 * 256.0) continue;
+
             Vector4d position = WorldToScreen.getEntityPositionsOn2D(livingEntity, partialTick);
-            if (position == null || position.z < 0.0 || position.w < 0.0 || position.x > screenWidth || position.y > screenHeight)
-                continue;
+            if (position == null) continue;
+
+            // 更严格的边界检查：必须在屏幕范围内且坐标合法
+            if (position.z < 0.0 || position.w < 0.0) continue;
+            if (position.x < -10.0 || position.x > screenWidth + 10.0) continue;
+            if (position.y < -10.0 || position.y > screenHeight + 10.0) continue;
+            if (!Double.isFinite(position.x) || !Double.isFinite(position.y)
+                || !Double.isFinite(position.z) || !Double.isFinite(position.w)) continue;
 
             float x = (float) position.x;
             float y = (float) position.y;
