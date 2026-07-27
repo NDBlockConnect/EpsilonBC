@@ -1,6 +1,6 @@
 package com.github.epsilon.settings.impl;
 
-import com.github.epsilon.assets.i18n.TranslateComponent;
+import com.github.epsilon.i18n.ITranslateComponent;
 import com.github.epsilon.settings.Setting;
 
 import java.util.HashMap;
@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 
 public class EnumSetting<E extends Enum<E>> extends Setting<E> {
 
-    private final Map<E, TranslateComponent> modeTranslations = new HashMap<>();
+    private final Map<E, ITranslateComponent> modeTranslations = new HashMap<>();
     private final E[] constants;
 
     public EnumSetting(String name, E defaultValue, Dependency dependency, Consumer<E> onChanged) {
@@ -23,7 +23,7 @@ public class EnumSetting<E extends Enum<E>> extends Setting<E> {
     }
 
     @Override
-    public void initTranslateComponent(TranslateComponent component) {
+    public void initTranslateComponent(ITranslateComponent component) {
         super.initTranslateComponent(component);
         modeTranslations.clear();
         for (E m : constants) {
@@ -32,8 +32,8 @@ public class EnumSetting<E extends Enum<E>> extends Setting<E> {
     }
 
     public String getTranslatedValue() {
-        TranslateComponent comp = modeTranslations.get(value);
-        return comp != null ? comp.getTranslatedName() : value.toString();
+        ITranslateComponent comp = modeTranslations.get(value);
+        return comp != null ? comp.getName() : value.toString();
     }
 
     public String getTranslatedValueByIndex(int index) {
@@ -43,8 +43,8 @@ public class EnumSetting<E extends Enum<E>> extends Setting<E> {
     }
 
     public String getTranslatedValue(E enumValue) {
-        TranslateComponent comp = modeTranslations.get(enumValue);
-        return comp != null ? comp.getTranslatedName() : enumValue.toString();
+        ITranslateComponent comp = modeTranslations.get(enumValue);
+        return comp != null ? comp.getName() : enumValue.toString();
     }
 
     public String getTranslatedValueUnchecked(Enum<?> enumValue) {

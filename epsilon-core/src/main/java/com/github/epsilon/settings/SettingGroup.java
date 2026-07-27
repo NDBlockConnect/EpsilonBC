@@ -1,6 +1,6 @@
 package com.github.epsilon.settings;
 
-import com.github.epsilon.assets.i18n.TranslateComponent;
+import com.github.epsilon.i18n.ITranslateComponent;
 
 /**
  * Setting 的显式分组模型。
@@ -10,18 +10,18 @@ import com.github.epsilon.assets.i18n.TranslateComponent;
 public class SettingGroup {
 
     private final String name;
-    private TranslateComponent translateComponent;
+    private ITranslateComponent translateComponent;
     private boolean collapsed = true;
 
     public SettingGroup(String name) {
         this.name = name;
     }
 
-    public void initTranslateComponent(TranslateComponent component) {
+    public void initTranslateComponent(ITranslateComponent component) {
         this.translateComponent = component;
     }
 
-    public TranslateComponent getTranslateComponent() {
+    public ITranslateComponent getTranslateComponent() {
         return translateComponent;
     }
 
@@ -30,7 +30,7 @@ public class SettingGroup {
     }
 
     public String getDisplayName() {
-        return translateComponent != null ? translateComponent.getTranslatedName() : name;
+        return translateComponent != null ? translateComponent.getName() : name;
     }
 
     public boolean isCollapsed() {

@@ -1,13 +1,14 @@
 package com.github.epsilon.modules;
 
-import com.github.epsilon.assets.i18n.TranslateComponent;
 import com.github.epsilon.events.bus.EventBus;
-import com.github.epsilon.managers.Managers;
+import com.github.epsilon.events.impl.ModuleStateChangedEvent;
+import com.github.epsilon.i18n.ITranslateComponent;
+import com.github.epsilon.platform.IMinecraftAccess;
+import com.github.epsilon.platform.MinecraftProvider;
 import com.github.epsilon.settings.Setting;
 import com.github.epsilon.settings.SettingGroup;
 import com.github.epsilon.settings.SettingHost;
 import com.google.gson.JsonObject;
-import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,17 +41,17 @@ public class Module implements SettingHost {
     public final List<Setting<?>> settings = new ArrayList<>();
     public final List<SettingGroup> settingGroups = new ArrayList<>();
 
-    protected final Minecraft mc;
+    protected final IMinecraftAccess mc;
 
-    public TranslateComponent translateComponent;
+    public ITranslateComponent translateComponent;
 
     public Module(String name, Category category) {
         this.name = name;
         this.category = category;
-        mc = Minecraft.getInstance();
+        mc = MinecraftProvider.get();
     }
 
-    public void initI18n(TranslateComponent moduleComponent) {
+    public void initI18n(ITranslateComponent moduleComponent) {
         this.translateComponent = moduleComponent;
         for (SettingGroup group : settingGroups) {
             group.initTranslateComponent(moduleComponent.createChild(group.getName().toLowerCase()));
@@ -69,7 +70,7 @@ public class Module implements SettingHost {
     }
 
     protected boolean nullCheck() {
-        return mc.player == null || mc.level == null;
+        return mc.isPlayerNull() || mc.isLevelNull();
     }
 
     protected void onEnable() {
@@ -92,13 +93,13 @@ public class Module implements SettingHost {
             if (enabled) {
                 EventBus.INSTANCE.subscribe(this);
                 if (!nullCheck()) {
-                    Managers.NOTIFICATION.moduleState(this.getTranslatedName(), getNotificationHash(), true);
+                    EventBus.INSTANCE.post(new ModuleStateChangedEvent(this.getTranslatedName(), true, getNotificationHash()));
                 }
                 onEnable();
             } else {
                 EventBus.INSTANCE.unsubscribe(this);
                 if (!nullCheck()) {
-                    Managers.NOTIFICATION.moduleState(this.getTranslatedName(), getNotificationHash(), false);
+                    EventBus.INSTANCE.post(new ModuleStateChangedEvent(this.getTranslatedName(), false, getNotificationHash()));
                 }
                 onDisable();
             }
@@ -178,7 +179,7 @@ public class Module implements SettingHost {
     }
 
     public String getTranslatedName() {
-        return translateComponent != null ? translateComponent.getTranslatedName() : name;
+        return translateComponent != null ? translateComponent.getName() : name;
     }
 
     public String getInfo() {

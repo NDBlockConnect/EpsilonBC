@@ -1,6 +1,6 @@
 package com.github.epsilon.settings;
 
-import com.github.epsilon.assets.i18n.TranslateComponent;
+import com.github.epsilon.i18n.ITranslateComponent;
 
 import java.util.function.Consumer;
 
@@ -15,7 +15,7 @@ public abstract class Setting<V> {
     protected boolean applyWhenRelease;
     protected SettingGroup group;
 
-    protected TranslateComponent translateComponent;
+    protected ITranslateComponent translateComponent;
 
     public Setting(String name, Dependency dependency, Consumer<V> onChanged) {
         this.name = name;
@@ -23,11 +23,11 @@ public abstract class Setting<V> {
         this.onChanged = onChanged;
     }
 
-    public void initTranslateComponent(TranslateComponent component) {
+    public void initTranslateComponent(ITranslateComponent component) {
         this.translateComponent = component;
     }
 
-    public TranslateComponent getTranslateComponent() {
+    public ITranslateComponent getTranslateComponent() {
         return translateComponent;
     }
 
@@ -36,7 +36,7 @@ public abstract class Setting<V> {
     }
 
     public String getDisplayName() {
-        return translateComponent != null ? translateComponent.getTranslatedName() : name;
+        return translateComponent != null ? translateComponent.getName() : name;
     }
 
     public V getValue() {

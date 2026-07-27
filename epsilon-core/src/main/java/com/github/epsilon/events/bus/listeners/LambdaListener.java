@@ -1,7 +1,7 @@
 package com.github.epsilon.events.bus.listeners;
 
-import com.github.epsilon.Constants;
 import com.github.epsilon.events.bus.EventHandler;
+import com.github.epsilon.logging.LoggerProvider;
 
 import java.lang.invoke.LambdaMetafactory;
 import java.lang.invoke.MethodHandle;
@@ -88,10 +88,10 @@ public class LambdaListener implements IListener {
         long now = System.currentTimeMillis();
         if (now - lastErrorLogMs >= 5_000L) {
             if (suppressedErrorCount > 0L) {
-                Constants.LOGGER.error("Event handler {} threw an exception (+{} more suppressed in the last 5s)",
+                LoggerProvider.getLogger().error("Event handler {} threw an exception (+{} more suppressed in the last 5s)",
                         description, suppressedErrorCount, throwable);
             } else {
-                Constants.LOGGER.error("Event handler {} threw an exception", description, throwable);
+                LoggerProvider.getLogger().error("Event handler {} threw an exception", description, throwable);
             }
             lastErrorLogMs = now;
             suppressedErrorCount = 0L;
@@ -119,7 +119,7 @@ public class LambdaListener implements IListener {
         try {
             privateLookupInMethod = MethodHandles.class.getDeclaredMethod("privateLookupIn", Class.class, MethodHandles.Lookup.class);
         } catch (NoSuchMethodException e) {
-            Constants.LOGGER.warn("Failed to initialize LambdaListener reflection", e);
+            LoggerProvider.getLogger().warn("Failed to initialize LambdaListener reflection", e);
         }
     }
 

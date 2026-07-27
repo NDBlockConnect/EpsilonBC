@@ -1,33 +1,28 @@
 package com.github.epsilon.modules;
 
-import com.github.epsilon.assets.i18n.EpsilonTranslateComponent;
-import com.github.epsilon.assets.i18n.TranslateComponent;
-import com.github.epsilon.graphics.text.IconChars;
-
+/**
+ * 模块分类枚举（epsilon-core 简化版本）
+ * 不依赖图形层和 i18n 实现，仅提供 ID。
+ * UI 层负责获取图标和翻译。
+ */
 public enum Category {
+    COMBAT("combat"),
+    PLAYER("player"),
+    MOVEMENT("movement"),
+    RENDER("render");
 
-    COMBAT(IconChars.SWORDS, "combat"),
-    PLAYER(IconChars.PERSON, "player"),
-    MOVEMENT(IconChars.DIRECTIONS_RUN, "movement"),
-    RENDER(IconChars.BRUSH, "render");
+    private final String id;
 
-    public final String icon;
-    private final String name;
-    private final TranslateComponent translateComponent;
-
-    Category(String icon, String name) {
-        this.icon = icon;
-        this.name = name;
-        translateComponent = EpsilonTranslateComponent.create("categories", name);
+    Category(String id) {
+        this.id = id;
     }
 
-    public String getName() {
-        return translateComponent.getTranslatedName();
+    public String getId() {
+        return id;
     }
 
     @Override
     public String toString() {
-        return name;
+        return id;
     }
-
 }

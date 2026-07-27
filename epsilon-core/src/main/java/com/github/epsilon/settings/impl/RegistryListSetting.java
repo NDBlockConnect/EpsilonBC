@@ -1,7 +1,6 @@
 package com.github.epsilon.settings.impl;
 
 import com.github.epsilon.settings.Setting;
-import com.github.epsilon.utils.world.BlockRegistryUtils;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -10,6 +9,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,7 +39,7 @@ public class RegistryListSetting<T> extends Setting<List<T>> {
         @SuppressWarnings("unchecked")
         <T> Predicate<T> defaultFilter() {
             return (Predicate<T>) switch (this) {
-                case BLOCK -> (Predicate<Block>) BlockRegistryUtils::isSelectable;
+                case BLOCK -> (Predicate<Block>) RegistryListSetting::isSelectableBlock;
                 case ITEM -> (Predicate<Item>) item -> item != null && item != Items.AIR;
                 case ENTITY_TYPE -> (Predicate<EntityType<?>>) entityType -> entityType != null;
                 case SOUND_EVENT -> (Predicate<SoundEvent>) sound -> sound != null;
@@ -187,5 +187,16 @@ public class RegistryListSetting<T> extends Setting<List<T>> {
 
     private boolean canUse(T entry) {
         return entry != null && (filter == null || filter.test(entry));
+    }
+
+    private static boolean isSelectableBlock(Block block) {
+        if (block == null || block == Blocks.AIR) {
+            return false;
+        }
+        if (block.asItem() == Items.AIR) {
+            return false;
+        }
+        Identifier id = BuiltInRegistries.BLOCK.getKey(block);
+        return !id.getPath().endsWith("_wall_banner");
     }
 }
