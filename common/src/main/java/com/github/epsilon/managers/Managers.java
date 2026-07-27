@@ -1,6 +1,8 @@
 package com.github.epsilon.managers;
 
 import com.github.epsilon.events.bus.EventBus;
+import com.github.epsilon.graphics.abstraction.IGraphicsAdapter;
+import com.github.epsilon.graphics.abstraction.OriginalLuminAdapter;
 import com.github.epsilon.managers.impl.AllyManager;
 import com.github.epsilon.managers.impl.FriendManager;
 import com.github.epsilon.managers.impl.HealthManager;
@@ -27,8 +29,10 @@ public class Managers {
     public static SoundManager SOUND;
     public static NotificationManager NOTIFICATION;
     public static TimerManager TIMER;
+    public static IGraphicsAdapter GRAPHICS;
 
     public static void initManagers() {
+        GRAPHICS = OriginalLuminAdapter.getInstance();
         switchRotationManager(ClientSetting.INSTANCE.rotationMode.getValue());
         TARGET = new TargetManager();
         HEALTH = new HealthManager();
