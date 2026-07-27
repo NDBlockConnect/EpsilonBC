@@ -3,6 +3,8 @@ package com.github.epsilon.managers.impl;
 import com.github.epsilon.assets.i18n.EpsilonTranslations;
 import com.github.epsilon.elements.impl.notification.Notification;
 import com.github.epsilon.elements.impl.notification.NotificationMode;
+import com.github.epsilon.events.bus.EventHandler;
+import com.github.epsilon.events.impl.ModuleStateChangedEvent;
 import com.github.epsilon.modules.impl.ClientSetting;
 import com.github.epsilon.utils.player.ChatUtils;
 import net.minecraft.ChatFormatting;
@@ -149,6 +151,14 @@ public class NotificationManager {
         if (notifications.size() >= MAX_NOTIFICATIONS) {
             unregister(notifications.poll());
         }
+    }
+
+    /**
+     * 监听模块状态变化事件，自动触发通知
+     */
+    @EventHandler
+    public void onModuleStateChanged(ModuleStateChangedEvent event) {
+        moduleState(event.getModuleName(), event.getNotificationHash(), event.isEnabled());
     }
 
 }

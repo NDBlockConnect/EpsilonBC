@@ -9,15 +9,67 @@ import com.github.epsilon.holders.ConfigHolder;
 import com.github.epsilon.holders.HudElementHolder;
 import com.github.epsilon.holders.ModuleHolder;
 import com.github.epsilon.gui.overlay.CompanionDeathOverlay;
+import com.github.epsilon.logging.ILogger;
+import com.github.epsilon.logging.LoggerProvider;
 import com.github.epsilon.managers.Managers;
 import com.github.epsilon.modules.impl.ClientSetting;
+import com.github.epsilon.platform.IMinecraftAccess;
+import com.github.epsilon.platform.MinecraftProvider;
 import com.github.epsilon.update.UpdateChecker;
+import net.minecraft.client.Minecraft;
 
 import java.lang.invoke.MethodHandles;
 
 public class EpsilonCommon {
 
     public static void init() {
+        // 注入核心 Provider（必须在最前面）
+        LoggerProvider.setLogger(new ILogger() {
+            @Override
+            public void info(String message, Object... args) {
+                Constants.LOGGER.info(message, args);
+            }
+
+            @Override
+            public void warn(String message, Object... args) {
+                Constants.LOGGER.warn(message, args);
+            }
+
+            @Override
+            public void error(String message, Object... args) {
+                Constants.LOGGER.error(message, args);
+            }
+
+            @Override
+            public void debug(String message, Object... args) {
+                Constants.LOGGER.debug(message, args);
+            }
+        });
+
+        MinecraftProvider.setMinecraftAccess(new IMinecraftAccess() {
+            private final Minecraft mc = Minecraft.getInstance();
+
+            @Override
+            public net.minecraft.client.player.LocalPlayer getPlayer() {
+                return mc.player;
+            }
+
+            @Override
+            public net.minecraft.client.multiplayer.ClientLevel getLevel() {
+                return mc.level;
+            }
+
+            @Override
+            public boolean isPlayerNull() {
+                return mc.player == null;
+            }
+
+            @Override
+            public boolean isLevelNull() {
+                return mc.level == null;
+            }
+        });
+
         Constants.LOGGER.info("Welcome to " + Constants.NAME + ".");
 
         EventBus.INSTANCE.registerLambdaFactory(EpsilonCommon.class.getPackageName(), (lookupInMethod, klass) -> (MethodHandles.Lookup) lookupInMethod.invoke(null, klass, MethodHandles.lookup()));

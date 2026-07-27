@@ -43,6 +43,7 @@ public class Managers {
         EventBus.INSTANCE.subscribe(ALLY);
         SOUND = new SoundManager();
         NOTIFICATION = new NotificationManager();
+        EventBus.INSTANCE.subscribe(NOTIFICATION);  // 订阅以监听 ModuleStateChangedEvent
         TIMER = new TimerManager();
     }
 

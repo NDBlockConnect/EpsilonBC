@@ -1,9 +1,10 @@
 package com.github.epsilon.assets.i18n;
 
 import com.github.epsilon.holders.TranslateHolder;
+import com.github.epsilon.i18n.ITranslateComponent;
 import com.github.epsilon.modules.impl.ClientSetting;
 
-public class DefaultTranslateComponent implements TranslateComponent {
+public class DefaultTranslateComponent implements TranslateComponent, ITranslateComponent {
 
     private final String fullKey;
     private String cachedName;
@@ -29,6 +30,18 @@ public class DefaultTranslateComponent implements TranslateComponent {
             cachedName = resolveTranslation(fullKey);
         }
         return cachedName;
+    }
+
+    // ITranslateComponent interface methods
+    @Override
+    public String getName() {
+        return getTranslatedName();
+    }
+
+    @Override
+    public String getTranslation(String key) {
+        String fullTranslationKey = fullKey + "." + key;
+        return EpsilonLanguageManager.INSTANCE.getOrDefault(fullTranslationKey);
     }
 
     @Override
@@ -73,7 +86,7 @@ public class DefaultTranslateComponent implements TranslateComponent {
     }
 
     @Override
-    public TranslateComponent createChild(String suffix) {
+    public DefaultTranslateComponent createChild(String suffix) {
         return DefaultTranslateComponent.create(fullKey + "." + suffix);
     }
 

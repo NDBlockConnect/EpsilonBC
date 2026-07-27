@@ -29,6 +29,9 @@ neoForge {
 }
 
 dependencies {
+    // 依赖 epsilon-core 抽象层
+    api(project(":epsilon-core"))
+
     compileOnly(libs.mixin)
     compileOnly(libs.mixinextras.common)
     annotationProcessor(libs.mixinextras.common)
