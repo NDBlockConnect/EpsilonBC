@@ -107,7 +107,7 @@ public class MixinLocalPlayer extends AbstractClientPlayer {
     }
 
     @WrapOperation(method = "move", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/AbstractClientPlayer;move(Lnet/minecraft/world/entity/MoverType;Lnet/minecraft/world/phys/Vec3;)V"))
-    private void onMove(AbstractClientPlayer player, MoverType moverType, Vec3 delta, Operation<Void> original) {
+    private void onMove(LocalPlayer player, MoverType moverType, Vec3 delta, Operation<Void> original) {
         MoveEvent event = EventBus.INSTANCE.post(new MoveEvent(delta.x, delta.y, delta.z));
         original.call(player, moverType, new Vec3(event.getX(), event.getY(), event.getZ()));
     }
