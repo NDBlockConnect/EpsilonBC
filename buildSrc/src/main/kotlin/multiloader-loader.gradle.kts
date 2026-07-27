@@ -13,6 +13,8 @@ val commonProject = project(":common")
 val commonBuildConfig = commonProject.tasks.named("generateBuildConfigClasses")
 val commonBuildConfigJava = commonProject.layout.buildDirectory.dir("generated/sources/buildConfig/main")
 
+val epsilonCoreProject = project(":epsilon-core")
+
 dependencies {
     val loaderAttribute = Attribute.of("io.github.mcgradleconventions.loader", String::class.java)
     compileOnly(project(":common")) {
@@ -20,6 +22,9 @@ dependencies {
             attribute(loaderAttribute, "common")
         }
     }
+    // epsilon-core 需要打包进最终 jar（运行时依赖）
+    implementation(project(":epsilon-core"))
+
     commonJava(project(path = ":common", configuration = "commonJava"))
     commonResources(project(path = ":common", configuration = "commonResources"))
 }
