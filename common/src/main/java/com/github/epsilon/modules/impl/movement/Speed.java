@@ -226,7 +226,13 @@ public class Speed extends Module {
             double n2 = moveVector.x;
             double n3 = mc.player.getYRot();
             if (n == 0.0 && n2 == 0.0) {
-                event.setHorizontal(0.0, 0.0, EventPriority.MEDIUM);
+                // 防御：输入向量读数为零但物理方向键仍被按住时，说明 26.2 输入链路出现读数不同步。
+                // 此时跳过清零，交由原版移动逻辑接管，避免把玩家水平速度钉死为 0（表现为"无法移动"）。
+                boolean physicalKeyDown = mc.options.keyUp.isDown() || mc.options.keyDown.isDown()
+                        || mc.options.keyLeft.isDown() || mc.options.keyRight.isDown();
+                if (!physicalKeyDown) {
+                    event.setHorizontal(0.0, 0.0, EventPriority.MEDIUM);
+                }
             } else {
                 event.setHorizontal(
                         (n * this.speed * -Math.sin(Math.toRadians(n3)) + n2 * this.speed * Math.cos(Math.toRadians(n3))) * 0.99,

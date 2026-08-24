@@ -7,7 +7,6 @@ import com.github.epsilon.events.impl.KeyboardInputEvent;
 import com.github.epsilon.events.impl.PlayerTickEvent;
 import com.github.epsilon.events.impl.Render3DEvent;
 import com.github.epsilon.managers.Managers;
-import com.github.epsilon.managers.Managers;
 import com.github.epsilon.modules.Category;
 import com.github.epsilon.modules.Module;
 import com.github.epsilon.settings.impl.*;
@@ -380,8 +379,10 @@ public class Scaffold extends Module {
         if (motionAim.getValue()) {
             Vec3 delta = mc.player.getDeltaMovement();
             double horizontalSpeed = delta.horizontal().length();
-            double predictionScale = horizontalSpeed > 1.0 ? 1.0 / horizontalSpeed : 1.0;
-            baseVec = eye.add(delta.x * predictionScale, 0.0, delta.z * predictionScale);
+            if (Double.isFinite(delta.x) && Double.isFinite(delta.z) && Double.isFinite(horizontalSpeed)) {
+                double predictionScale = horizontalSpeed > 1.0 ? 1.0 / horizontalSpeed : 1.0;
+                baseVec = eye.add(delta.x * predictionScale, 0.0, delta.z * predictionScale);
+            }
         }
         BlockPos base = BlockPos.containing(baseVec.x, getYLevel(), baseVec.z);
         int baseX = base.getX();

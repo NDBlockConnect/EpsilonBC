@@ -17,6 +17,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import org.joml.Vector4d;
 
 import java.awt.*;
@@ -68,7 +70,9 @@ public class ESP2D extends Module {
             // 距离限制：超过 256 方块不渲染，防止远处实体漂移
             if (mc.player.distanceToSqr(livingEntity) > 256.0 * 256.0) continue;
 
-            Vector4d position = WorldToScreen.getEntityPositionsOn2D(livingEntity, partialTick);
+            Vec3 renderPosition = livingEntity.getPosition(partialTick);
+            AABB box = livingEntity.getBoundingBox().move(renderPosition.subtract(livingEntity.position()));
+            Vector4d position = WorldToScreen.projectAbsoluteAABBOn2D(box);
             if (position == null) continue;
 
             // 更严格的边界检查：必须在屏幕范围内且坐标合法

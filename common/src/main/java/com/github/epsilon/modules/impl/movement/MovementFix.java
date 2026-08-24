@@ -9,31 +9,9 @@ public class MovementFix extends Module {
 
     public static final MovementFix INSTANCE = new MovementFix();
 
-    private static final float DIAGONAL_ANGLE = 45.0f;
-    private static final float SIDE_ANGLE = 90.0f;
-    private static final float REVERSE_ANGLE = 180.0f;
-
     private MovementFix() {
         super("Movement Fix", Category.MOVEMENT);
-    }
-
-    private float getDirection(float playerYaw, float forward, float strafe) {
-        if (forward > 0.0f) {
-            if (strafe < 0.0f) return playerYaw - DIAGONAL_ANGLE;
-            if (strafe > 0.0f) return playerYaw + DIAGONAL_ANGLE;
-            return playerYaw;
-        }
-
-        if (forward < 0.0f) {
-            if (strafe < 0.0f) return playerYaw + REVERSE_ANGLE - DIAGONAL_ANGLE;
-            if (strafe > 0.0f) return playerYaw + REVERSE_ANGLE + DIAGONAL_ANGLE;
-            return playerYaw + REVERSE_ANGLE;
-        }
-
-        if (strafe < 0.0f) return playerYaw - SIDE_ANGLE;
-        if (strafe > 0.0f) return playerYaw + SIDE_ANGLE;
-
-        return playerYaw;
+        setDefaultEnabled(true);
     }
 
     public void fixMovement(KeyboardInputEvent event, float playerYaw, float serverYaw) {
@@ -45,38 +23,36 @@ public class MovementFix extends Module {
                 || !Float.isFinite(serverYaw)) return;
 
         float magnitude = Math.max(Math.abs(forward), Math.abs(strafe));
-        float difference = Mth.wrapDegrees(getDirection(playerYaw, forward, strafe) - serverYaw);
-        // 修复：使用 Math.floorMod 正确处理负角度，避免向零截断导致的方向错误
-        int sector = Math.floorMod(Math.round(difference / 45.0f), 8);
+        float targetDirection = movementDirection(playerYaw, forward, strafe);
+        float bestForward = 0.0f;
+        float bestStrafe = 0.0f;
+        float smallestDifference = Float.MAX_VALUE;
 
-        float newForward = 0.0f;
-        float newStrafe = 0.0f;
+        // 根据服务器 yaw 枚举所有合法输入，选择世界运动方向最接近原始输入的组合。
+        for (int candidateForward = -1; candidateForward <= 1; candidateForward++) {
+            for (int candidateStrafe = -1; candidateStrafe <= 1; candidateStrafe++) {
+                if (candidateForward == 0 && candidateStrafe == 0) continue;
 
-        switch (sector) {
-            case 0 -> newForward = magnitude;
-            case 1 -> {
-                newForward = magnitude;
-                newStrafe = -magnitude;
-            }
-            case 2 -> newStrafe = -magnitude;
-            case 3 -> {
-                newForward = -magnitude;
-                newStrafe = -magnitude;
-            }
-            case 4 -> newForward = -magnitude;
-            case 5 -> {
-                newForward = -magnitude;
-                newStrafe = magnitude;
-            }
-            case 6 -> newStrafe = magnitude;
-            case 7 -> {
-                newForward = magnitude;
-                newStrafe = magnitude;
+                float difference = Math.abs(Mth.wrapDegrees(
+                        movementDirection(serverYaw, candidateForward, candidateStrafe) - targetDirection));
+                if (difference < smallestDifference) {
+                    smallestDifference = difference;
+                    bestForward = candidateForward * magnitude;
+                    bestStrafe = candidateStrafe * magnitude;
+                }
             }
         }
 
-        event.setForward(newForward);
-        event.setStrafe(newStrafe);
+        event.setForward(bestForward);
+        event.setStrafe(bestStrafe);
+    }
+
+    private static float movementDirection(float yaw, float forward, float strafe) {
+        if (forward < 0.0f) yaw += 180.0f;
+        float forwardScale = forward < 0.0f ? -0.5f : forward > 0.0f ? 0.5f : 1.0f;
+        if (strafe > 0.0f) yaw -= 90.0f * forwardScale;
+        if (strafe < 0.0f) yaw += 90.0f * forwardScale;
+        return yaw;
     }
 
 }
