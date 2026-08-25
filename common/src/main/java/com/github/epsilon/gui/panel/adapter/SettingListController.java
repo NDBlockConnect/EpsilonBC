@@ -41,6 +41,7 @@ public class SettingListController implements AutoCloseable {
 
     private SettingEntry draggingSliderEntry;
     private EnumSettingRow activeEnumRow;
+    private ChoiceSettingRow activeChoiceRow;
 
     public SettingListController(PanelPopupHost popupHost) {
         this.popupHost = popupHost;
@@ -109,6 +110,10 @@ public class SettingListController implements AutoCloseable {
         if (activeEnumRow != null && popupHost.getActivePopup() == null) {
             activeEnumRow.setDropdownOpen(false);
             activeEnumRow = null;
+        }
+        if (activeChoiceRow != null && popupHost.getActivePopup() == null) {
+            activeChoiceRow.setDropdownOpen(false);
+            activeChoiceRow = null;
         }
 
         appendRows(ownerKey, settings, viewport, scroll, rowWidth, scope, textRenderer, mouseX, mouseY, callback);
@@ -203,6 +208,14 @@ public class SettingListController implements AutoCloseable {
                     activeEnumRow.setDropdownOpen(false);
                 }
                 activeEnumRow = enumRow;
+                draggingSliderEntry = null;
+                return true;
+            }
+            if (entry.row instanceof ChoiceSettingRow choiceRow && entry.row.mouseClicked(entry.bounds, event, isDoubleClick)) {
+                popupHost.open(createChoicePopup(choiceRow, entry.bounds, popupBounds));
+                choiceRow.setDropdownOpen(true);
+                if (activeChoiceRow != null && activeChoiceRow != choiceRow) activeChoiceRow.setDropdownOpen(false);
+                activeChoiceRow = choiceRow;
                 draggingSliderEntry = null;
                 return true;
             }
@@ -301,6 +314,10 @@ public class SettingListController implements AutoCloseable {
         if (activeEnumRow != null) {
             activeEnumRow.setDropdownOpen(false);
             activeEnumRow = null;
+        }
+        if (activeChoiceRow != null) {
+            activeChoiceRow.setDropdownOpen(false);
+            activeChoiceRow = null;
         }
     }
 
@@ -448,6 +465,18 @@ public class SettingListController implements AutoCloseable {
             popupY = chipBounds.y() - popupHeight - 4.0f;
         }
         return new EnumSelectPopup(new UiRect(popupX, popupY, popupWidth, popupHeight), enumRow.getSetting());
+    }
+
+    private ChoiceSelectPopup createChoicePopup(ChoiceSettingRow choiceRow, UiRect rowBounds, UiRect popupBounds) {
+        UiRect chipBounds = choiceRow.getChipBounds(measureTextRenderer, rowBounds);
+        int visibleCount = Math.min(choiceRow.getSetting().getChoices().size(), ChoiceSelectPopup.MAX_VISIBLE_ITEMS);
+        float popupHeight = visibleCount * 24.0f + 12.0f;
+        float popupWidth = Math.max(108.0f, chipBounds.width() + 24.0f);
+        float popupX = Math.max(popupBounds.x() + MD3Theme.PANEL_VIEWPORT_INSET, chipBounds.right() - popupWidth);
+        float popupY = chipBounds.bottom() + 4.0f;
+        float maxBottom = popupBounds.bottom() - MD3Theme.PANEL_VIEWPORT_INSET;
+        if (popupY + popupHeight > maxBottom) popupY = chipBounds.y() - popupHeight - 4.0f;
+        return new ChoiceSelectPopup(new UiRect(popupX, popupY, popupWidth, popupHeight), choiceRow.getSetting());
     }
 
     private ColorPickerPopup createColorPopup(ColorSettingRow colorRow, UiRect rowBounds, UiRect popupBounds) {

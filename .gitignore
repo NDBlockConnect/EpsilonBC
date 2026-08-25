@@ -20,6 +20,8 @@ build
 # other
 .kotlin
 .eclipse
+__pycache__/
+*.pyc
 run
 runs
 run-data
@@ -46,3 +48,7 @@ repo
 HANDOFF.md
 fabric-*-rebuild.log
 neoforge-*-build.log
+# opencode session data
+.opencode-data/
+.opencode/
+releases/

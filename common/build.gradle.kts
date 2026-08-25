@@ -37,6 +37,7 @@ dependencies {
     annotationProcessor(libs.mixinextras.common)
     compileOnly(libs.asm)
     compileOnly(libs.jsr305)
+    implementation(libs.luaj.jse)
     testImplementation(libs.gson)
     testImplementation(libs.junit.jupiter)
     testRuntimeOnly(libs.junit.platform.launcher)

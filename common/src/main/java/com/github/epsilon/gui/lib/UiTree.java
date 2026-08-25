@@ -62,6 +62,13 @@ public final class UiTree {
     }
 
     /**
+     * 返回树中的节点总数；上游 Lumin Graphics 同名 API 的内建等价实现。
+     */
+    public int nodeCount() {
+        return nodes.size();
+    }
+
+    /**
      * 返回该树是否仍包含未结束的动画。
      * <p>
      * 该标记通常被面板层用于决定是否需要继续触发重绘。
@@ -423,7 +430,18 @@ public final class UiTree {
         }
 
         public void text(String text, float x, float y, float scale, Color color, TtfFontLoader fontLoader) {
-            nodes.add(new TextNode(text, resolveX(x), resolveY(y), scale, color, fontLoader));
+            nodes.add(new TextNode(text, x, y, scale, color, fontLoader));
+        }
+
+        /**
+         * 上游 Lumin Graphics 风格的字体名重载；内部解析为内建静态字体。
+         */
+        public void text(String text, float x, float y, float scale, Color color, String fontName) {
+            text(text, x, y, scale, color, BuiltInTextMetrics.resolveFont(fontName));
+        }
+
+        public void text(int layer, String text, float x, float y, float scale, Color color, String fontName) {
+            addNode(layer, new TextNode(text, x, y, scale, color, BuiltInTextMetrics.resolveFont(fontName)));
         }
 
         public void text(int layer, String text, float x, float y, float scale, Color color, TtfFontLoader fontLoader) {
@@ -465,13 +483,19 @@ public final class UiTree {
         }
 
         public void texture(Identifier texture, float x, float y, float width, float height,
-                            float u0, float v0, float u1, float v1, Color color) {
-            texture(texture, x, y, width, height, u0, v0, u1, v1, color, false);
+                            float u0, float v0, float u1, float v1, Color color) {            texture(texture, x, y, width, height, u0, v0, u1, v1, color, false);
         }
 
         public void texture(Identifier texture, float x, float y, float width, float height,
                             float u0, float v0, float u1, float v1, Color color, boolean linearFilter) {
             texture(new Render2DTexture.IdentifierRef(texture, linearFilter), x, y, width, height, u0, v0, u1, v1, color);
+        }
+
+        /**
+         * 上游 Lumin Graphics 风格的整图纹理重载（默认 UV 0..1）。
+         */
+        public void texture(Identifier texture, float x, float y, float width, float height, Color color) {
+            texture(texture, x, y, width, height, 0.0f, 0.0f, 1.0f, 1.0f, color);
         }
 
         public void texture(LuminTexture texture, float x, float y, float width, float height,

@@ -19,6 +19,7 @@ gson = "2.13.2"
 sodium = "0.9.0-beta.3+mc26.2r1"
 junit = "5.13.4"
 junit-platform = "1.13.4"
+luaj = "3.0.1"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "project-minecraft" }
@@ -29,6 +30,7 @@ mixinextras-common = { module = "io.github.llamalad7:mixinextras-common", versio
 asm = { module = "org.ow2.asm:asm", version.ref = "asm" }
 jsr305 = { module = "com.google.code.findbugs:jsr305", version.ref = "jsr305" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+luaj-jse = { module = "org.luaj:luaj-jse", version.ref = "luaj" }
 sodium-fabric = { module = "net.caffeinemc:sodium-fabric", version.ref = "sodium" }
 sodium-neoforge = { module = "net.caffeinemc:sodium-neoforge", version.ref = "sodium" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }

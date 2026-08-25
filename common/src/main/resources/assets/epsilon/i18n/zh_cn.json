@@ -343,6 +343,7 @@
         "wide hinata duration": "宽星野持续时间",
         "wide hinata max width": "宽星野最大宽度",
         "check for updates": "检查更新",
+        "enable lua scripts": "启用 Lua 脚本",
         "sound notify": "声音通知",
         "chat notify": "聊天通知",
         "animated chat prefix": "聊天前缀动画",

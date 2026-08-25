@@ -318,6 +318,10 @@ public class DropdownScreen extends Screen {
                 if (headerClick && i < panels.size() - 1) {
                     panels.remove(i);
                     panels.add(panel);
+                    // 同步瀑布布局快照，避免 reflowRightColumn 使用陈旧顺序
+                    // 导致展开/折叠时右侧列 Y 坐标跳变、面板相互遮挡。
+                    layoutPanels.remove(panel);
+                    layoutPanels.add(panel);
                 }
                 DropdownLayoutState.save(panels);
                 if (reactionRevision == reisaCompanion.getReactionRevision()) {

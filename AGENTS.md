@@ -470,6 +470,42 @@ textRenderer.drawAndClear();
 
 完整 HUD 渲染示例：`common/.../elements/impl/Watermark.java`
 
+### 内建 UI 树与上游 Lumin Graphics 兼容
+
+- 内建声明式 UI 树位于 `gui/lib/`（`UiTree`/`UiRect`/`UiTextMetrics` 等），与上游
+  slmpc/lumingraphics 同源。为外部库编写的代码迁移到内建树时，参考
+  `scripting/lua/render/` 的适配模式：
+  - `BuiltInTextMetrics`（`gui/lib/BuiltInTextMetrics.java`）— 文本度量实现，提供
+    字符串字体名重载（`"epsilon-icons"` 等映射到 `StaticFontLoader`）；注意
+    `TtfFontLoader` 与 `String` 双重载下 `null` 字面量需要显式转型。
+  - `UiTree.Scope` 含上游风格便捷重载：`text(..., String fontName)`、
+    `texture(Identifier, x, y, w, h, color)`、`nodeCount()`。
+  - `EpsilonUiTheme.lumin(color)` / `lumin()` — 上游主题包装的恒等桥接。
+  - 运行时替换：`runtime.createScene(theme)` → `new UiScene(theme)`；
+    `runtime.render(scene, layer, tree)` → `scene.beginFrame(); scene.submit(...); scene.endFrame();`
+- 消费面分析文档：OpenLumin 仓库 `docs/references/epsilon-lumin-consumption/`。
+
+## Lua 脚本系统
+
+- 位置：`common/src/main/java/com/github/epsilon/scripting/lua/`（来自上游 PR #420，已适配内建图形）
+- 依赖：`org.luaj:luaj-jse:3.0.1`（`gradle/libs.versions.toml`）
+- 脚本目录：`~/.epsilon/scripts/<packageId>/`，每个包必须含 `script.json`（manifest，
+  含 `id`/`modules[]`/`settingsEntry`）；示例见 `docs/examples/lua/example-suite`
+- 开关：`ClientSetting.luaScriptsEnabled`（root 级设置，默认关闭）；
+  初始化链：`EpsilonCommon.init()` → `LuaScriptManager.init(enabled)`，
+  关闭钩子中调用 `LuaScriptManager.INSTANCE.close()`
+- 核心类：
+  - `LuaScriptManager` — 包扫描/加载/卸载、模块注册进 `ModuleHolder`
+  - `LuaScriptPackage` / `LuaScriptManifest` — 包与 manifest 模型
+  - `LuaRuntime` / `LuaModule` / `LuaModuleApi` / `LuaSettingApi` / `LuaStorage` — 运行时与 API 绑定
+  - `LuaEventRegistry` / `LuaEventListener` — 事件订阅（Render2D 走 `LuaRender2DService` 专用通道）
+  - `LuaRender2DService` / `LuaUiContext` / `LuaRender3DContext` — 渲染面（内建图形适配版）
+  - `LuaTranslateComponent` / `LuaTranslationCatalog` — 包内 i18n
+- `ChoiceSetting`（`settings/impl/ChoiceSetting.java`）— Lua 设置面使用的字符串枚举设置；
+  GUI 三件套：`ChoiceWidget`（Dropdown）/`ChoiceSettingRow`（Panel）/`ChoiceSelectPopup`
+- Lua 包的模块注册进 `ModuleHolder`，与 Java 模块同等参与配置/键位/i18n
+  （i18n owner = 包 id）
+
 ## i18n 翻译系统
 
 - `TranslateComponent` — 翻译组件接口

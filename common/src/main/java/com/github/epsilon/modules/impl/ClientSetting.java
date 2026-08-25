@@ -14,6 +14,7 @@ import com.github.epsilon.managers.Managers;
 import com.github.epsilon.managers.impl.rotations.RotationManager;
 import com.github.epsilon.managers.impl.sound.SoundKey;
 import com.github.epsilon.modules.Module;
+import com.github.epsilon.scripting.lua.LuaScriptManager;
 import com.github.epsilon.settings.SettingGroup;
 import com.github.epsilon.settings.impl.*;
 import com.mojang.blaze3d.platform.IconSet;
@@ -116,6 +117,7 @@ public class ClientSetting extends Module {
     private final SettingGroup sgAppearance = settingGroup("Appearance");
     private final SettingGroup sgReisa = settingGroup("Companion");
     private final SettingGroup sgNotification = settingGroup("Notification");
+    private final SettingGroup sgLua = settingGroup("Lua Scripts");
 
     @SuppressWarnings("unused")
     private final ButtonSetting openHUDEditor = buttonSetting("Open HUD Editor", () -> mc.gui.setScreen(HudEditorScreen.INSTANCE));
@@ -221,6 +223,10 @@ public class ClientSetting extends Module {
     public final DoubleSetting wideHinataMaxWidth = doubleSetting("Wide Hinata Max Width", 2.6, 1.5, 6.0, 0.1,
             wideHinataEasterEgg::getValue)
             .group(sgReisa);
+
+    // Lua Scripts
+    public final BoolSetting luaScriptsEnabled = boolSetting("Enable Lua Scripts", false,
+            LuaScriptManager.INSTANCE::setEnabled).rootSetting().group(sgLua);
 
     // Notification
     public final BoolSetting soundNotify = boolSetting("Sound Notify", true).group(sgNotification);

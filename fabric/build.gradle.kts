@@ -12,6 +12,8 @@ dependencies {
     minecraft(libs.minecraft)
     implementation(libs.fabric.loader)
     implementation(libs.fabric.api)
+    implementation(libs.luaj.jse)
+    include(libs.luaj.jse)
     compileOnly(libs.sodium.fabric)
     compileOnly(libs.jsr305)
 

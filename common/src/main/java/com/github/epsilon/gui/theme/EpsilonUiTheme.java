@@ -15,6 +15,20 @@ public final class EpsilonUiTheme implements UiTheme {
     private EpsilonUiTheme() {
     }
 
+    /**
+     * 上游 Lumin Graphics 风格的颜色桥接；内建树直接消费 Color，此处恒等返回。
+     */
+    public static Color lumin(Color color) {
+        return color;
+    }
+
+    /**
+     * 上游 Lumin Graphics 风格的主题获取；内建树使用单例主题。
+     */
+    public static EpsilonUiTheme lumin() {
+        return INSTANCE;
+    }
+
     @Override
     public float controlRadius() {
         return MD3Theme.CONTROL_RADIUS;
