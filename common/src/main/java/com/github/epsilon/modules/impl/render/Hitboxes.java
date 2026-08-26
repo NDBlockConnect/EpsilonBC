@@ -36,6 +36,8 @@ public class Hitboxes extends Module {
 
         for (Entity entity : mc.level.entitiesForRendering()) {
             if (entity == mc.player) continue;
+            // 跳过隐形实体：marker/armor_stand 等不可见目标是"强调框满天飞"的主要来源。
+            if (entity.isInvisible() || !entity.isAlive() || entity.isSpectator()) continue;
             AABB box = getExpandedAABB(entity.getBoundingBox());
             Managers.GRAPHICS.getRender3DScheduler().addOutlineBox(box, new Color(255, 100, 100, 200));
         }

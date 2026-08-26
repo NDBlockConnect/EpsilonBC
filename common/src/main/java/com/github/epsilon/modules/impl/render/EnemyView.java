@@ -62,6 +62,7 @@ public class EnemyView extends Module {
     private final BoolSetting monsters = boolSetting("Monsters", false);
     private final BoolSetting ambients = boolSetting("Ambients", false);
     private final BoolSetting others = boolSetting("Others", false);
+    private final BoolSetting showInvisible = boolSetting("Show Invisible", false);
 
     private final IntSetting maxRange = intSetting("Max Range", 96, 16, 256, 1);
 
@@ -144,6 +145,7 @@ public class EnemyView extends Module {
     private boolean isTarget(Entity entity) {
         if (mc.player == null) return false;
         if (entity == mc.player || !entity.isAlive() || entity.isSpectator()) return false;
+        if (!showInvisible.getValue() && entity.isInvisible()) return false;
         // Allies (incl. marked mobs) and friends are never enemies.
         if (Managers.ALLY.isAlly(entity)) return false;
 

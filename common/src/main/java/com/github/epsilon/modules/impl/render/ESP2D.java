@@ -44,6 +44,9 @@ public class ESP2D extends Module {
     private final DoubleSetting healthBarOutlineWidth = doubleSetting("Health Bar Outline Width", 1.0, 0.5, 3.0, 0.5, () -> renderHealth.getValue() && healthBarOutline.getValue());
     private final BoolSetting renderBox = boolSetting("Render Box", true);
     private final BoolSetting boxOutline = boolSetting("Box Outline", true, renderBox::getValue);
+    // 隐形实体默认不框选：marker/armor_stand/NoAI 测试实体等不可见目标
+    // 是"ESP 框满天飞"体验的主要来源。
+    private final BoolSetting showInvisible = boolSetting("Show Invisible", false);
 
     private final ColorSetting playersColor = colorSetting("Players Color", new Color(0xFF9200), false);
     private final ColorSetting friendsColor = colorSetting("Friends Color", new Color(0x30FF00), false);
@@ -111,6 +114,7 @@ public class ESP2D extends Module {
     private boolean shouldRender(Entity entity) {
         if (mc.player == null) return false;
         if (!entity.isAlive() || entity.isSpectator()) return false;
+        if (!showInvisible.getValue() && entity.isInvisible()) return false;
         // Allies (incl. middle-click-marked mobs) are exempt from all enemy visuals.
         if (Managers.ALLY.isAlly(entity)) return false;
 

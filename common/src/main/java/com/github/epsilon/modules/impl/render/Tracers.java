@@ -37,6 +37,7 @@ public class Tracers extends Module {
     private final BoolSetting monsters = boolSetting("Monsters", false);
     private final BoolSetting ambients = boolSetting("Ambients", false);
     private final BoolSetting others = boolSetting("Others", false);
+    private final BoolSetting showInvisible = boolSetting("Show Invisible", false);
 
     private final EnumSetting<Target> target = enumSetting("Target", Target.Body);
     private final DoubleSetting thickness = doubleSetting("Thickness", 1.5, 0.5, 5.0, 0.1);
@@ -84,6 +85,7 @@ public class Tracers extends Module {
     private boolean shouldRender(Entity entity) {
         if (mc.player == null) return false;
         if (entity == mc.player || !entity.isAlive() || entity.isSpectator()) return false;
+        if (!showInvisible.getValue() && entity.isInvisible()) return false;
         // Allies (incl. middle-click-marked mobs) are exempt from all enemy visuals.
         if (Managers.ALLY.isAlly(entity)) return false;
 
