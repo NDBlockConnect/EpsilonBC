@@ -46,6 +46,7 @@ public class ModuleHolder {
         addModule(AllyMarker.INSTANCE);
         addModule(AnchorBlast.INSTANCE);
         addModule(AntiBot.INSTANCE);
+        addModule(AutoThrow.INSTANCE);
         addModule(AutoClicker.INSTANCE);
         addModule(AutoDtap.INSTANCE);
         addModule(AutoHitCrystal.INSTANCE);
@@ -124,6 +125,8 @@ public class ModuleHolder {
         addModule(AutoSprint.INSTANCE);
         addModule(Bhop.INSTANCE);
         addModule(Blink.INSTANCE);
+        addModule(Dolphin.INSTANCE);
+        addModule(TargetStrafe.INSTANCE);
         addModule(Eagle.INSTANCE);
         addModule(AutoMap.INSTANCE);
         addModule(FastWeb.INSTANCE);
