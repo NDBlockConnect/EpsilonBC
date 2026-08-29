@@ -1,4 +1,5 @@
 package com.github.epsilon.modules.impl.player.helper;
+import com.github.epsilon.managers.Managers;
 
 import com.github.epsilon.graphics.schedulers.render3d.Render3DScheduler;
 import com.github.epsilon.managers.impl.rotations.RotationManager;
@@ -72,7 +73,7 @@ public class ExtinguishFire extends HelperBase {
             return;
         }
 
-        HitResult hitResult = RotationManager.INSTANCE.getHitResult();
+        HitResult hitResult = Managers.ROTATION.getHitResult();
         if (hitResult instanceof BlockHitResult blockHit && blockHit.getBlockPos().equals(firePos)) {
             mc.gameMode.startDestroyBlock(firePos, RotationUtils.getDirection(firePos));
             mc.player.swing(InteractionHand.MAIN_HAND);

@@ -1,6 +1,7 @@
 package com.github.epsilon.modules.impl.player.helper;
 
 import com.github.epsilon.graphics.schedulers.render3d.Render3DScheduler;
+import com.github.epsilon.managers.Managers;
 import com.github.epsilon.managers.impl.rotations.RotationManager;
 import com.github.epsilon.utils.player.FindItemResult;
 import com.github.epsilon.utils.player.InvUtils;
@@ -73,7 +74,7 @@ public class BlockLava extends HelperBase {
                 state = State.NONE;
                 return;
             }
-            if (!RaytraceUtils.overBlock(RotationManager.INSTANCE.getRotation(), pendingPlacement.blockPos(), pendingPlacement.direction())) {
+            if (!RaytraceUtils.overBlock(Managers.ROTATION.getRotation(), pendingPlacement.blockPos(), pendingPlacement.direction())) {
                 if (Helper.isRotationAtTarget(targetRotation)) reset();
                 return;
             }

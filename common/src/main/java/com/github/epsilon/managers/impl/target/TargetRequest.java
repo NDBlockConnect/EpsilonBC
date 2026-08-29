@@ -12,6 +12,9 @@ public record TargetRequest(
         boolean animal,
         boolean villager,
         boolean invisible,
+        boolean passive,
+        boolean teams,
+        boolean named,
         Predicate<LivingEntity> extraFilter,
         int maxTargets
 ) {
@@ -23,6 +26,7 @@ public record TargetRequest(
         if (maxTargets < 1) maxTargets = 1;
     }
 
+    /** 兼容旧 8 参数（5 布尔）调用方。 */
     public static TargetRequest of(
             double range,
             float fov,
@@ -33,9 +37,10 @@ public record TargetRequest(
             boolean invisible,
             int maxTargets
     ) {
-        return new TargetRequest(range, fov, player, mob, animal, villager, invisible, living -> true, maxTargets);
+        return new TargetRequest(range, fov, player, mob, animal, villager, invisible, false, false, false, living -> true, maxTargets);
     }
 
+    /** 兼容旧 9 参数（5 布尔 + 谓词）调用方。 */
     public static TargetRequest of(
             double range,
             float fov,
@@ -47,6 +52,23 @@ public record TargetRequest(
             Predicate<LivingEntity> extraFilter,
             int maxTargets
     ) {
-        return new TargetRequest(range, fov, player, mob, animal, villager, invisible, extraFilter, maxTargets);
+        return new TargetRequest(range, fov, player, mob, animal, villager, invisible, false, false, false, extraFilter, maxTargets);
+    }
+
+    /** Epsilon-Private 端口 11 参数（8 布尔）签名。 */
+    public static TargetRequest of(
+            double range,
+            float fov,
+            boolean player,
+            boolean mob,
+            boolean animal,
+            boolean villager,
+            boolean invisible,
+            boolean passive,
+            boolean teams,
+            boolean named,
+            int maxTargets
+    ) {
+        return new TargetRequest(range, fov, player, mob, animal, villager, invisible, passive, teams, named, living -> true, maxTargets);
     }
 }

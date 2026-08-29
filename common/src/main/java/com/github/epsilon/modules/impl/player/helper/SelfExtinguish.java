@@ -1,4 +1,5 @@
 package com.github.epsilon.modules.impl.player.helper;
+import com.github.epsilon.managers.Managers;
 
 import com.github.epsilon.managers.impl.NotificationManager;
 import com.github.epsilon.managers.impl.rotations.RotationManager;
@@ -131,7 +132,7 @@ public class SelfExtinguish extends HelperBase {
     }
 
     private BlockHitResult getManagedBlockHit() {
-        HitResult hit = RotationManager.INSTANCE.getHitResult();
+        HitResult hit = Managers.ROTATION.getHitResult();
         return hit instanceof BlockHitResult blockHit && hit.getType() == HitResult.Type.BLOCK ? blockHit : null;
     }
 
@@ -157,7 +158,7 @@ public class SelfExtinguish extends HelperBase {
     }
 
     private void log(String message) {
-        NotificationManager.INSTANCE.error(Helper.INSTANCE.selfExtinguish.getTranslateComponent().getTranslatedName(), message);
+        Managers.NOTIFICATION.error(Helper.INSTANCE.selfExtinguish.getTranslateComponent().getTranslatedName(), message);
     }
 
     @Override

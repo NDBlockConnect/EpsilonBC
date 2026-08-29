@@ -176,6 +176,14 @@ public class RotationUtils {
         return calculate(mc.player.getEyePosition(), to);
     }
 
+    /**
+     * Epsilon-Private 端口兼容版本：带 adaptive 标志的 Vec3 目标旋转计算。
+     * 26.1.x 阶段先把 adaptive=false 当作标准视线计算；后续若需自适应扫描可扩展。
+     */
+    public static Rot2f calculate(Vec3 to, boolean adaptive) {
+        return calculate(to);
+    }
+
     public static Rot2f calculate(Vec3 position, Direction direction) {
         double x = position.x + 0.5;
         double y = position.y + 0.5;

@@ -1,4 +1,5 @@
 package com.github.epsilon.modules.impl.player.helper;
+import com.github.epsilon.managers.Managers;
 
 import com.github.epsilon.events.bus.EventHandler;
 import com.github.epsilon.events.impl.PlayerTickEvent;
@@ -94,7 +95,7 @@ public class Helper extends Module {
             }
         }
         if (targetRotation != null) {
-            RotationManager.INSTANCE.setRotations(targetRotation, rotationSpeed.getValue(), rotationPriority.getValue());
+            Managers.ROTATION.setRotations(targetRotation, rotationSpeed.getValue(), rotationPriority.getValue());
         }
     }
 
@@ -127,7 +128,7 @@ public class Helper extends Module {
     }
 
     public static boolean isRotationAtTarget(Rot2f target) {
-        Rot2f current = RotationManager.INSTANCE.getRotation();
+        Rot2f current = Managers.ROTATION.getRotation();
         float yaw = Mth.wrapDegrees(current.getYaw() - target.getYaw());
         float pitch = current.getPitch() - target.getPitch();
         return Math.hypot(yaw, pitch) <= 2.0;

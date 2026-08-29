@@ -6,6 +6,7 @@ import com.github.epsilon.events.impl.KeyboardInputEvent;
 import com.github.epsilon.events.impl.PlayerTickEvent;
 import com.github.epsilon.events.impl.Render3DEvent;
 import com.github.epsilon.graphics.schedulers.render3d.Render3DScheduler;
+import com.github.epsilon.managers.Managers;
 import com.github.epsilon.managers.impl.FriendManager;
 import com.github.epsilon.managers.impl.rotations.RotationManager;
 import com.github.epsilon.modules.Category;
@@ -64,7 +65,7 @@ public class TargetStrafe extends Module {
             return;
         }
 
-        if (requireJump.getValue() && (mc.gui.screen() != null || !mc.options.keyJump.isDown())) {
+        if (requireJump.getValue() && (mc.screen != null || !mc.options.keyJump.isDown())) {
             resetTarget();
             return;
         }
@@ -105,7 +106,7 @@ public class TargetStrafe extends Module {
 
         targetYaw = Mth.wrapDegrees((float) Math.toDegrees(Math.atan2(deltaZ, deltaX)) - 90.0f);
 
-        RotationManager.INSTANCE.setRotations(new Rot2f(targetYaw, RotationManager.INSTANCE.getPitch()), 180.0f, Priority.Low);
+        Managers.ROTATION.setRotations(new Rot2f(targetYaw, Managers.ROTATION.getPitch()), 180.0f, Priority.Low);
     }
 
     @EventHandler
@@ -193,7 +194,7 @@ public class TargetStrafe extends Module {
 
     private Color getTargetColor(LivingEntity entity) {
         if (entity instanceof Player player) {
-            if (FriendManager.INSTANCE.isFriend(player)) {
+            if (Managers.FRIEND.isFriend(player)) {
                 return new Color(85, 255, 85);
             } else {
                 new Color(entity.getTeamColor());

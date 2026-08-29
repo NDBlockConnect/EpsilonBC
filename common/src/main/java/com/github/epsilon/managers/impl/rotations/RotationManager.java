@@ -37,6 +37,17 @@ public abstract class RotationManager {
 
     protected int priority;
 
+    /** 上一次旋转 raytrace 的物理命中结果；供需要"瞄准点"信息的模块查询。 */
+    private net.minecraft.world.phys.HitResult lastHitResult;
+
+    public net.minecraft.world.phys.HitResult getHitResult() {
+        return lastHitResult;
+    }
+
+    public void setHitResult(net.minecraft.world.phys.HitResult hitResult) {
+        this.lastHitResult = hitResult;
+    }
+
     public void setRotations(Rot2f rotations, double rotationSpeed) {
         setRotations(rotations, rotationSpeed, null, Priority.Medium);
     }

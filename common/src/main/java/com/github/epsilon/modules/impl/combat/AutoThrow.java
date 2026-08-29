@@ -1,4 +1,5 @@
 package com.github.epsilon.modules.impl.combat;
+import com.github.epsilon.managers.Managers;
 
 import com.github.epsilon.events.bus.EventHandler;
 import com.github.epsilon.events.impl.ClientTickEvent;
@@ -86,7 +87,7 @@ public class AutoThrow extends Module {
                 double maxRange = this.maxRange.getValue();
                 double maxRangeSq = maxRange * maxRange;
 
-                List<LivingEntity> candidates = new ArrayList<>(TargetManager.INSTANCE.acquireTargets(TargetRequest.of(
+                List<LivingEntity> candidates = new ArrayList<>(Managers.TARGET.acquireTargets(TargetRequest.of(
                         maxRange,
                         fov.getValue().floatValue(),
                         true,
@@ -121,7 +122,7 @@ public class AutoThrow extends Module {
 
                 Rot2f rotation = RotationUtils.calculate(getAimVec(currentTarget), false);
 
-                RotationManager.INSTANCE.setRotations(rotation, rotationSpeed.getValue(), rotationPriority.getValue());
+                Managers.ROTATION.setRotations(rotation, rotationSpeed.getValue(), rotationPriority.getValue());
 
                 HitResult hit = RaytraceUtils.raytrace(rotation, maxRange);
                 if (hit.getType() != HitResult.Type.ENTITY) return;
@@ -193,7 +194,7 @@ public class AutoThrow extends Module {
             return false;
         }
 
-        if (mc.gui.screen() != null) {
+        if (mc.screen != null) {
             return false;
         }
 
