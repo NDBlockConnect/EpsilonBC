@@ -1,0 +1,93 @@
+[2m2026-08-22T01:29:34.278606Z[0m [32m INFO[0m [2mmdl[0m[2m:[0m MCDebugLauncher v26.2.0-alpha.4
+[2m2026-08-22T01:29:34.490651Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Using Java 25 (required: Java 25)
+[2m2026-08-22T01:29:34.490722Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Launching instance 'epsilon-test-26.2-fabric'...
+[2m2026-08-22T01:29:34.490752Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Building classpath and downloading libraries...
+[2m2026-08-22T01:29:34.493178Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: com.mojang:jtracy:1.0.37:natives-linux
+[2m2026-08-22T01:29:34.493745Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: com.mojang:jtracy:1.0.37:natives-macos
+[2m2026-08-22T01:29:34.494007Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: com.mojang:jtracy:1.0.37:natives-macos-arm64
+[2m2026-08-22T01:29:34.494259Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: com.mojang:jtracy:1.0.37:natives-windows
+[2m2026-08-22T01:29:34.495906Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-freetype:3.4.1:natives-linux
+[2m2026-08-22T01:29:34.496375Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-freetype:3.4.1:natives-macos
+[2m2026-08-22T01:29:34.496814Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-freetype:3.4.1:natives-macos-arm64
+[2m2026-08-22T01:29:34.497255Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-freetype:3.4.1:natives-windows
+[2m2026-08-22T01:29:34.497716Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-freetype:3.4.1:natives-windows-arm64
+[2m2026-08-22T01:29:34.498153Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-freetype:3.4.1:natives-windows-x86
+[2m2026-08-22T01:29:34.498604Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-glfw:3.4.1:natives-linux
+[2m2026-08-22T01:29:34.499004Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-glfw:3.4.1:natives-macos
+[2m2026-08-22T01:29:34.499496Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-glfw:3.4.1:natives-macos-arm64
+[2m2026-08-22T01:29:34.499958Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-glfw:3.4.1:natives-windows
+[2m2026-08-22T01:29:34.500362Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-glfw:3.4.1:natives-windows-arm64
+[2m2026-08-22T01:29:34.500771Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-glfw:3.4.1:natives-windows-x86
+[2m2026-08-22T01:29:34.501185Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-jemalloc:3.4.1:natives-linux
+[2m2026-08-22T01:29:34.501661Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-jemalloc:3.4.1:natives-macos
+[2m2026-08-22T01:29:34.502042Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-jemalloc:3.4.1:natives-macos-arm64
+[2m2026-08-22T01:29:34.502430Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-jemalloc:3.4.1:natives-windows
+[2m2026-08-22T01:29:34.502821Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-jemalloc:3.4.1:natives-windows-arm64
+[2m2026-08-22T01:29:34.503208Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-jemalloc:3.4.1:natives-windows-x86
+[2m2026-08-22T01:29:34.503672Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-openal:3.4.1:natives-linux
+[2m2026-08-22T01:29:34.504068Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-openal:3.4.1:natives-macos
+[2m2026-08-22T01:29:34.504491Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-openal:3.4.1:natives-macos-arm64
+[2m2026-08-22T01:29:34.504908Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-openal:3.4.1:natives-windows
+[2m2026-08-22T01:29:34.505348Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-openal:3.4.1:natives-windows-arm64
+[2m2026-08-22T01:29:34.505751Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-openal:3.4.1:natives-windows-x86
+[2m2026-08-22T01:29:34.506201Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-opengl:3.4.1:natives-linux
+[2m2026-08-22T01:29:34.506666Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-opengl:3.4.1:natives-macos
+[2m2026-08-22T01:29:34.507147Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-opengl:3.4.1:natives-macos-arm64
+[2m2026-08-22T01:29:34.507554Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-opengl:3.4.1:natives-windows
+[2m2026-08-22T01:29:34.507948Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-opengl:3.4.1:natives-windows-arm64
+[2m2026-08-22T01:29:34.508343Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-opengl:3.4.1:natives-windows-x86
+[2m2026-08-22T01:29:34.508776Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-shaderc:3.4.1:natives-linux
+[2m2026-08-22T01:29:34.509182Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-shaderc:3.4.1:natives-macos
+[2m2026-08-22T01:29:34.509579Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-shaderc:3.4.1:natives-macos-arm64
+[2m2026-08-22T01:29:34.509977Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-shaderc:3.4.1:natives-windows
+[2m2026-08-22T01:29:34.510374Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-shaderc:3.4.1:natives-windows-arm64
+[2m2026-08-22T01:29:34.510794Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-shaderc:3.4.1:natives-windows-x86
+[2m2026-08-22T01:29:34.511244Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-spvc:3.4.1:natives-linux
+[2m2026-08-22T01:29:34.511645Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-spvc:3.4.1:natives-macos
+[2m2026-08-22T01:29:34.512140Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-spvc:3.4.1:natives-macos-arm64
+[2m2026-08-22T01:29:34.512545Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-spvc:3.4.1:natives-windows
+[2m2026-08-22T01:29:34.512946Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-spvc:3.4.1:natives-windows-arm64
+[2m2026-08-22T01:29:34.513344Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-spvc:3.4.1:natives-windows-x86
+[2m2026-08-22T01:29:34.513793Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-stb:3.4.1:natives-linux
+[2m2026-08-22T01:29:34.514215Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-stb:3.4.1:natives-macos
+[2m2026-08-22T01:29:34.514598Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-stb:3.4.1:natives-macos-arm64
+[2m2026-08-22T01:29:34.514981Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-stb:3.4.1:natives-windows
+[2m2026-08-22T01:29:34.515365Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-stb:3.4.1:natives-windows-arm64
+[2m2026-08-22T01:29:34.515749Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-stb:3.4.1:natives-windows-x86
+[2m2026-08-22T01:29:34.516172Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-tinyfd:3.4.1:natives-linux
+[2m2026-08-22T01:29:34.516546Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-tinyfd:3.4.1:natives-macos
+[2m2026-08-22T01:29:34.517000Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-tinyfd:3.4.1:natives-macos-arm64
+[2m2026-08-22T01:29:34.517377Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-tinyfd:3.4.1:natives-windows
+[2m2026-08-22T01:29:34.517782Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-tinyfd:3.4.1:natives-windows-arm64
+[2m2026-08-22T01:29:34.518162Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-tinyfd:3.4.1:natives-windows-x86
+[2m2026-08-22T01:29:34.518587Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-vma:3.4.1:natives-linux
+[2m2026-08-22T01:29:34.518956Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-vma:3.4.1:natives-macos
+[2m2026-08-22T01:29:34.519312Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-vma:3.4.1:natives-macos-arm64
+[2m2026-08-22T01:29:34.519698Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-vma:3.4.1:natives-windows
+[2m2026-08-22T01:29:34.520096Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-vma:3.4.1:natives-windows-arm64
+[2m2026-08-22T01:29:34.520463Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-vma:3.4.1:natives-windows-x86
+[2m2026-08-22T01:29:34.520886Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-vulkan:3.4.1:natives-macos
+[2m2026-08-22T01:29:34.521284Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl-vulkan:3.4.1:natives-macos-arm64
+[2m2026-08-22T01:29:34.521680Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl:3.4.1:natives-linux
+[2m2026-08-22T01:29:34.522305Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl:3.4.1:natives-macos
+[2m2026-08-22T01:29:34.522776Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl:3.4.1:natives-macos-arm64
+[2m2026-08-22T01:29:34.523165Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl:3.4.1:natives-windows
+[2m2026-08-22T01:29:34.523728Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl:3.4.1:natives-windows-arm64
+[2m2026-08-22T01:29:34.524131Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Extracting native library: org.lwjgl:lwjgl:3.4.1:natives-windows-x86
+[2m2026-08-22T01:29:34.524604Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Classpath built with 66 entries
+[2m2026-08-22T01:29:34.524628Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Main class: net.fabricmc.loader.impl.launch.knot.KnotClient
+[2m2026-08-22T01:29:34.669444Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Verifying game assets...
+[2m2026-08-22T01:29:35.057578Z[0m [32m INFO[0m [2mmdl::version::assets[0m[2m:[0m All 5057 assets already present
+[2m2026-08-22T01:29:35.059376Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Agent control enabled via Despotes
+[2m2026-08-22T01:29:35.091795Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Loaded 3 mod(s) in 'epsilon-test-26.2-fabric':
+[2m2026-08-22T01:29:35.091837Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m   - Despotes (26.2.0)
+[2m2026-08-22T01:29:35.091849Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m   - EpsilonBC (26.0.0-alpha.2-671f2896)
+[2m2026-08-22T01:29:35.091859Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m   - Fabric API (0.155.2+26.2)
+[2m2026-08-22T01:29:35.125384Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m OOM protection: scanning for stale processes and trimming working sets...
+[2m2026-08-22T01:29:35.761211Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m OOM protection complete: ~569 MB freed, 4793 MB available, standby purged=false
+[2m2026-08-22T01:29:35.762019Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Starting Minecraft...
+[2m2026-08-22T01:29:35.773409Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Game output is being written to C:\Users\Sails\AppData\Roaming\mdl\instances\epsilon-test-26.2-fabric\logs\launch_detached.log
+[2m2026-08-22T01:29:35.773446Z[0m [32m INFO[0m [2mmdl::instance::launcher[0m[2m:[0m Instance 'epsilon-test-26.2-fabric' launched in background (PID 31820)
+Instance 'epsilon-test-26.2-fabric' launched in background (PID 31820)
+  Game log: <instance>/logs/launch_detached.log
+  Agent control: use 'mdl game status epsilon-test-26.2-fabric' once in-game

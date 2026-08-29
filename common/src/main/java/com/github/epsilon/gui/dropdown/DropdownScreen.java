@@ -313,10 +313,15 @@ public class DropdownScreen extends Screen {
             // 记录点击前是不是命中标题栏——只有拖标题栏才应该把面板拉到最顶，
             // 点面板内部的设置或下拉选项不能触发 z-shuffle，否则整块面板会突然弹到最上层看着像闪烁。
             boolean headerClick = panel.isHeaderHovered(mx, my);
+            // 快照当前 size 以应对 panel.mouseClicked 内部对 panels 的 mutate
+            // （比如子弹窗 open/close 同步增删 panel），避免在 i 基础上再读 panels.size() 产生错位；
+            // 同时把 panels 自身也以引用读出，后用引用做 add/remove 摆脱对索引的依赖。
+            int currentSize = panels.size();
+            DropdownPanel clickTarget = panel;
             if (panel.mouseClicked(mx, my, button)) {
-                if (headerClick && i < panels.size() - 1) {
-                    panels.remove(i);
-                    panels.add(panel);
+                if (headerClick && currentSize > 0) {
+                    panels.remove(clickTarget);
+                    panels.add(clickTarget);
                 }
                 DropdownLayoutState.save(panels);
                 if (reactionRevision == reisaCompanion.getReactionRevision()) {
