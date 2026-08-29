@@ -1,7 +1,7 @@
 package com.github.epsilon.modules.impl.player.helper;
 
 import com.github.epsilon.graphics.schedulers.render3d.Render3DScheduler;
-import com.github.epsilon.managers.rotation.RotationManager;
+import com.github.epsilon.managers.impl.rotations.RotationManager;
 import com.github.epsilon.utils.player.FindItemResult;
 import com.github.epsilon.utils.player.InvUtils;
 import com.github.epsilon.utils.rotation.RaytraceUtils;

@@ -1,7 +1,7 @@
 package com.github.epsilon.modules.impl.player.helper;
 
-import com.github.epsilon.managers.NotificationManager;
-import com.github.epsilon.managers.rotation.RotationManager;
+import com.github.epsilon.managers.impl.NotificationManager;
+import com.github.epsilon.managers.impl.rotations.RotationManager;
 import com.github.epsilon.utils.player.FindItemResult;
 import com.github.epsilon.utils.player.InvUtils;
 import com.github.epsilon.utils.rotation.Rot2f;
