@@ -1405,7 +1405,19 @@
         "no entity push": "无实体推动",
         "no block push": "无方块推动",
         "exclude spear lunge": "排除突进附魔长矛",
-        "exclude wind charge": "排除风弹"
+        "exclude wind charge": "排除风弹",
+        "Modify": {
+          "_value": "削减"
+        },
+        "Horizontal": {
+          "_value": "水平系数"
+        },
+        "Vertical": {
+          "_value": "垂直系数"
+        },
+        "Modify group": {
+          "_value": "削减设置"
+        }
       },
       "anti alias": "抗锯齿",
       "aspect ratio": {

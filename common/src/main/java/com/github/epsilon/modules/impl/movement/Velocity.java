@@ -7,6 +7,7 @@ import com.github.epsilon.modules.Category;
 import com.github.epsilon.modules.Module;
 import com.github.epsilon.settings.SettingGroup;
 import com.github.epsilon.settings.impl.BoolSetting;
+import com.github.epsilon.settings.impl.DoubleSetting;
 import com.github.epsilon.settings.impl.EnumSetting;
 import com.github.epsilon.utils.player.EnchantmentUtils;
 import com.github.epsilon.utils.player.PlayerUtils;
@@ -32,6 +33,7 @@ public class Velocity extends Module {
 
     private enum Mode {
         Cancel,
+        Modify,
         Legit,
     }
 
@@ -44,6 +46,10 @@ public class Velocity extends Module {
     public final BoolSetting blockPush = boolSetting("No Block Push", true, () -> mode.is(Mode.Cancel));
 
     private final SettingGroup sgExclusions = settingGroup("Exclusions");
+
+    private final SettingGroup sgModify = settingGroup("Modify");
+    private final DoubleSetting horizontal = doubleSetting("Horizontal", 0.0, 0.0, 200.0, 5.0, () -> mode.is(Mode.Modify)).group(sgModify);
+    private final DoubleSetting vertical = doubleSetting("Vertical", 0.0, 0.0, 200.0, 5.0, () -> mode.is(Mode.Modify)).group(sgModify);
 
     private final BoolSetting excludeSpearLunge = boolSetting("Exclude Spear Lunge", false, () -> mode.is(Mode.Cancel)).group(sgExclusions);
     private final BoolSetting excludeWindCharge = boolSetting("Exclude Wind Charge", false, () -> mode.is(Mode.Cancel)).group(sgExclusions);
@@ -105,6 +111,24 @@ public class Velocity extends Module {
                             packet.explosionSound(),
                             packet.blockParticles()
                     ));
+                }
+            }
+            case Modify -> {
+                // Meteor 公式：current + (incoming - current) * factor
+                if (event.getPacket() instanceof ClientboundSetEntityMotionPacket packet
+                        && packet.id() == mc.player.getId()
+                        && !shouldExcludeMotion(packet)) {
+                    Vec3 current = mc.player.getDeltaMovement();
+                    Vec3 incoming = packet.movement();
+                    double hFactor = horizontal.getValue() / 100.0;
+                    double vFactor = vertical.getValue() / 100.0;
+                    Vec3 modified = new Vec3(
+                            current.x + (incoming.x - current.x) * hFactor,
+                            current.y + (incoming.y - current.y) * vFactor,
+                            current.z + (incoming.z - current.z) * hFactor
+                    );
+                    event.setPacket(new ClientboundSetEntityMotionPacket(packet.id(), modified));
+                    return;
                 }
             }
             case Legit -> {

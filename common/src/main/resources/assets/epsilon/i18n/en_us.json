@@ -1405,7 +1405,19 @@
         "no entity push": "No Entity Push",
         "no block push": "No Block Push",
         "exclude spear lunge": "Exclude Spear Lunge",
-        "exclude wind charge": "Exclude Wind Charge"
+        "exclude wind charge": "Exclude Wind Charge",
+        "Modify": {
+          "_value": "Modify"
+        },
+        "Horizontal": {
+          "_value": "Horizontal"
+        },
+        "Vertical": {
+          "_value": "Vertical"
+        },
+        "Modify group": {
+          "_value": "Modify"
+        }
       },
       "anti alias": "Anti Alias",
       "aspect ratio": {
