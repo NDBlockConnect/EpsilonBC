@@ -1,85 +1,80 @@
-# EpsilonBC 交接文档 v3（2026-08-29 会话 3）
+# EpsilonBC 交接文档 v4（2026-08-31 会话 4）
 
 > GitHub@NDBlockConnect | BlockConnect@StarsailsClover
-> 分支: `working-2f484774-base`（远端已推 origin）
+> 分支: `working-2f484774-base`（HEAD = 9b2ff173，已推 origin）
 
-## 严格按 bc-developmentndebugging 规范执行进度
+## 用户定位（本轮确认）
 
-### 规划 (Plan) ✅
-- REWRITE_PLAN.md 完整
-- 用户重新定位"以上游 26.1.x 为基座重写"
-- 新目标：从 Epsilon-Private 移植 32 个专有模块 + 修 dropdown 根因
+一切基于 2f484774（EpsilonShot 底层架构革新 + 陪伴系统 + 新功能）做：
+1. **研究 Epsilon-Private（转闭源源码）**：搞清瀑布式根因 + 跟进新增功能；**不跟进新界面**
+2. **基于参考仓库（LiquidBounce/Meteor/Wurst）做模块重写与新增**
+3. **保留我们自己的模块/代码改进**
 
-### 研究 (Research) ✅
-- 已扫描 Epsilon-Private 仓库：32 个模块我们没有
-- 已分析我们 26.1.x base 工具 API 与 Private 差异（mc.gui.screen vs mc.screen；Managers.X vs X.INSTANCE；TargetRequest 签名）
-- 已定位 dropdown 根因（mouseClicked 反向索引循环在 panel 回调 mutate panels 后用陈旧 index）
+## 瀑布式根因（已确认 + 已修复）
 
-### 开发 (Develop) ✅
-提交链（基线 2f484774 → 当前 HEAD 859a2999）：
+Epsilon-Private `DropdownScreen.mouseClicked` 用 **index-based** `panels.remove(i)` + `panels.add(panel)`
+在 panel 回调 mutate panels 后索引错位 → z-shuffle 闪烁。
+我们的修复（8e85831c）：headerClick 判定 + reference-based remove/add，**优于 Private 原实现**。
 
-| Commit | 内容 |
-|--------|------|
-| 8e85831c | 修 DropdownScreen mouseClicked 迭代器破坏：快照 panels.size() + panel 引用，回调后用 remove/add by ref 摆脱索引依赖 |
-| 7dd496dd | 从 Private 移植 TargetStrafe / AutoThrow / Dolphin / Helper 套件（7 个文件） |
-| 86ff4395 | 修 ported 模块的 import 路径（managers.X → managers.impl.X） |
-| 859a2999 | 适配 26.1.x API：TargetRequest 加 11 参重载；RotationUtils.calculate(Vec3, boolean) 重载；RotationManager.getHitResult/setHitResult；批量修 Manager.INSTANCE → Managers.X；mc.gui.screen → mc.screen |
+## 模块差异（已全部量化）
 
-**最终编译状态**（`./gradlew :common:compileJava`）：**BUILD SUCCESSFUL in 41s** ✅
-**最终 fabric jar**：`fabric/build/libs/epsilon-fabric-26.1.2-26.0.0-alpha.2-859a2999.jar`（36.8MB）
+- Epsilon-Private 119 个模块；EpsilonBC 137 个（含 42 个独有自定义模块，全部保留）
+- 重命名对：HandView=HandsView、NoSlowdown=NoSlow（不重复移植）
+- **本轮移植 20 个注册**（19 新 + Helper）：见 commit 9b2ff173
+- **顺延到 26.2**（_parked_wip/）：MotionBlur（需 MotionBlurShader，26.2 blaze3d BindGroupLayout）、BetterChat（26.2 chat 内部 mixin）
 
-### 测试 (Test) ⏳ **环境阻塞**
-- 代码层编译验证 ✅
-- 真实游戏测试 ⏳ **未完成**（MDL 升级 v26.4.0-alpha.5 破坏 26.1.2 实例配置，抛 os error 2 找不到文件；并行会话 8G 游戏占内存）
-- **建议下一会话**: 
-  1. mdl 修复或降级后启动 epsilon-test-26.1.2-fabric
-  2. 验证 dropdown：打开 GUI → 多点击面板头部 → 折叠/展开稳定（无闪烁/跳到最前）
-  3. 验证新模块可见：RightShift → Dropdown → Movement → 应见 Target Strafe / Dolphin；Combat → 应见 Auto Throw；Player → Helper
+## 参考仓库研究结论（子任务已归档）
 
-### 调优 (Tune) ✅（轻量自审）
-- DropdownScreen 修复：snapshot + reference 模式，零回归风险
-- TargetRequest 扩展：3 个新 boolean（passive/teams/named），旧 5/8/9 参重载全部保留为兼容垫片
-- RotationManager.getHitResult：纯 getter，不影响任何现有调用方
-- RotationUtils.calculate(Vec3, boolean)：单行 delegate 到非 adaptive 形式（之后可加 adaptive 扫描）
+- **Meteor 最适合直接移植**：纯 Java、单文件模块、事件模型与 EpsilonBC 一一对应
+- **Wurst 架构最干净**：两阶段 rotate→attack 模式匹配我们的 pending-rotation 模式
+- **LB 借思想不借代码**：rotation-goal 系统、SimulatedPlayer/FallingPlayer、transaction buffer
+- 值得移植的技法：Meteor doYawSteps（Grim 绕过）、EntityAddedEvent fast-crystal、AutoTotem（130 行）；
+  LB jumpOrder[]（Step 包重放）、SimulatedPlayer；Wurst ±ms 攻速随机化（Vulcan bypass）
+- 文件路径前缀：LB=`reference/LiquidBounce-0.40.0/LiquidBounce-0.40.0/src/main/kotlin/net/ccbluex/liquidbounce/`，
+  MC=`reference/meteor-client-1.21.11/meteor-client-1.21.11/src/main/java/meteordevelopment/meteorclient/`，
+  W=`reference/Wurst7-26.2/Wurst7-26.2/src/main/java/net/wurstclient/`
 
-### 发布 (Release) ⏳
-- 分支已推送：`working-2f484774-base` (HEAD = 859a2999)
-- jar 已就位但测试未通过 → **暂不发布到 GitHub Release**
-- 下一会话确认 dropdown 修复 + 新模块可工作后：
-  1. 修 HANDOFF.md（标注已通过测试）
-  2. bump gradle.properties `version=26.0.0-alpha.3`
-  3. 构建 :fabric:jar :neoforge:jar
-  4. `gh release create v26.0.0-alpha.3` 附双 jar + RELEASE_NOTES.md
-  5. 推送 v26.0-alpha.3 分支
+## 构建环境修复（本轮重大）
 
-## 重要文件位置
+| 问题 | 修复 |
+|------|------|
+| gradle-9.2.1 dist 缓存丢失 + services.gradle.org 超时 | wrapper 切到本地已缓存 **9.5.1**（gradle-wrapper.properties） |
+| maven.neoforged.net 间歇 Connection reset | 手动补齐 m2：neoform-runtime 2.0.18 (pom/jar/module/all.jar)、mergetool 2.0.7(+api)、mergetool 1.1.7、accesstransformers 13.0.1(+at-parser)、installertools 4.0.12(+fatjar)、AutoRenamingTool 2.0.17(+all)、vineflower-plugins 0.1.5、**minecraft-dependencies 26.1.2 (pom+module，来自 mojang-meta 代理仓库，packaging 已改 pom)** |
+| MavenLocal 被排在 Mojang Meta 之后（moddev dependencyResolutionManagement 前插） | init 脚本 afterEvaluate 把 MavenLocal move 到首位（`~/.gradle/init.d/zz-diag.init.gradle.kts`，名字可改） |
+| metadata 缓存的负结果 | 清 `~/.gradle/caches/modules-2/metadata-2.107/descriptors` |
 
-- 分支: `working-2f484774-base`（远端: `origin/working-2f484774-base`）
-- 关键修复: `common/src/main/java/com/github/epsilon/gui/dropdown/DropdownScreen.java` line ~309-330
-- 签名扩展: `common/src/main/java/com/github/epsilon/managers/impl/target/TargetRequest.java`
-- 运行时: `common/src/main/java/com/github/epsilon/utils/rotation/RotationUtils.java`（calculate overload）
-- 运行时: `common/src/main/java/com/github/epsilon/managers/impl/rotations/RotationManager.java`（getHitResult/setHitResult）
-- 新模块: `common/src/main/java/com/github/epsilon/modules/impl/{combat/AutoThrow,movement/TargetStrafe,movement/Dolphin,player/helper/*}.java`
+**关键知识**：`minecraft-dependencies` 只存在于 `https://maven.neoforged.net/mojang-meta/net/neoforged/minecraft-dependencies/<ver>/`（releases 仓库 404！）；packaging=module 无 jar，pom+module 即完整。
 
-## 已知遗留
+## 并行会话 WIP（_parked_wip/，动我构建的都暂存了）
 
-1. **未在实机测试的 dropdown 修复** — 必须先确认。
-2. **未移植的 24 个 Private 模块**（AutoBan, AutoMLG, BedNuker, ChestAura, helper/BlockLava 等 6 个已移植，其余 18 个未碰）。
-3. **m2 缓存**: neoform-26.1.2-1 (pom+zip+module) 已预存于 `~/.m2/repository/net/neoforged/neoform/26.1.2-1/`；但 `minecraft-dependencies:26.1.2` 等传递依赖若网络抖动可能还需重试。
-4. **build network**: neoforged.net 间歇 SSL/Connection reset；预下载到 m2 + mavenLocal 注入 init 脚本可缓解。
+- `graphics/vulkan/`、`graphics/abstraction/`、`scripting/`（lua，缺 org.luaj 依赖）
+- `gui/dropdown/component/UiScrollBar`、`gui/dropdown/widget/ChoiceWidget`、
+  `gui/panel/component/setting/ChoiceSettingRow`、`gui/panel/popup/ChoiceSelectPopup`
+- `platform/`（UiRuntime/UiRuntimeRegistry/InternalUiRuntime）
+- `gui/addon/AddonPanelEntryRegistry`（注意：AddonPanelEntry/BuiltInTextMetrics/LuminColorShim 被误并入 9b2ff173 提交，可编译无害）
+- 我方顺延：`MotionBlur.java`、`MotionBlurShader.java`、`LuminBindGroupLayouts.java`、`BetterChat.java`
 
-## 命令
+⚠️ 并行会话正在往本仓库写 WIP 文件——每次构建前 `git status` 检查 ?? 文件，必要时再暂存。
 
-```bash
-# 构建
+## 下一步
+
+1. **i18n 同步**：✅ 已完成（09166ba8）：20 新模块 en_us/zh_cn key 树（源码扫描生成）
+2. **参考仓库重写进度**：
+   - ✅ **AutoTotem**（3a021406）：Meteor Smart/Strict + 预测伤害（晶体/锚爆炸扫描 + FallingPlayer 摔落模拟）+ 弹出包重置延迟 + isLocked() 暴露
+   - ✅ **Velocity**（c421cdbc）：Modify 模式（current + (incoming-current)*factor 百分比削减）
+   - ✅ **CrystalAura**（108a3ae3）：Grim yawSteps 门控（移动包追踪 serverYaw）+ Fast Break（新水晶当 tick 攻击）
+   - ⏳ **Speed**：LB ~20 AC 模式参考，Meteor Strafe 4 阶段状态机（MoveEvent 需求）
+   - ⏳ **Scaffold**：LB techniques/towers 最重（Normal/Expand/GodBridge/Breezily + tower 系列）
+   - ⏳ **KillAura**：已有 CPS 随机化（Wurst 技法已在），剩余升级空间：LB rotation-goal 的 raytraceBox 选点
+3. **实机测试**（dropdown 修复 + 20 新模块 + 3 重写模块）：mdl v26.4.0-alpha.5 破 26.1.2 实例配置的问题未解；注意并行会话内存压力（曾出现 1.3GB 空闲压死构建）
+4. **发布 alpha.3**：测试通过后 bump version + gh release
+
+## 快速命令
+
+```powershell
 $env:JAVA_HOME='C:\Users\Sails\Java\jdk-25.0.3+9'
-Start-Process cmd '/k set JAVA_HOME=...&& .\gradlew.bat :common:compileJava :fabric:jar -x test --no-daemon > build.log 2>&1'
-
-# 部署
+# 构建（分离进程防 shell 超时）
+Start-Process cmd '/k set JAVA_HOME=C:\Users\Sails\Java\jdk-25.0.3+9&& .\gradlew.bat :common:compileJava :fabric:jar -x test --console=plain > build.log 2>&1' -WindowStyle Hidden
+# 部署 26.1.2 实例
 Copy-Item fabric\build\libs\epsilon-fabric-26.1.2-*.jar $env:APPDATA\mdl\instances\epsilon-test-26.1.2-fabric\mods\ -Force
-
-# 启动（注意：当前 mdl v26.4.0-alpha.5 破 26.1.2 实例；需先修复）
-mdl launch epsilon-test-26.1.2-fabric --detach --agent --no-idle-timeout -m 1280M --username Tester
-# 验证 dropdown: RightShift 打开 GUI → 点击面板头部（应稳定折叠展开，不闪到最前）
-# 验证新模块: Movement → Target Strafe / Dolphin；Combat → Auto Throw；Player → Helper
 ```
