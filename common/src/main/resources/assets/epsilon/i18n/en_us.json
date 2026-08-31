@@ -688,7 +688,16 @@
         "anti-weakness": "Anti Weakness",
         "strict air check": "Strict Air Check",
         "particle chance": "Particle Chance",
-        "swing hand": "Swing Hand"
+        "swing hand": "Swing Hand",
+        "Grim": {
+          "_value": "Grim",
+          "Yaw Steps": {
+            "_value": "Yaw Steps"
+          },
+          "Fast Break": {
+            "_value": "Fast Break"
+          }
+        }
       },
       "crystal blocker": {
         "_value": "Crystal Blocker",

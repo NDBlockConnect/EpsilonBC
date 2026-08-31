@@ -1,10 +1,12 @@
 package com.github.epsilon.modules.impl.combat;
 
 import com.github.epsilon.events.bus.EventHandler;
+import com.github.epsilon.events.impl.PacketEvent;
 import com.github.epsilon.events.impl.PlayerTickEvent;
 import com.github.epsilon.events.impl.RightClickEvent;
 import com.github.epsilon.modules.Category;
 import com.github.epsilon.modules.Module;
+import com.github.epsilon.settings.SettingGroup;
 import com.github.epsilon.settings.impl.BoolSetting;
 import com.github.epsilon.settings.impl.DoubleSetting;
 import com.github.epsilon.settings.impl.KeybindSetting;
@@ -15,6 +17,7 @@ import com.github.epsilon.utils.player.InvUtils;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
 import net.minecraft.network.protocol.game.ServerboundSwingPacket;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
@@ -32,7 +35,12 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.Mth;
 import org.lwjgl.glfw.GLFW;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class CrystalAura extends Module {
 
@@ -56,9 +64,19 @@ public class CrystalAura extends Module {
     private final DoubleSetting particleChance = doubleSetting("Particle Chance", 20.0, 0.0, 100.0, 1.0);
     private final BoolSetting swingHand = boolSetting("Swing Hand", true);
 
+    private final SettingGroup sgGrim = settingGroup("Grim");
+
+    // Grim 绕过：仅当服务器已看到视线与目标夹角小于该值时才攻击（参考 Meteor doYawSteps）
+    private final DoubleSetting yawSteps = doubleSetting("Yaw Steps", 180.0, 0.0, 180.0, 5.0, () -> true).group(sgGrim);
+    // 快速爆破：水晶生成当 tick 立即攻击（不依赖准星）
+    private final BoolSetting fastBreak = boolSetting("Fast Break", false, () -> true).group(sgGrim);
+
     private int placeClock;
     private int breakClock;
     public boolean crystalling;
+
+    private float lastServerYaw;
+    private final Set<Integer> seenCrystals = new HashSet<>();
 
     public void resetClocks() {
         this.placeClock = 0;
@@ -69,12 +87,37 @@ public class CrystalAura extends Module {
     protected void onEnable() {
         resetClocks();
         crystalling = false;
+        seenCrystals.clear();
+        if (mc.player != null) lastServerYaw = mc.player.getYRot();
     }
 
     @Override
     protected void onDisable() {
         resetClocks();
         crystalling = false;
+        seenCrystals.clear();
+    }
+
+    /**
+     * 记录服务器实际看到的 yaw（来自最新移动感包），供 yawSteps 门控使用。
+     */
+    @EventHandler
+    public void onPacketSend(PacketEvent.Send event) {
+        if (nullCheck()) return;
+        if (event.getPacket() instanceof ServerboundMovePlayerPacket packet && packet.hasRotation()) {
+            lastServerYaw = packet.getYRot(lastServerYaw);
+        }
+    }
+
+    /**
+     * Grim yawSteps 门控：服务器看到的 yaw 与当前视线 yaw 差值是否在阈值内。
+     * 180 = 禁用。
+     */
+    private boolean yawStepGate() {
+        float limit = yawSteps.getValue().floatValue();
+        if (limit >= 180.0f) return true;
+        float delta = Math.abs(Mth.wrapDegrees(mc.player.getYRot() - lastServerYaw));
+        return delta <= limit;
     }
 
     @EventHandler
@@ -101,6 +144,32 @@ public class CrystalAura extends Module {
         }
 
         crystalling = true;
+
+        // Fast Break：水晶生成当 tick 立即攻击（不依赖准星），Grim 门控同样生效
+        if (fastBreak.getValue()) {
+            List<EndCrystal> crystals = mc.level.getEntitiesOfClass(EndCrystal.class, mc.player.getBoundingBox().inflate(4.5));
+            Set<Integer> currentIds = new HashSet<>();
+            boolean broke = false;
+            for (EndCrystal crystal : crystals) {
+                int id = crystal.getId();
+                currentIds.add(id);
+                if (!seenCrystals.contains(id) && !dontBreak && yawStepGate()) {
+                    mc.gameMode.attack(mc.player, crystal);
+                    if (swingHand.getValue()) {
+                        mc.player.swing(InteractionHand.MAIN_HAND);
+                    } else {
+                        mc.getConnection().send(new ServerboundSwingPacket(InteractionHand.MAIN_HAND));
+                    }
+                    breakClock = breakDelay.getValue().intValue();
+                    broke = true;
+                }
+            }
+            seenCrystals.clear();
+            seenCrystals.addAll(currentIds);
+            if (broke && !dontBreak) {
+                // 本 tick 已爆破，放置流程照常继续（0 延迟时同 tick 放置）
+            }
+        }
 
         if (!mc.player.getMainHandItem().is(Items.END_CRYSTAL)) return;
 
@@ -150,6 +219,10 @@ public class CrystalAura extends Module {
                 Entity entity = hit.getEntity();
 
                 if (!(fakePunch.getValue() || entity instanceof EndCrystal || entity instanceof Slime)) {
+                    return;
+                }
+
+                if (entity instanceof EndCrystal && !yawStepGate()) {
                     return;
                 }
 

@@ -688,7 +688,16 @@
         "anti-weakness": "抗虚弱",
         "strict air check": "严格空气检查",
         "particle chance": "粒子几率",
-        "swing hand": "挥手"
+        "swing hand": "挥手",
+        "Grim": {
+          "_value": "Grim 绕过",
+          "Yaw Steps": {
+            "_value": "Yaw 容差"
+          },
+          "Fast Break": {
+            "_value": "快速爆破"
+          }
+        }
       },
       "crystal blocker": {
         "_value": "水晶阻断",
