@@ -233,4 +233,23 @@ public class NoSlow extends Module {
         return useAnim == ItemUseAnimation.EAT || useAnim == ItemUseAnimation.DRINK;
     }
 
+    /**
+     * 供外部模块（如 AutoMLG）查询：NoSlow 是否正处于 GrimC0F 进食状态机中。
+     */
+    public boolean isWorking() {
+        return isEnabled() && step == Step.EATING;
+    }
+
+    /**
+     * 供外部模块强制中止状态机（如 MLG 水桶场景需立即恢复移动）。
+     */
+    public void stop() {
+        if (step == Step.NONE) return;
+        mc.options.keyUse.setDown(false);
+        if (mc.player != null && mc.player.isUsingItem() && mc.gameMode != null) {
+            mc.gameMode.releaseUsingItem(mc.player);
+        }
+        releasePackets();
+    }
+
 }

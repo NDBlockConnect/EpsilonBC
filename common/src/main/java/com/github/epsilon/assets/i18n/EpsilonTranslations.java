@@ -32,6 +32,7 @@ public final class EpsilonTranslations {
             Gui.MAINMENU_REISA_FAREWELL,
             Gui.MAINMENU_HINATA_GREETING,
             Gui.MAINMENU_HINATA_FAREWELL,
+            Notifications.NO_SLOWDOWN_DISABLED_WATER,
             Gui.TAB_GENERAL,
             Gui.TAB_FRIEND,
             Gui.TAB_CONFIG,
@@ -249,6 +250,13 @@ public final class EpsilonTranslations {
         public static final TranslateComponent UNKNOWN_GAMEMODE = create("modules.player alarms", "unknown_gamemode");
 
         private PlayerAlarms() {
+        }
+    }
+
+    public static final class Notifications {
+        public static final TranslateComponent NO_SLOWDOWN_DISABLED_WATER = create("notifications", "no_slowdown_disabled_water");
+
+        private Notifications() {
         }
     }
 
