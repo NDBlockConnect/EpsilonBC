@@ -2167,6 +2167,330 @@
         "login": "Login",
         "resolve name from uuid": "Resolve Name From UUID",
         "restore original": "Restore Original"
+      },
+      "multi aura": {
+        "_value": "Multi Aura",
+        "Range": {
+          "_value": "Range"
+        },
+        "Min CPS": {
+          "_value": "Min CPS"
+        },
+        "Max CPS": {
+          "_value": "Max CPS"
+        },
+        "FOV": {
+          "_value": "FOV"
+        },
+        "Swing Hand": {
+          "_value": "Swing Hand"
+        },
+        "Pause On Containers": {
+          "_value": "Pause On Containers"
+        },
+        "Player": {
+          "_value": "Player"
+        },
+        "Mob": {
+          "_value": "Mob"
+        },
+        "Animal": {
+          "_value": "Animal"
+        },
+        "Villager": {
+          "_value": "Villager"
+        },
+        "Ambient": {
+          "_value": "Ambient"
+        },
+        "Water": {
+          "_value": "Water"
+        },
+        "Others": {
+          "_value": "Others"
+        },
+        "Invisible": {
+          "_value": "Invisible"
+        }
+      },
+      "super knockback": {
+        "_value": "Super Knockback",
+        "Mode": {
+          "_value": "Mode"
+        },
+        "Delay": {
+          "_value": "Delay"
+        },
+        "Hurt Time": {
+          "_value": "Hurt Time"
+        }
+      },
+      "reverse step": {
+        "_value": "Reverse Step",
+        "Fall Speed": {
+          "_value": "Fall Speed"
+        },
+        "Fall Distance": {
+          "_value": "Fall Distance"
+        },
+        "Vehicles": {
+          "_value": "Vehicles"
+        }
+      },
+      "auto ban": {
+        "_value": "Auto Ban",
+        "Order": {
+          "_value": "Order"
+        },
+        "Delay": {
+          "_value": "Delay"
+        }
+      },
+      "auto crossbow release": {
+        "_value": "Auto Crossbow Release"
+      },
+      "auto mlg": {
+        "_value": "Auto MLG",
+        "Interact Delay": {
+          "_value": "Interact Delay"
+        },
+        "Collect Delay Ticks": {
+          "_value": "Collect Delay Ticks"
+        }
+      },
+      "bed nuker": {
+        "_value": "Bed Nuker",
+        "Range": {
+          "_value": "Range"
+        },
+        "Through Walls": {
+          "_value": "Through Walls"
+        },
+        "Rotate": {
+          "_value": "Rotate"
+        },
+        "Rotation Speed": {
+          "_value": "Rotation Speed"
+        },
+        "Swing Hand": {
+          "_value": "Swing Hand"
+        },
+        "ESP": {
+          "_value": "ESP"
+        }
+      },
+      "chest aura": {
+        "_value": "Chest Aura",
+        "Chests": {
+          "_value": "Chests"
+        },
+        "Furnaces": {
+          "_value": "Furnaces"
+        },
+        "Blast Furnaces": {
+          "_value": "Blast Furnaces"
+        },
+        "Smokers": {
+          "_value": "Smokers"
+        },
+        "Brewing Stands": {
+          "_value": "Brewing Stands"
+        },
+        "Swing": {
+          "_value": "Swing"
+        },
+        "Pause On Eat": {
+          "_value": "Pause On Eat"
+        },
+        "Require Stealer": {
+          "_value": "Require Stealer"
+        },
+        "Ignore Other Opened": {
+          "_value": "Ignore Other Opened"
+        },
+        "Range": {
+          "_value": "Range"
+        },
+        "Through Wall Range": {
+          "_value": "Through Wall Range"
+        },
+        "Cancel Range": {
+          "_value": "Cancel Range"
+        },
+        "Delay": {
+          "_value": "Delay"
+        },
+        "Turn Speed": {
+          "_value": "Turn Speed"
+        },
+        "Disable In Hypixel Lobby": {
+          "_value": "Disable In Hypixel Lobby"
+        }
+      },
+      "input disabler": {
+        "_value": "Input Disabler"
+      },
+      "helper": {
+        "_value": "Helper",
+        "Self Extinguish": {
+          "_value": "Self Extinguish"
+        },
+        "Extinguish Fire": {
+          "_value": "Extinguish Fire"
+        },
+        "Block Lava": {
+          "_value": "Block Lava"
+        },
+        "Block Water": {
+          "_value": "Block Water"
+        },
+        "Speed": {
+          "_value": "Speed"
+        },
+        "Rotation Priority": {
+          "_value": "Rotation Priority"
+        }
+      },
+      "better scoreboard": {
+        "_value": "Better Scoreboard",
+        "Background Color": {
+          "_value": "Background Color"
+        },
+        "Radius": {
+          "_value": "Radius"
+        },
+        "X Offset": {
+          "_value": "X Offset"
+        },
+        "Y Offset": {
+          "_value": "Y Offset"
+        },
+        "Background Blur": {
+          "_value": "Background Blur"
+        },
+        "Blur Strength": {
+          "_value": "Blur Strength"
+        },
+        "Draw Shadow": {
+          "_value": "Draw Shadow"
+        },
+        "Shadow Blur": {
+          "_value": "Shadow Blur"
+        },
+        "Shadow Color": {
+          "_value": "Shadow Color"
+        }
+      },
+      "customsky": {
+        "_value": "CustomSky",
+        "Shader": {
+          "_value": "Shader"
+        },
+        "Speed": {
+          "_value": "Speed"
+        },
+        "Color": {
+          "_value": "Color"
+        },
+        "Background Color (Local)": {
+          "_value": "Background Color (Local)"
+        }
+      },
+      "health": {
+        "_value": "Health"
+      },
+      "item physics": {
+        "_value": "Item Physics"
+      },
+      "kill effect": {
+        "_value": "Kill Effect",
+        "Lightning": {
+          "_value": "Lightning"
+        },
+        "Explosion": {
+          "_value": "Explosion"
+        },
+        "Squid": {
+          "_value": "Squid"
+        },
+        "Blood": {
+          "_value": "Blood"
+        }
+      },
+      "logout spots": {
+        "_value": "Logout Spots",
+        "Notifications": {
+          "_value": "Notifications"
+        },
+        "Ignore Bots": {
+          "_value": "Ignore Bots"
+        },
+        "Render Mode": {
+          "_value": "Render Mode"
+        },
+        "Side Color": {
+          "_value": "Side Color"
+        },
+        "Line Color": {
+          "_value": "Line Color"
+        }
+      },
+      "no ghost blocks": {
+        "_value": "No Ghost Blocks",
+        "Breaking": {
+          "_value": "Breaking"
+        },
+        "Placing": {
+          "_value": "Placing"
+        }
+      },
+      "title replace": {
+        "_value": "Title Replace",
+        "Value": {
+          "_value": "Value"
+        },
+        "Gradient": {
+          "_value": "Gradient"
+        },
+        "Color": {
+          "_value": "Color"
+        },
+        "Start Color": {
+          "_value": "Start Color"
+        },
+        "End Color": {
+          "_value": "End Color"
+        }
+      },
+      "totem animation": {
+        "_value": "Totem Animation",
+        "Mode": {
+          "_value": "Mode"
+        },
+        "Speed": {
+          "_value": "Speed"
+        }
+      },
+      "world tweaks": {
+        "_value": "World Tweaks",
+        "Fog Modify": {
+          "_value": "Fog Modify"
+        },
+        "Fog Start": {
+          "_value": "Fog Start"
+        },
+        "Fog End": {
+          "_value": "Fog End"
+        },
+        "Fog Color": {
+          "_value": "Fog Color"
+        },
+        "Change Time": {
+          "_value": "Change Time"
+        },
+        "Time": {
+          "_value": "Time"
+        }
       }
     },
     "elements": {

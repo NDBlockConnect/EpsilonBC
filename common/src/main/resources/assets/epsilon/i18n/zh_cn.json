@@ -2167,6 +2167,330 @@
         "login": "登录",
         "resolve name from uuid": "从UUID查询名字",
         "restore original": "还原原账号"
+      },
+      "multi aura": {
+        "_value": "多重攻击",
+        "Range": {
+          "_value": "Range"
+        },
+        "Min CPS": {
+          "_value": "Min CPS"
+        },
+        "Max CPS": {
+          "_value": "Max CPS"
+        },
+        "FOV": {
+          "_value": "FOV"
+        },
+        "Swing Hand": {
+          "_value": "Swing Hand"
+        },
+        "Pause On Containers": {
+          "_value": "Pause On Containers"
+        },
+        "Player": {
+          "_value": "Player"
+        },
+        "Mob": {
+          "_value": "Mob"
+        },
+        "Animal": {
+          "_value": "Animal"
+        },
+        "Villager": {
+          "_value": "Villager"
+        },
+        "Ambient": {
+          "_value": "Ambient"
+        },
+        "Water": {
+          "_value": "Water"
+        },
+        "Others": {
+          "_value": "Others"
+        },
+        "Invisible": {
+          "_value": "Invisible"
+        }
+      },
+      "super knockback": {
+        "_value": "超级击退",
+        "Mode": {
+          "_value": "Mode"
+        },
+        "Delay": {
+          "_value": "Delay"
+        },
+        "Hurt Time": {
+          "_value": "Hurt Time"
+        }
+      },
+      "reverse step": {
+        "_value": "反向台阶",
+        "Fall Speed": {
+          "_value": "Fall Speed"
+        },
+        "Fall Distance": {
+          "_value": "Fall Distance"
+        },
+        "Vehicles": {
+          "_value": "Vehicles"
+        }
+      },
+      "auto ban": {
+        "_value": "自动封禁",
+        "Order": {
+          "_value": "Order"
+        },
+        "Delay": {
+          "_value": "Delay"
+        }
+      },
+      "auto crossbow release": {
+        "_value": "自动弩击发"
+      },
+      "auto mlg": {
+        "_value": "自动 MLG",
+        "Interact Delay": {
+          "_value": "Interact Delay"
+        },
+        "Collect Delay Ticks": {
+          "_value": "Collect Delay Ticks"
+        }
+      },
+      "bed nuker": {
+        "_value": "床挖掘",
+        "Range": {
+          "_value": "Range"
+        },
+        "Through Walls": {
+          "_value": "Through Walls"
+        },
+        "Rotate": {
+          "_value": "Rotate"
+        },
+        "Rotation Speed": {
+          "_value": "Rotation Speed"
+        },
+        "Swing Hand": {
+          "_value": "Swing Hand"
+        },
+        "ESP": {
+          "_value": "ESP"
+        }
+      },
+      "chest aura": {
+        "_value": "箱子光环",
+        "Chests": {
+          "_value": "Chests"
+        },
+        "Furnaces": {
+          "_value": "Furnaces"
+        },
+        "Blast Furnaces": {
+          "_value": "Blast Furnaces"
+        },
+        "Smokers": {
+          "_value": "Smokers"
+        },
+        "Brewing Stands": {
+          "_value": "Brewing Stands"
+        },
+        "Swing": {
+          "_value": "Swing"
+        },
+        "Pause On Eat": {
+          "_value": "Pause On Eat"
+        },
+        "Require Stealer": {
+          "_value": "Require Stealer"
+        },
+        "Ignore Other Opened": {
+          "_value": "Ignore Other Opened"
+        },
+        "Range": {
+          "_value": "Range"
+        },
+        "Through Wall Range": {
+          "_value": "Through Wall Range"
+        },
+        "Cancel Range": {
+          "_value": "Cancel Range"
+        },
+        "Delay": {
+          "_value": "Delay"
+        },
+        "Turn Speed": {
+          "_value": "Turn Speed"
+        },
+        "Disable In Hypixel Lobby": {
+          "_value": "Disable In Hypixel Lobby"
+        }
+      },
+      "input disabler": {
+        "_value": "输入禁用"
+      },
+      "helper": {
+        "_value": "助手",
+        "Self Extinguish": {
+          "_value": "Self Extinguish"
+        },
+        "Extinguish Fire": {
+          "_value": "Extinguish Fire"
+        },
+        "Block Lava": {
+          "_value": "Block Lava"
+        },
+        "Block Water": {
+          "_value": "Block Water"
+        },
+        "Speed": {
+          "_value": "Speed"
+        },
+        "Rotation Priority": {
+          "_value": "Rotation Priority"
+        }
+      },
+      "better scoreboard": {
+        "_value": "更好的计分板",
+        "Background Color": {
+          "_value": "Background Color"
+        },
+        "Radius": {
+          "_value": "Radius"
+        },
+        "X Offset": {
+          "_value": "X Offset"
+        },
+        "Y Offset": {
+          "_value": "Y Offset"
+        },
+        "Background Blur": {
+          "_value": "Background Blur"
+        },
+        "Blur Strength": {
+          "_value": "Blur Strength"
+        },
+        "Draw Shadow": {
+          "_value": "Draw Shadow"
+        },
+        "Shadow Blur": {
+          "_value": "Shadow Blur"
+        },
+        "Shadow Color": {
+          "_value": "Shadow Color"
+        }
+      },
+      "customsky": {
+        "_value": "自定义天空",
+        "Shader": {
+          "_value": "Shader"
+        },
+        "Speed": {
+          "_value": "Speed"
+        },
+        "Color": {
+          "_value": "Color"
+        },
+        "Background Color (Local)": {
+          "_value": "Background Color (Local)"
+        }
+      },
+      "health": {
+        "_value": "生命值显示"
+      },
+      "item physics": {
+        "_value": "物品物理"
+      },
+      "kill effect": {
+        "_value": "击杀特效",
+        "Lightning": {
+          "_value": "Lightning"
+        },
+        "Explosion": {
+          "_value": "Explosion"
+        },
+        "Squid": {
+          "_value": "Squid"
+        },
+        "Blood": {
+          "_value": "Blood"
+        }
+      },
+      "logout spots": {
+        "_value": "登出位置",
+        "Notifications": {
+          "_value": "Notifications"
+        },
+        "Ignore Bots": {
+          "_value": "Ignore Bots"
+        },
+        "Render Mode": {
+          "_value": "Render Mode"
+        },
+        "Side Color": {
+          "_value": "Side Color"
+        },
+        "Line Color": {
+          "_value": "Line Color"
+        }
+      },
+      "no ghost blocks": {
+        "_value": "无幽灵方块",
+        "Breaking": {
+          "_value": "Breaking"
+        },
+        "Placing": {
+          "_value": "Placing"
+        }
+      },
+      "title replace": {
+        "_value": "标题替换",
+        "Value": {
+          "_value": "Value"
+        },
+        "Gradient": {
+          "_value": "Gradient"
+        },
+        "Color": {
+          "_value": "Color"
+        },
+        "Start Color": {
+          "_value": "Start Color"
+        },
+        "End Color": {
+          "_value": "End Color"
+        }
+      },
+      "totem animation": {
+        "_value": "图腾动画",
+        "Mode": {
+          "_value": "Mode"
+        },
+        "Speed": {
+          "_value": "Speed"
+        }
+      },
+      "world tweaks": {
+        "_value": "世界调整",
+        "Fog Modify": {
+          "_value": "Fog Modify"
+        },
+        "Fog Start": {
+          "_value": "Fog Start"
+        },
+        "Fog End": {
+          "_value": "Fog End"
+        },
+        "Fog Color": {
+          "_value": "Fog Color"
+        },
+        "Change Time": {
+          "_value": "Change Time"
+        },
+        "Time": {
+          "_value": "Time"
+        }
       }
     },
     "elements": {
