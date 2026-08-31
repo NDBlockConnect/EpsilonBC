@@ -441,7 +441,30 @@
         "_value": "Auto Totem",
         "strict": "Strict",
         "health": "Health",
-        "check gapple": "Check Gapple"
+        "check gapple": "Check Gapple",
+        "Mode": {
+          "_value": "Mode",
+          "Strict": "Strict",
+          "Smart": "Smart"
+        },
+        "Delay": {
+          "_value": "Delay"
+        },
+        "Health": {
+          "_value": "Health"
+        },
+        "Elytra": {
+          "_value": "Elytra"
+        },
+        "Explosion": {
+          "_value": "Explosion"
+        },
+        "Fall": {
+          "_value": "Fall"
+        },
+        "Gapple": {
+          "_value": "Gapple"
+        }
       },
       "auto weapon": {
         "_value": "Auto Weapon",

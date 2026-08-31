@@ -441,7 +441,30 @@
         "_value": "自动图腾",
         "strict": "严格模式",
         "health": "生命值",
-        "check gapple": "检查金苹果"
+        "check gapple": "检查金苹果",
+        "Mode": {
+          "_value": "模式",
+          "Strict": "严格",
+          "Smart": "智能"
+        },
+        "Delay": {
+          "_value": "延迟"
+        },
+        "Health": {
+          "_value": "血量阈值"
+        },
+        "Elytra": {
+          "_value": "鞘翅飞行时"
+        },
+        "Explosion": {
+          "_value": "爆炸预测"
+        },
+        "Fall": {
+          "_value": "摔落预测"
+        },
+        "Gapple": {
+          "_value": "金苹果手持"
+        }
       },
       "auto weapon": {
         "_value": "自动武器",
