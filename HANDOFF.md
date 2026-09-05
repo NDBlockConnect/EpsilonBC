@@ -1,7 +1,50 @@
-# EpsilonBC 交接文档 v4（2026-08-31 会话 4）
+# EpsilonBC 交接文档 v5（2026-09-05/06 会话 5）
 
 > GitHub@NDBlockConnect | BlockConnect@StarsailsClover
-> 分支: `working-2f484774-base`（HEAD = 9b2ff173，已推 origin）
+> 分支: `working-2f484774-base`（HEAD = 2dbb1306，已推 origin）
+> **✅ v26.0.0-alpha.4 已发布**: https://github.com/NDBlockConnect/EpsilonBC/releases/tag/v26.0.0-alpha.4
+
+## 实机测试结论（本轮完成 ✅）
+
+**测试环境排障（三个根因全部定位）**：
+1. **实例游戏静默死亡** = mods 里缺 **Despotes agent 模组** → `--agent` 等不到连接被 mdl 杀；从 openlumin-fabric-26.1.2 拷 `Despotes-v26.12-Alpha.3-fabric-26.1.2.jar` 解决
+2. **keybd_event 注入键无效** = scancode=0 时 GLFW 不识别；**必须带正确 scancode**（RightShift=VK 0xA1 + scan 0x36）；ESC/字母键 scan=0 恰好能通造成误判
+3. **mdl `game key`/raw-action key 走 KeyMapping 层**，不经过我们的 GLFW mixin —— 测模组按键必须用 OS 级输入
+4. mdl 版本自动升级频繁（v26.4→v26.5.0-alpha.8），instance→window 映射有 bug；`--oom-list-only` 防止 launch 清场杀别的游戏
+
+**验证通过项**：
+- 全部 157 模块注册（含 20 新）——本次运行生成的 epsilon-empty-i18n.json 逐项确认
+- 自定义 MainMenuScreen 渲染 ✓；世界创建/进入 ✓
+- **DropdownGui 开启/关闭正常**；主面板头部连点 5 次 + 分类面板切换 3 次**无 z-shuffle、无异常**（8e85831c 修复实机验证通过）
+- dropdown-layout.json 持久化正常
+
+## 测试环境快速复现
+
+```powershell
+# 实例: epsilon-test-26.1.2-fabric（MC 26.1.2 + fabric 0.19.2，runtime/versions 已从 epsilon-fabric-26 拷贝）
+# mods 必须: epsilon jar + fabric-api + Despotes-v26.12-Alpha.3-fabric-26.1.2.jar
+mdl launch epsilon-test-26.1.2-fabric --detach --agent --no-idle-timeout --oom-list-only -m 1280M --username Tester
+# GUI 按键注入（PowerShell, keybd_event 必须带 scancode）:
+#   RightShift = keybd_event(0xA1, 0x36, 0/2) ；ESC = 0x1B；进入世界后按键才生效
+# mdl click 坐标 = MC gui-scaled 空间（guiScale=2 时 427x240）
+# 自定义主菜单 Singleplayer 按钮 ≈ (75, 220)；Create 按钮 ≈ (134, 224)（左 Create 右 Cancel！）
+```
+
+## 发布信息（alpha.4）
+
+- tag `v26.0.0-alpha.4`（注意：alpha.3 标签被旧 26.2 线占用，故跳号）
+- 资产：epsilon-fabric-26.1.2-26.0.0-alpha.4.jar + epsilon-neoforge-26.1.2-26.0.0-alpha.4.jar（36.9MB×2，SHA256 校验通过）
+- 发布用 gh api（`gh release create` 需 workflow scope；REST API 只要 repo 权限）
+- ⚠️ C 盘空间曾耗尽（0GB）——已清旧 gradle dists/caches 释放 ~2GB；构建前留意
+
+## 前情摘要（会话 4 及更早）
+
+- 瀑布式根因：Private 用 index-based remove/add；我们已用 headerClick+reference 方案修复并实机验证
+- 移植 20 模块（9b2ff173）+ i18n（09166ba8，en/zh 各 216+ keys）
+- 重写：AutoTotem（3a021406 预测伤害）、Velocity（c421cdbc Modify）、CrystalAura（108a3ae3 yawSteps+fastBreak）
+- Speed/Scaffold 审查后判定与参考持平，无需重写
+- 构建环境：gradle 9.5.1（wrapper）、MavenLocal 首位重排（init.d/zz-mavenlocal-first.init.gradle.kts）、minecraft-dependencies 只在 mojang-meta 仓库（pom+module，packaging 已改 pom）
+- _parked_wip/：并行会话 WIP（vulkan/abstraction/scripting/platform/gui Choice*）+ 26.2 顺延（MotionBlur/BetterChat）
 
 ## 用户定位（本轮确认）
 
