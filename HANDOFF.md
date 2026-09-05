@@ -66,15 +66,28 @@ Epsilon-Private `DropdownScreen.mouseClicked` 用 **index-based** `panels.remove
    - ⏳ **Speed**：LB ~20 AC 模式参考，Meteor Strafe 4 阶段状态机（MoveEvent 需求）
    - ⏳ **Scaffold**：LB techniques/towers 最重（Normal/Expand/GodBridge/Breezily + tower 系列）
    - ⏳ **KillAura**：已有 CPS 随机化（Wurst 技法已在），剩余升级空间：LB rotation-goal 的 raytraceBox 选点
-3. **实机测试**（dropdown 修复 + 20 新模块 + 3 重写模块）：mdl v26.4.0-alpha.5 破 26.1.2 实例配置的问题未解；注意并行会话内存压力（曾出现 1.3GB 空闲压死构建）
+3. **实机测试进展**（2026-09-05）：
+   - ✅ **修复 26.1.2 实例**：instance.json 丢失（只剩 mods/）→ 重建 + 从 epsilon-fabric-26 拷贝 runtime/versions + loader 版本对齐 **0.19.2**（0.19.3 会启动即死）
+   - ✅ **游戏启动成功，模组完整加载**："Welcome to EpsilonBC." + CJK fallback font (malgun.ttf) 初始化成功 = 全部 157 模块（含 20 新）注册无崩溃
+   - ❌ **进程在 17:03:21 后被静默击杀**（无崩溃日志 = 已知并行会话 8G 游戏触发 OOM 清扫问题）；⚠️ 注意 mdl v26.5.0-alpha.5 有 instance→window 映射 bug，会把他人的 openlumin 游戏映射到我们的实例名（已两次误导测试，须用进程 cmdline 验证归属）
+   - ⏳ **未验证**：dropdown 修复实机行为、新模块 GUI 可见性、Smart AutoTotem 预测
+   - 网络现状：services.gradle.org / piston-meta.mojang.com 均间歇不可达（新建实例受阻）
 4. **发布 alpha.3**：测试通过后 bump version + gh release
 
 ## 快速命令
 
 ```powershell
 $env:JAVA_HOME='C:\Users\Sails\Java\jdk-25.0.3+9'
-# 构建（分离进程防 shell 超时）
-Start-Process cmd '/k set JAVA_HOME=C:\Users\Sails\Java\jdk-25.0.3+9&& .\gradlew.bat :common:compileJava :fabric:jar -x test --console=plain > build.log 2>&1' -WindowStyle Hidden
-# 部署 26.1.2 实例
+# 构建（务必 --offline 防网络停滞；分离进程防 shell 超时）
+Start-Process cmd '/k set JAVA_HOME=C:\Users\Sails\Java\jdk-25.0.3+9&& .\gradlew.bat :common:compileJava :fabric:jar -x test --console=plain --offline > build.log 2>&1' -WindowStyle Hidden
+# 部署 26.1.2 实例（epsilon-test-26.1.2-fabric，runtime 已修好，loader 必须 0.19.2）
 Copy-Item fabric\build\libs\epsilon-fabric-26.1.2-*.jar $env:APPDATA\mdl\instances\epsilon-test-26.1.2-fabric\mods\ -Force
+# 启动
+mdl launch epsilon-test-26.1.2-fabric --detach --agent --no-idle-timeout -m 1280M --username Tester
+# 验证归属（mdl 有实例→窗口映射 bug）：
+Get-CimInstance Win32_Process -Filter "Name='java.exe'" | ? { $_.CommandLine -match 'instances\\([\w.\-]+)' } | % { $Matches[1] }
 ```
+
+## 既有 jar
+
+- 最新：`fabric/build/libs/epsilon-fabric-26.1.2-26.0.0-alpha.2-86999bf9.jar`（含 20 新模块 + AutoTotem/Velocity/CrystalAura 重写 + i18n）
