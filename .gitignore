@@ -41,4 +41,4 @@ repo
 /build-log*.txt
 /game-*.log
 /build-fabric.bat
-/deploy.bat
+/deploy.bat*.log
