@@ -1,0 +1,96 @@
+Starting a Gradle Daemon, 6 busy and 1 incompatible Daemons could not be reused, use --status for details
+> Task :buildSrc:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :buildSrc:generateExternalPluginSpecBuilders UP-TO-DATE
+> Task :buildSrc:extractPrecompiledScriptPluginPlugins UP-TO-DATE
+> Task :buildSrc:compilePluginsBlocks UP-TO-DATE
+> Task :buildSrc:generatePrecompiledScriptPluginAccessors UP-TO-DATE
+> Task :buildSrc:generateScriptPluginAdapters UP-TO-DATE
+> Task :buildSrc:compileKotlin UP-TO-DATE
+> Task :buildSrc:compileJava NO-SOURCE
+> Task :buildSrc:compileGroovy NO-SOURCE
+> Task :buildSrc:pluginDescriptors UP-TO-DATE
+> Task :buildSrc:processResources UP-TO-DATE
+> Task :buildSrc:classes UP-TO-DATE
+> Task :buildSrc:jar UP-TO-DATE
+
+> Configure project :common
+Parsed unknown MC version 26.1.2 from NeoForm version 26.1.2-1. Using capabilities of latest known Minecraft version 26.1-snapshot-2 with an updated Minecraft version.
+
+> Configure project :fabric
+Fabric Loom: 1.15.5
+
+> Configure project :neoforge
+Parsed unknown MC version 26.1.2 from NeoForge version 26.1.2.76. Using capabilities of latest known Minecraft version 26.1-snapshot-2 with an updated Minecraft version.
+
+> Task :common:dependencies
+
+------------------------------------------------------------
+Project ':common'
+------------------------------------------------------------
+
+neoFormRuntimeDependenciesCompileClasspath - Dependencies needed for running NeoFormRuntime for the selected NeoForge/NeoForm version (Classpath)
+\--- net.neoforged:neoform:26.1.2-1
+     +--- net.neoforged:minecraft-dependencies:26.1.2
+     |    +--- at.yawk.lz4:lz4-java:{strictly 1.10.1} -> 1.10.1
+     |    +--- com.azure:azure-json:{strictly 1.4.0} -> 1.4.0
+     |    +--- com.github.oshi:oshi-core:{strictly 6.9.0} -> 6.9.0
+     |    +--- com.google.code.gson:gson:{strictly 2.13.2} -> 2.13.2
+     |    +--- com.google.guava:failureaccess:{strictly 1.0.3} -> 1.0.3
+     |    +--- com.google.guava:guava:{strictly 33.5.0-jre} -> 33.5.0-jre
+     |    +--- com.ibm.icu:icu4j:{strictly 77.1} -> 77.1
+     |    +--- com.microsoft.azure:msal4j:{strictly 1.23.1} -> 1.23.1
+     |    +--- com.mojang:authlib:{strictly 7.0.63} -> 7.0.63
+     |    +--- com.mojang:blocklist:{strictly 1.0.10} -> 1.0.10
+     |    +--- com.mojang:brigadier:{strictly 1.3.10} -> 1.3.10
+     |    +--- com.mojang:datafixerupper:{strictly 9.0.19} -> 9.0.19
+     |    +--- com.mojang:jtracy:{strictly 1.0.37} -> 1.0.37
+     |    +--- com.mojang:logging:{strictly 1.6.11} -> 1.6.11
+     |    +--- com.mojang:patchy:{strictly 2.2.10} -> 2.2.10
+     |    +--- com.mojang:text2speech:{strictly 1.18.11} -> 1.18.11
+     |    +--- commons-codec:commons-codec:{strictly 1.19.0} -> 1.19.0
+     |    +--- commons-io:commons-io:{strictly 2.20.0} -> 2.20.0
+     |    +--- io.netty:netty-buffer:{strictly 4.2.7.Final} -> 4.2.7.Final
+     |    +--- io.netty:netty-codec-base:{strictly 4.2.7.Final} -> 4.2.7.Final
+     |    +--- io.netty:netty-codec-compression:{strictly 4.2.7.Final} -> 4.2.7.Final
+     |    +--- io.netty:netty-codec-http:{strictly 4.2.7.Final} -> 4.2.7.Final
+     |    +--- io.netty:netty-common:{strictly 4.2.7.Final} -> 4.2.7.Final
+     |    +--- io.netty:netty-handler:{strictly 4.2.7.Final} -> 4.2.7.Final
+     |    +--- io.netty:netty-resolver:{strictly 4.2.7.Final} -> 4.2.7.Final
+     |    +--- io.netty:netty-transport-classes-epoll:{strictly 4.2.7.Final} -> 4.2.7.Final
+     |    +--- io.netty:netty-transport-classes-kqueue:{strictly 4.2.7.Final} -> 4.2.7.Final
+     |    +--- io.netty:netty-transport-native-unix-common:{strictly 4.2.7.Final} -> 4.2.7.Final
+     |    +--- io.netty:netty-transport:{strictly 4.2.7.Final} -> 4.2.7.Final
+     |    +--- it.unimi.dsi:fastutil:{strictly 8.5.18} -> 8.5.18
+     |    +--- net.java.dev.jna:jna-platform:{strictly 5.17.0} -> 5.17.0
+     |    +--- net.java.dev.jna:jna:{strictly 5.17.0} -> 5.17.0
+     |    +--- net.sf.jopt-simple:jopt-simple:{strictly 5.0.4} -> 5.0.4
+     |    +--- org.apache.commons:commons-compress:{strictly 1.28.0} -> 1.28.0
+     |    +--- org.apache.commons:commons-lang3:{strictly 3.19.0} -> 3.19.0
+     |    +--- org.apache.logging.log4j:log4j-api:{strictly 2.25.2} -> 2.25.2
+     |    +--- org.apache.logging.log4j:log4j-core:{strictly 2.25.2} -> 2.25.2
+     |    +--- org.apache.logging.log4j:log4j-slf4j2-impl:{strictly 2.25.2} -> 2.25.2
+     |    +--- org.jcraft:jorbis:{strictly 0.0.17} -> 0.0.17
+     |    +--- org.joml:joml:{strictly 1.10.8} -> 1.10.8
+     |    +--- org.jspecify:jspecify:{strictly 1.0.0} -> 1.0.0
+     |    +--- org.lwjgl:lwjgl-freetype:{strictly 3.4.1} -> 3.4.1
+     |    +--- org.lwjgl:lwjgl-glfw:{strictly 3.4.1} -> 3.4.1
+     |    +--- org.lwjgl:lwjgl-jemalloc:{strictly 3.4.1} -> 3.4.1
+     |    +--- org.lwjgl:lwjgl-openal:{strictly 3.4.1} -> 3.4.1
+     |    +--- org.lwjgl:lwjgl-opengl:{strictly 3.4.1} -> 3.4.1
+     |    +--- org.lwjgl:lwjgl-stb:{strictly 3.4.1} -> 3.4.1
+     |    +--- org.lwjgl:lwjgl-tinyfd:{strictly 3.4.1} -> 3.4.1
+     |    +--- org.lwjgl:lwjgl:{strictly 3.4.1} -> 3.4.1
+     |    +--- org.slf4j:slf4j-api:{strictly 2.0.17} -> 2.0.17
+     |    \--- ca.weblite:java-objc-bridge:{strictly 1.1} -> 1.1
+     |         \--- net.java.dev.jna:jna:5.10.0 -> 5.17.0
+     +--- net.neoforged:mergetool:2.0.7
+     +--- com.google.code.findbugs:jsr305:3.0.2
+     +--- org.jetbrains:annotations:26.0.2-1
+     \--- ca.weblite:java-objc-bridge:1.1 (*)
+
+(*) - Indicates repeated occurrences of a transitive dependency subtree. Gradle expands transitive dependency subtrees only once per project; repeat occurrences only display the root of the subtree, followed by this annotation.
+
+A web-based, searchable dependency report is available by adding the --scan option.
+
+BUILD SUCCESSFUL in 1m
+10 actionable tasks: 1 executed, 9 up-to-date
