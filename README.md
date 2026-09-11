@@ -32,6 +32,10 @@
 
 > [!IMPORTANT]
 > ## 🔀 BlockConnect Fork Notice
+> **EpsilonBC is no longer supported!** Check out our self-developed machine learning-powered client[EuphoriaClient](https://github.com/BlockConnectExp/EuphoriaClient)
+> 
+> **EpsilonBC已被停止支持！** 看我们自研的机器学习加持的客户端[EuphoriaClient](https://github.com/BlockConnectExp/EuphoriaClient)
+> 
 > This repository is a **community-maintained fork** by **BlockConnect**, continued from the original [Epsilon](https://github.com/NekoyaHouse/Epsilon) project.
 >
 > The original Epsilon repository has been archived and public development has ceased. We at BlockConnect have forked the project to continue maintenance, bug fixes, and feature development for the community.
