@@ -24,6 +24,7 @@ import net.minecraft.network.protocol.game.ServerboundSwingPacket;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
@@ -183,7 +184,7 @@ public class KillAura extends Module {
             Rot2f rotation = raytraceBox(target, rotationSpeed.getValue().floatValue());
             Managers.ROTATION.setRotations(rotation, rotationSpeed.getValue().floatValue(), (rot) -> {
                 HitResult result = RaytraceUtils.raytrace(rot, aimRange.getValue(), 0.0f);
-                return result != null && result.getType() == HitResult.Type.ENTITY && result.getEntity() == target;
+                return result instanceof EntityHitResult ehr && ehr.getEntity() == target;
             }, Priority.Medium);
             if (mode.is(Mode.OnePointEight)) {
                 while (attacks >= 1.0) {
@@ -245,7 +246,7 @@ public class KillAura extends Module {
 
                     Rot2f rot = RotationUtils.calculate(eyes, point);
                     HitResult hit = RaytraceUtils.raytrace(rot, range, 0.0f);
-                    boolean visible = hit != null && hit.getType() == HitResult.Type.ENTITY && hit.getEntity() == entity;
+                    boolean visible = hit instanceof EntityHitResult ehr && ehr.getEntity() == entity;
                     double distSq = eyes.distanceToSqr(point);
 
                     if (visible && distSq < bestDistSq) {
