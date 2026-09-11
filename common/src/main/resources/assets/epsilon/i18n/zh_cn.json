@@ -808,7 +808,14 @@
         "firefly length": "萤火虫长度",
         "firefly factor": "萤火虫因子",
         "firefly shaking": "萤火虫抖动",
-        "firefly amplitude": "萤火虫振幅"
+        "firefly amplitude": "萤火虫振幅",
+        "target point": {
+          "_value": "瞄准点",
+          "body": "身体",
+          "head": "头部",
+          "feet": "脚部",
+          "auto": "自动"
+        }
       },
       "key pearl": {
         "_value": "按键珍珠",
@@ -1341,7 +1348,19 @@
         "shrink": "收缩",
         "side color": "侧面颜色",
         "line color": "线条颜色",
-        "blacklisted blocks": "黑名单方块"
+        "blacklisted blocks": "黑名单方块",
+        "tower": {
+          "_value": "搭路塔",
+          "none": "关闭",
+          "motion": "运动",
+          "pulldown": "下拉",
+          "vulcan": "Vulcan",
+          "hypixel": "Hypixel"
+        },
+        "tower motion": "塔运动值",
+        "trigger height": "触发高度",
+        "tower slow": "塔减速",
+        "pulldown trigger": "下拉触发值"
       },
       "speed": {
         "_value": "速度",

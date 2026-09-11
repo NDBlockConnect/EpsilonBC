@@ -808,7 +808,14 @@
         "firefly length": "Firefly Length",
         "firefly factor": "Firefly Factor",
         "firefly shaking": "Firefly Shaking",
-        "firefly amplitude": "Firefly Amplitude"
+        "firefly amplitude": "Firefly Amplitude",
+        "target point": {
+          "_value": "Target Point",
+          "body": "Body",
+          "head": "Head",
+          "feet": "Feet",
+          "auto": "Auto"
+        }
       },
       "key pearl": {
         "_value": "Key Pearl",
@@ -1341,7 +1348,19 @@
         "shrink": "Shrink",
         "side color": "Side Color",
         "line color": "Line Color",
-        "blacklisted blocks": "Blacklisted Blocks"
+        "blacklisted blocks": "Blacklisted Blocks",
+        "tower": {
+          "_value": "Tower",
+          "none": "None",
+          "motion": "Motion",
+          "pulldown": "Pulldown",
+          "vulcan": "Vulcan",
+          "hypixel": "Hypixel"
+        },
+        "tower motion": "Tower Motion",
+        "trigger height": "Trigger Height",
+        "tower slow": "Tower Slow",
+        "pulldown trigger": "Pulldown Trigger"
       },
       "speed": {
         "_value": "Speed",

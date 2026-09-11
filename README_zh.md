@@ -30,10 +30,16 @@
   <a href="https://qm.qq.com/q/3hhg8ww9ag"><img alt="QQ 2群" src="https://img.shields.io/badge/QQ%202群-加入-12B7F5?style=flat-square&logo=tencentqq&logoColor=white"></a>
 </p>
 
-> [!IMPORTANT]
-> ## 🔀 BlockConnect 分支说明
-> 本仓库是由 BlockConnect 进行社区维护的分支（Fork），延续自原 Epsilon 项目。
-> 原 Epsilon 仓库已归档，公开开发工作已停止。我们 BlockConnect 团队对该项目进行了分支，以便继续为社区提供维护、错误修复和功能开发。
+> [!WARNING]
+> ## 停止支持公告
+> **EpsilonBC 于 2026 年 9 月 13 日起停止维护。**
+> 本仓库已归档，不再接受更新。
+>
+> **继任产品：**
+> - [BlockConnectExp/EuphoriaWinedge](https://github.com/BlockConnectExp/EuphoriaWinedge) — 合法客户端（半开源，含内购）
+> - [BlockConnectExp/EuphoriaClient](https://github.com/BlockConnectExp/EuphoriaClient) — 辅助客户端（半开源，含内购）
+>
+> 付费事务由 ExLoader、SwiftSoft、USA 处理
 
 > [!NOTE]
 > ## 原项目归档公告（来自 Epsilon）

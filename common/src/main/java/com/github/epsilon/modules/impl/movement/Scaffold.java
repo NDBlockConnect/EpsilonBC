@@ -89,6 +89,14 @@ public class Scaffold extends Module {
         GodBridge
     }
 
+    private enum TowerMode {
+        None,
+        Motion,
+        Pulldown,
+        Vulcan,
+        Hypixel
+    }
+
     private enum RotationMode {
         Rise,
         Hypixel
@@ -107,6 +115,11 @@ public class Scaffold extends Module {
     }
 
     private final EnumSetting<Mode> mode = enumSetting("Mode", Mode.TellyBridge);
+    private final EnumSetting<TowerMode> towerMode = enumSetting("Tower", TowerMode.None);
+    private final DoubleSetting towerMotion = doubleSetting("Tower Motion", 0.42, 0.1, 1.0, 0.01, () -> towerMode.is(TowerMode.Motion));
+    private final DoubleSetting towerTriggerHeight = doubleSetting("Trigger Height", 0.78, 0.76, 1.0, 0.01, () -> towerMode.is(TowerMode.Motion));
+    private final DoubleSetting towerSlow = doubleSetting("Tower Slow", 1.0, 0.0, 3.0, 0.1, () -> towerMode.is(TowerMode.Motion));
+    private final DoubleSetting towerPulldownTrigger = doubleSetting("Pulldown Trigger", 0.1, 0.0, 0.2, 0.01, () -> towerMode.is(TowerMode.Pulldown));
     private final EnumSetting<SwapMode> swapMode = enumSetting("Swap Mode", SwapMode.Normal);
     private final BoolSetting swapBack = boolSetting("Swap Back", true, () -> swapMode.is(SwapMode.Normal));
     private final BoolSetting skipTicks = boolSetting("Skip Ticks", false);
@@ -133,6 +146,9 @@ public class Scaffold extends Module {
     private Direction direction;
     private Rot2f rotation;
     private int rotateCount = 0;
+
+    private double towerJumpY;
+    private int towerTick;
 
     private FindItemResult blockResult;
     private boolean shouldSwapBack;
@@ -198,6 +214,8 @@ public class Scaffold extends Module {
         rotateCount = 0;
         blockResult = null;
         shouldSwapBack = false;
+        towerJumpY = 0;
+        towerTick = 0;
     }
 
     @Override
@@ -226,6 +244,18 @@ public class Scaffold extends Module {
         }
 
         getBlockInfo();
+
+        if (towerMode.is(TowerMode.Motion) && mc.options.keyJump.isDown() && blockResult.found()) {
+            handleTowerMotion();
+        } else if (towerMode.is(TowerMode.Pulldown) && mc.options.keyJump.isDown() && blockResult.found()) {
+            handleTowerPulldown();
+        } else if (towerMode.is(TowerMode.Vulcan) && mc.options.keyJump.isDown() && blockResult.found()) {
+            handleTowerVulcan();
+        } else if (towerMode.is(TowerMode.Hypixel) && mc.options.keyJump.isDown() && blockResult.found()) {
+            handleTowerHypixel();
+        } else {
+            towerTick = 0;
+        }
 
         if (skipTicks.getValue() && blockPos != null) {
             boolean reachable = true;
@@ -326,6 +356,69 @@ public class Scaffold extends Module {
             Managers.ROTATION.setRotations(rotation, rotateSpeed.getValue());
         }
         place();
+    }
+
+    private void handleTowerMotion() {
+        if (mc.player.onGround()) {
+            towerJumpY = mc.player.getY();
+            towerTick = 0;
+            return;
+        }
+        towerTick++;
+        if (mc.player.getY() >= towerJumpY + towerTriggerHeight.getValue() && mc.player.getDeltaMovement().y >= 0) {
+            mc.player.setPos(mc.player.getX(), Math.floor(mc.player.getY()), mc.player.getZ());
+            mc.player.setDeltaMovement(
+                mc.player.getDeltaMovement().x * towerSlow.getValue(),
+                towerMotion.getValue(),
+                mc.player.getDeltaMovement().z * towerSlow.getValue()
+            );
+            towerJumpY = mc.player.getY();
+        }
+    }
+
+    private void handleTowerPulldown() {
+        if (mc.player.onGround()) {
+            towerTick = 0;
+            return;
+        }
+        towerTick++;
+        if (mc.player.getDeltaMovement().y < towerPulldownTrigger.getValue() && towerTick > 2) {
+            mc.player.setDeltaMovement(mc.player.getDeltaMovement().x, -1.0, mc.player.getDeltaMovement().z);
+        }
+    }
+
+    private void handleTowerVulcan() {
+        if (mc.player.onGround()) {
+            towerTick = 0;
+            return;
+        }
+        towerTick++;
+        if (towerTick % 2 == 0) {
+            mc.player.setDeltaMovement(mc.player.getDeltaMovement().x, 0.7, mc.player.getDeltaMovement().z);
+        } else {
+            double horiz = mc.player.getDeltaMovement().horizontal().length();
+            mc.player.setDeltaMovement(
+                mc.player.getDeltaMovement().x,
+                horiz < 0.01 ? 0.6 : 0.42,
+                mc.player.getDeltaMovement().z
+            );
+        }
+        if (towerTick % 2 == 0 && mc.player.horizontalCollision) {
+            mc.player.setPos(mc.player.getX() + 0.1, mc.player.getY(), mc.player.getZ() + 0.1);
+        }
+    }
+
+    private void handleTowerHypixel() {
+        if (mc.player.onGround()) {
+            towerTick = 0;
+            mc.player.setDeltaMovement(0, 0.42, 0);
+            return;
+        }
+        towerTick++;
+        double dy = mc.player.getDeltaMovement().y;
+        if (dy < 0 && dy > -0.09) {
+            mc.player.setDeltaMovement(0, -0.38, 0);
+        }
     }
 
     private void place() {

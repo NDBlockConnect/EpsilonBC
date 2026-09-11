@@ -16,12 +16,16 @@ import com.github.epsilon.utils.render.esp.CircleESP;
 import com.github.epsilon.utils.render.esp.DeobfESP;
 import com.github.epsilon.utils.render.esp.FireflyESP;
 import com.github.epsilon.utils.rotation.Priority;
+import com.github.epsilon.utils.rotation.RaytraceUtils;
+import com.github.epsilon.utils.rotation.Rot2f;
 import com.github.epsilon.utils.rotation.RotationUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.network.protocol.game.ServerboundSwingPacket;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
 import java.awt.*;
 import java.util.List;
@@ -54,6 +58,13 @@ public class KillAura extends Module {
         Multiple,
     }
 
+    private enum TargetPoint {
+        Body,
+        Head,
+        Feet,
+        Auto
+    }
+
     private enum ESPMode {
         CaptureMark,
         Circle,
@@ -81,6 +92,8 @@ public class KillAura extends Module {
     private final BoolSetting invisible = boolSetting("Invisible", true);
 
     private final BoolSetting throughWalls = boolSetting("Through Walls", false);
+
+    private final EnumSetting<TargetPoint> targetPoint = enumSetting("Target Point", TargetPoint.Body);
 
     private final BoolSetting swingHand = boolSetting("SwingHand", true);
 
@@ -167,7 +180,11 @@ public class KillAura extends Module {
         attacks += MathUtils.getRandom(minCPS.getValue().doubleValue(), maxCPS.getValue().doubleValue()) / 20.0;
 
         if (target != null) {
-            Managers.ROTATION.setRotations(RotationUtils.getRotationsToEntity(target), rotationSpeed.getValue().floatValue(), Priority.Medium);
+            Rot2f rotation = raytraceBox(target, rotationSpeed.getValue().floatValue());
+            Managers.ROTATION.setRotations(rotation, rotationSpeed.getValue().floatValue(), (rot) -> {
+                HitResult result = RaytraceUtils.raytrace(rot, aimRange.getValue(), 0.0f);
+                return result != null && result.getType() == HitResult.Type.ENTITY && result.getEntity() == target;
+            }, Priority.Medium);
             if (mode.is(Mode.OnePointEight)) {
                 while (attacks >= 1.0) {
                     clickTargets(targets);
@@ -209,6 +226,70 @@ public class KillAura extends Module {
         } else {
             mc.getConnection().send(new ServerboundSwingPacket(InteractionHand.MAIN_HAND));
         }
+    }
+
+    private Rot2f raytraceBox(LivingEntity entity, float range) {
+        Vec3 eyes = mc.player.getEyePosition();
+        AABB box = entity.getBoundingBox().inflate(entity.getPickRadius());
+        Rot2f bestRotation = null;
+        double bestDistSq = Double.MAX_VALUE;
+        boolean bestVisible = false;
+
+        for (double y = 0; y <= 1; y += 0.25) {
+            for (double x = 0; x <= 1; x += 0.5) {
+                for (double z = 0; z <= 1; z += 0.5) {
+                    double px = box.minX + (box.maxX - box.minX) * x;
+                    double py = box.minY + (box.maxY - box.minY) * y;
+                    double pz = box.minZ + (box.maxZ - box.minZ) * z;
+                    Vec3 point = new Vec3(px, py, pz);
+
+                    Rot2f rot = RotationUtils.calculate(eyes, point);
+                    HitResult hit = RaytraceUtils.raytrace(rot, range, 0.0f);
+                    boolean visible = hit != null && hit.getType() == HitResult.Type.ENTITY && hit.getEntity() == entity;
+                    double distSq = eyes.distanceToSqr(point);
+
+                    if (visible && distSq < bestDistSq) {
+                        bestRotation = rot;
+                        bestDistSq = distSq;
+                        bestVisible = true;
+                    } else if (!bestVisible && !visible && distSq < bestDistSq) {
+                        bestRotation = rot;
+                        bestDistSq = distSq;
+                    }
+                }
+            }
+        }
+
+        if (bestRotation != null && bestVisible) {
+            return bestRotation;
+        }
+
+        Vec3 fallbackPoint;
+        switch (targetPoint.getValue()) {
+            case Head -> fallbackPoint = entity.position().add(0, entity.getBbHeight(), 0);
+            case Feet -> fallbackPoint = entity.position();
+            case Auto -> {
+                double closestDist = Double.MAX_VALUE;
+                fallbackPoint = entity.position().add(0, entity.getBbHeight() / 2.0, 0);
+                for (double y = 0; y <= 1; y += 0.25) {
+                    for (double x = 0; x <= 1; x += 0.5) {
+                        for (double z = 0; z <= 1; z += 0.5) {
+                            double px = box.minX + (box.maxX - box.minX) * x;
+                            double py = box.minY + (box.maxY - box.minY) * y;
+                            double pz = box.minZ + (box.maxZ - box.minZ) * z;
+                            Vec3 pt = new Vec3(px, py, pz);
+                            double d = eyes.distanceToSqr(pt);
+                            if (d < closestDist) {
+                                closestDist = d;
+                                fallbackPoint = pt;
+                            }
+                        }
+                    }
+                }
+            }
+            default -> fallbackPoint = entity.position().add(0, entity.getBbHeight() / 2.0, 0);
+        }
+        return bestRotation != null ? bestRotation : RotationUtils.calculate(eyes, fallbackPoint);
     }
 
     @EventHandler
